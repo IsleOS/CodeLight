@@ -61,17 +61,26 @@ export async function sessionRoutes(app: FastifyInstance) {
             return reply.code(404).send({ error: 'Session not found' });
         }
 
-        const messages = await db.sessionMessage.findMany({
-            where: { sessionId, seq: { gt: after_seq } },
-            orderBy: { seq: 'asc' },
-            take: limit + 1,
-        });
-
-        const hasMore = messages.length > limit;
-        return {
-            messages: messages.slice(0, limit),
-            hasMore,
-        };
+        let messages;
+        if (after_seq === 0) {
+            // Default: return latest messages (most recent first, then reverse for display order)
+            const latest = await db.sessionMessage.findMany({
+                where: { sessionId },
+                orderBy: { seq: 'desc' },
+                take: limit,
+            });
+            messages = latest.reverse();
+            return { messages, hasMore: latest.length === limit };
+        } else {
+            // Cursor mode: return messages after a specific seq
+            const result = await db.sessionMessage.findMany({
+                where: { sessionId, seq: { gt: after_seq } },
+                orderBy: { seq: 'asc' },
+                take: limit + 1,
+            });
+            const hasMore = result.length > limit;
+            return { messages: result.slice(0, limit), hasMore };
+        }
     });
 
     // Batch send messages

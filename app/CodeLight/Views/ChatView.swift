@@ -103,6 +103,13 @@ struct ChatView: View {
         .refreshable {
             await loadMessages()
         }
+        .onReceive(appState.newMessageSubject) { event in
+            guard event.sessionId == sessionId else { return }
+            // Avoid duplicates
+            if !messages.contains(where: { $0.id == event.message.id }) {
+                messages.append(event.message)
+            }
+        }
     }
 
     private var sessionTitle: String {

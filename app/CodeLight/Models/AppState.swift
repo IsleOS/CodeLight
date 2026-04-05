@@ -13,6 +13,9 @@ final class AppState: ObservableObject {
     @Published var sessions: [SessionInfo] = []
     @Published var isConnected = false
 
+    /// New message events — ChatView subscribes to this
+    let newMessageSubject = PassthroughSubject<(sessionId: String, message: ChatMessage), Never>()
+
     private let keyManager = KeyManager(serviceName: "com.codelight.app")
     private(set) var socket: SocketClient?
 
@@ -48,6 +51,10 @@ final class AppState: ObservableObject {
             client.connect()
             client.onSessionsUpdate = { [weak self] sessions in
                 self?.sessions = sessions
+            }
+            client.onNewMessage = { [weak self] sessionId, msg in
+                let chatMsg = ChatMessage(id: msg.id, seq: msg.seq, content: msg.content, localId: msg.localId)
+                self?.newMessageSubject.send((sessionId: sessionId, message: chatMsg))
             }
             isConnected = true
             print("[AppState] Connected to \(server.url)")
