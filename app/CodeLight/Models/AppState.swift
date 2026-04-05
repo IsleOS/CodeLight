@@ -55,6 +55,14 @@ final class AppState: ObservableObject {
             client.onNewMessage = { [weak self] sessionId, msg in
                 let chatMsg = ChatMessage(id: msg.id, seq: msg.seq, content: msg.content, localId: msg.localId)
                 self?.newMessageSubject.send((sessionId: sessionId, message: chatMsg))
+
+                // Trigger Dynamic Island based on message type
+                self?.updateLiveActivity(sessionId: sessionId, content: msg.content, serverName: server.name)
+            }
+            client.onEphemeral = { [weak self] sessionId, active in
+                if !active {
+                    LiveActivityManager.shared.end(sessionId: sessionId)
+                }
             }
             isConnected = true
             print("[AppState] Connected to \(server.url)")
@@ -77,6 +85,30 @@ final class AppState: ObservableObject {
         guard let socket else { return }
         let localId = UUID().uuidString
         socket.sendMessage(sessionId: sessionId, content: text, localId: localId)
+    }
+
+    // MARK: - Dynamic Island
+
+    private func updateLiveActivity(sessionId: String, content: String, serverName: String) {
+        guard let data = content.data(using: .utf8),
+              let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let type = dict["type"] as? String else { return }
+
+        let projectName = sessions.first(where: { $0.id == sessionId })?.metadata?.title ?? "Session"
+
+        switch type {
+        case "thinking":
+            LiveActivityManager.shared.update(sessionId: sessionId, phase: "thinking", toolName: nil, projectName: projectName, serverName: serverName)
+        case "tool":
+            let toolName = dict["toolName"] as? String
+            LiveActivityManager.shared.update(sessionId: sessionId, phase: "tool_running", toolName: toolName, projectName: projectName, serverName: serverName)
+        case "assistant":
+            LiveActivityManager.shared.update(sessionId: sessionId, phase: "idle", toolName: nil, projectName: projectName, serverName: serverName)
+        case "interrupted":
+            LiveActivityManager.shared.end(sessionId: sessionId)
+        default:
+            break
+        }
     }
 
     // MARK: - Persistence
