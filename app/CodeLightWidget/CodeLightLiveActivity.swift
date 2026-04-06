@@ -111,10 +111,10 @@ struct RotatingCompactText: View {
             items.append(phaseLabel(state.phase))
         }
         if let q = state.lastUserMessage, !q.isEmpty {
-            items.append("👤 \(q)")
+            items.append(q)
         }
         if let a = state.lastAssistantSummary, !a.isEmpty {
-            items.append("✨ \(a)")
+            items.append(a)
         }
         return items
     }
