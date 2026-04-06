@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Chat view for a single session — shows messages and allows sending.
+/// Chat view with markdown rendering and lazy message loading.
 struct ChatView: View {
     @EnvironmentObject var appState: AppState
     let sessionId: String
@@ -8,6 +8,8 @@ struct ChatView: View {
     @State private var messages: [ChatMessage] = []
     @State private var inputText = ""
     @State private var isLoading = true
+    @State private var isLoadingMore = false
+    @State private var hasMoreOlder = false
     @State private var selectedModel = "opus"
     @State private var selectedMode = "auto"
 
@@ -16,10 +18,30 @@ struct ChatView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Messages
+            // Messages with lazy loading
             ScrollViewReader { proxy in
                 ScrollView {
-                    LazyVStack(alignment: .leading, spacing: 8) {
+                    LazyVStack(alignment: .leading, spacing: 6) {
+                        // Load more button at top
+                        if hasMoreOlder {
+                            Button {
+                                Task { await loadOlderMessages() }
+                            } label: {
+                                if isLoadingMore {
+                                    ProgressView()
+                                        .frame(maxWidth: .infinity)
+                                        .padding(8)
+                                } else {
+                                    Text(String(localized: "load_earlier_messages"))
+                                        .font(.caption)
+                                        .foregroundStyle(.blue)
+                                        .frame(maxWidth: .infinity)
+                                        .padding(8)
+                                }
+                            }
+                            .id("loadMore")
+                        }
+
                         if isLoading {
                             ProgressView()
                                 .frame(maxWidth: .infinity)
@@ -31,11 +53,12 @@ struct ChatView: View {
                                 .id(message.id)
                         }
                     }
-                    .padding()
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
                 }
                 .onChange(of: messages.count) {
                     if let last = messages.last {
-                        withAnimation {
+                        withAnimation(.easeOut(duration: 0.2)) {
                             proxy.scrollTo(last.id, anchor: .bottom)
                         }
                     }
@@ -44,79 +67,80 @@ struct ChatView: View {
 
             Divider()
 
-            // Model/Mode selector + Input
-            VStack(spacing: 8) {
-                HStack(spacing: 12) {
-                    Menu {
-                        ForEach(models, id: \.self) { model in
-                            Button(model.capitalized) {
-                                selectedModel = model
-                                appState.updateModelMode(sessionId: sessionId, model: model, mode: selectedMode)
-                            }
-                        }
-                    } label: {
-                        Label(selectedModel.capitalized, systemImage: "cpu")
-                            .font(.caption)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(.ultraThinMaterial, in: Capsule())
-                    }
-
-                    Menu {
-                        ForEach(modes, id: \.self) { mode in
-                            Button(mode.capitalized) {
-                                selectedMode = mode
-                                appState.updateModelMode(sessionId: sessionId, model: selectedModel, mode: mode)
-                            }
-                        }
-                    } label: {
-                        Label(selectedMode.capitalized, systemImage: "shield")
-                            .font(.caption)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(.ultraThinMaterial, in: Capsule())
-                    }
-
-                    Spacer()
-                }
-
-                HStack(spacing: 8) {
-                    TextField(String(localized: "message_placeholder"), text: $inputText, axis: .vertical)
-                        .textFieldStyle(.plain)
-                        .padding(10)
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
-                        .lineLimit(1...5)
-
-                    Button {
-                        send()
-                    } label: {
-                        Image(systemName: "arrow.up.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(inputText.isEmpty ? .gray : .blue)
-                    }
-                    .disabled(inputText.isEmpty)
-                }
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-            .background(.bar)
+            // Input bar
+            composeBar
         }
         .navigationTitle(sessionTitle)
         .navigationBarTitleDisplayMode(.inline)
-        .task {
-            await loadMessages()
-        }
-        .refreshable {
-            await loadMessages()
-        }
+        .task { await loadMessages() }
+        .refreshable { await loadMessages() }
         .onReceive(appState.newMessageSubject) { event in
             guard event.sessionId == sessionId else { return }
-            // Avoid duplicates
             if !messages.contains(where: { $0.id == event.message.id }) {
                 messages.append(event.message)
             }
         }
     }
+
+    // MARK: - Compose Bar
+
+    private var composeBar: some View {
+        VStack(spacing: 8) {
+            HStack(spacing: 12) {
+                Menu {
+                    ForEach(models, id: \.self) { model in
+                        Button(model.capitalized) {
+                            selectedModel = model
+                            appState.updateModelMode(sessionId: sessionId, model: model, mode: selectedMode)
+                        }
+                    }
+                } label: {
+                    Label(selectedModel.capitalized, systemImage: "cpu")
+                        .font(.caption)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(.ultraThinMaterial, in: Capsule())
+                }
+
+                Menu {
+                    ForEach(modes, id: \.self) { mode in
+                        Button(mode.capitalized) {
+                            selectedMode = mode
+                            appState.updateModelMode(sessionId: sessionId, model: selectedModel, mode: mode)
+                        }
+                    }
+                } label: {
+                    Label(selectedMode.capitalized, systemImage: "shield")
+                        .font(.caption)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(.ultraThinMaterial, in: Capsule())
+                }
+
+                Spacer()
+            }
+
+            HStack(spacing: 8) {
+                TextField(String(localized: "message_placeholder"), text: $inputText, axis: .vertical)
+                    .textFieldStyle(.plain)
+                    .padding(10)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                    .lineLimit(1...5)
+
+                Button { send() } label: {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(inputText.isEmpty ? .gray : .blue)
+                }
+                .disabled(inputText.isEmpty)
+            }
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+        .background(.bar)
+    }
+
+    // MARK: - Data
 
     private var sessionTitle: String {
         appState.sessions.first { $0.id == sessionId }?.metadata?.title ?? String(localized: "session")
@@ -125,10 +149,22 @@ struct ChatView: View {
     private func loadMessages() async {
         isLoading = true
         if let socket = appState.socket {
-            messages = (try? await socket.fetchMessages(sessionId: sessionId)) ?? []
-            print("[ChatView] Loaded \(messages.count) messages")
+            let result = (try? await socket.fetchMessages(sessionId: sessionId, limit: 50)) ?? SocketClient.FetchResult(messages: [], hasMore: false)
+            messages = result.messages
+            hasMoreOlder = result.hasMore
         }
         isLoading = false
+    }
+
+    private func loadOlderMessages() async {
+        guard !isLoadingMore, let oldest = messages.first else { return }
+        isLoadingMore = true
+        if let socket = appState.socket {
+            let result = (try? await socket.fetchOlderMessages(sessionId: sessionId, beforeSeq: oldest.seq, limit: 50)) ?? SocketClient.FetchResult(messages: [], hasMore: false)
+            messages.insert(contentsOf: result.messages, at: 0)
+            hasMoreOlder = result.hasMore
+        }
+        isLoadingMore = false
     }
 
     private func send() {
@@ -136,7 +172,6 @@ struct ChatView: View {
         guard !text.isEmpty else { return }
         inputText = ""
         appState.sendMessage(text, toSession: sessionId)
-
         let msg = ChatMessage(id: UUID().uuidString, seq: (messages.last?.seq ?? 0) + 1, content: text, localId: nil)
         messages.append(msg)
     }
@@ -150,23 +185,19 @@ private struct MessageRow: View {
     var body: some View {
         let parsed = parseContent(message.content)
 
-        HStack(alignment: .top, spacing: 10) {
-            // Role icon
+        HStack(alignment: .top, spacing: 8) {
             Image(systemName: roleIcon(parsed.type))
-                .font(.caption)
+                .font(.system(size: 10))
                 .foregroundStyle(roleColor(parsed.type))
-                .frame(width: 16, height: 16)
-                .padding(.top, 2)
+                .frame(width: 14, height: 14)
+                .padding(.top, 3)
 
-            VStack(alignment: .leading, spacing: 4) {
-                // Role label
+            VStack(alignment: .leading, spacing: 3) {
                 Text(roleLabel(parsed.type))
-                    .font(.caption2)
-                    .fontWeight(.bold)
+                    .font(.system(size: 9, weight: .bold))
                     .foregroundStyle(roleColor(parsed.type))
                     .textCase(.uppercase)
 
-                // Content by type
                 switch parsed.type {
                 case "tool":
                     toolView(parsed)
@@ -177,7 +208,7 @@ private struct MessageRow: View {
                         .font(.caption)
                         .foregroundStyle(.red)
                 default:
-                    textContentView(parsed.text)
+                    markdownContent(parsed.text)
                 }
             }
         }
@@ -185,52 +216,77 @@ private struct MessageRow: View {
         .padding(.vertical, 2)
     }
 
-    // MARK: - Content Views
+    // MARK: - Markdown Rendering
 
-    private func textContentView(_ text: String) -> some View {
+    @ViewBuilder
+    private func markdownContent(_ text: String) -> some View {
+        let parts = splitCodeBlocks(text)
         VStack(alignment: .leading, spacing: 4) {
-            // Split by code blocks
-            let parts = splitCodeBlocks(text)
             ForEach(Array(parts.enumerated()), id: \.offset) { _, part in
                 if part.isCode {
-                    // Code block
-                    VStack(alignment: .leading, spacing: 0) {
-                        if !part.language.isEmpty {
-                            Text(part.language)
-                                .font(.caption2)
-                                .foregroundStyle(.secondary)
-                                .padding(.horizontal, 8)
-                                .padding(.top, 4)
-                        }
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            Text(part.text)
-                                .font(.system(.caption, design: .monospaced))
-                                .textSelection(.enabled)
-                                .padding(8)
-                        }
-                    }
-                    .background(Color(.systemGray6), in: RoundedRectangle(cornerRadius: 8))
+                    codeBlockView(part)
                 } else if !part.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    Text(part.text)
-                        .font(.body)
-                        .textSelection(.enabled)
+                    // Use AttributedString for inline markdown
+                    if let attributed = try? AttributedString(markdown: part.text, options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace)) {
+                        Text(attributed)
+                            .font(.subheadline)
+                            .textSelection(.enabled)
+                    } else {
+                        Text(part.text)
+                            .font(.subheadline)
+                            .textSelection(.enabled)
+                    }
                 }
             }
         }
     }
 
+    private func codeBlockView(_ part: TextPart) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            if !part.language.isEmpty {
+                HStack {
+                    Text(part.language)
+                        .font(.system(size: 9, weight: .medium, design: .monospaced))
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                    Button {
+                        UIPasteboard.general.string = part.text
+                    } label: {
+                        Image(systemName: "doc.on.doc")
+                            .font(.system(size: 9))
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(.horizontal, 10)
+                .padding(.top, 6)
+                .padding(.bottom, 2)
+            }
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                Text(part.text)
+                    .font(.system(size: 11, design: .monospaced))
+                    .textSelection(.enabled)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+            }
+        }
+        .background(Color(.systemGray6), in: RoundedRectangle(cornerRadius: 8))
+    }
+
+    // MARK: - Tool / Thinking Views
+
     private func toolView(_ parsed: ParsedMessage) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 6) {
                 Image(systemName: toolIcon(parsed.toolName ?? ""))
-                    .font(.caption)
+                    .font(.system(size: 10))
                 Text(parsed.toolName ?? "tool")
-                    .font(.caption)
-                    .fontWeight(.semibold)
+                    .font(.system(size: 11, weight: .semibold))
                 Spacer()
                 if let status = parsed.toolStatus {
                     Text(status)
-                        .font(.caption2)
+                        .font(.system(size: 9))
                         .padding(.horizontal, 6)
                         .padding(.vertical, 2)
                         .background(statusColor(status).opacity(0.2), in: Capsule())
@@ -240,38 +296,9 @@ private struct MessageRow: View {
 
             if !parsed.text.isEmpty {
                 Text(parsed.text)
-                    .font(.system(.caption, design: .monospaced))
+                    .font(.system(size: 10, design: .monospaced))
                     .foregroundStyle(.secondary)
                     .lineLimit(4)
-            }
-
-            // Approval buttons for pending permissions
-            if parsed.toolStatus == "pending" || parsed.toolStatus == "waiting" {
-                HStack(spacing: 12) {
-                    Button {
-                        // Send deny via message (CodeIsland will handle)
-                        // For now this is a placeholder
-                    } label: {
-                        Label(String(localized: "deny"), systemImage: "xmark.circle")
-                            .font(.caption)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(.red.opacity(0.2), in: Capsule())
-                    }
-                    .foregroundStyle(.red)
-
-                    Button {
-                        // Send approve via message
-                    } label: {
-                        Label(String(localized: "allow"), systemImage: "checkmark.circle")
-                            .font(.caption)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(.green.opacity(0.2), in: Capsule())
-                    }
-                    .foregroundStyle(.green)
-                }
-                .padding(.top, 4)
             }
         }
         .padding(8)
@@ -279,17 +306,17 @@ private struct MessageRow: View {
     }
 
     private func thinkingView(_ parsed: ParsedMessage) -> some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 4) {
             Image(systemName: "brain")
-                .font(.caption)
+                .font(.system(size: 10))
             Text(parsed.text.isEmpty ? String(localized: "thinking_ellipsis") : parsed.text)
                 .font(.caption)
                 .italic()
-                .lineLimit(2)
+                .lineLimit(3)
         }
         .foregroundStyle(.purple.opacity(0.8))
         .padding(6)
-        .background(.purple.opacity(0.1), in: RoundedRectangle(cornerRadius: 6))
+        .background(.purple.opacity(0.08), in: RoundedRectangle(cornerRadius: 6))
     }
 
     // MARK: - Code Block Parsing
@@ -316,11 +343,9 @@ private struct MessageRow: View {
             if beforeRange.length > 0 {
                 parts.append(TextPart(text: nsText.substring(with: beforeRange), isCode: false, language: ""))
             }
-
             let lang = match.numberOfRanges > 1 ? nsText.substring(with: match.range(at: 1)) : ""
             let code = match.numberOfRanges > 2 ? nsText.substring(with: match.range(at: 2)) : ""
             parts.append(TextPart(text: code, isCode: true, language: lang))
-
             lastEnd = match.range.location + match.range.length
         }
 
@@ -344,10 +369,7 @@ private struct MessageRow: View {
         if let data = content.data(using: .utf8),
            let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
            let type = dict["type"] as? String {
-            let text = dict["text"] as? String ?? ""
-            let toolName = dict["toolName"] as? String
-            let toolStatus = dict["toolStatus"] as? String
-            return ParsedMessage(type: type, text: text, toolName: toolName, toolStatus: toolStatus)
+            return ParsedMessage(type: type, text: dict["text"] as? String ?? "", toolName: dict["toolName"] as? String, toolStatus: dict["toolStatus"] as? String)
         }
         return ParsedMessage(type: "user", text: content, toolName: nil, toolStatus: nil)
     }
