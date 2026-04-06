@@ -174,6 +174,15 @@ struct SessionListView: View {
     }
 }
 
+/// Shorten a path by replacing home directory with ~
+private func shortenPath(_ path: String) -> String {
+    var p = path
+    if let home = ProcessInfo.processInfo.environment["HOME"], p.hasPrefix(home) {
+        p = "~" + p.dropFirst(home.count)
+    }
+    return p
+}
+
 /// A single session row.
 private struct SessionRow: View {
     let session: SessionInfo
@@ -196,8 +205,10 @@ private struct SessionRow: View {
                     HStack(spacing: 4) {
                         Image(systemName: "folder")
                             .font(.system(size: 9))
-                        Text(URL(fileURLWithPath: path).lastPathComponent)
+                        Text(shortenPath(path))
                             .font(.caption)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
                     }
                     .foregroundStyle(.secondary)
                 }

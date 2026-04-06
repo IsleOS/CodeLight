@@ -161,18 +161,6 @@ private struct LockScreenView: View {
                         }
                     }
 
-                    // Path
-                    if let path = state.projectPath, !path.isEmpty {
-                        HStack(spacing: 3) {
-                            Image(systemName: "folder.fill").font(.system(size: 8))
-                            Text(shortenPath(path))
-                                .font(.system(size: 10, design: .monospaced))
-                                .lineLimit(1)
-                                .truncationMode(.middle)
-                        }
-                        .foregroundStyle(.white.opacity(0.4))
-                    }
-
                     HStack(spacing: 4) {
                         Circle().fill(phaseColor(state.phase)).frame(width: 6, height: 6)
                         Text(phaseLabel(state.phase))
@@ -253,26 +241,6 @@ private func phaseLabel(_ phase: String) -> String {
     case "error": return "Error"
     default: return phase
     }
-}
-
-/// Shorten a path by replacing home directory with ~ and truncating middle if long
-private func shortenPath(_ path: String) -> String {
-    var p = path
-    if let home = ProcessInfo.processInfo.environment["HOME"] {
-        if p.hasPrefix(home) {
-            p = "~" + p.dropFirst(home.count)
-        }
-    }
-    // Further shorten if still too long
-    if p.count > 40 {
-        let components = p.split(separator: "/")
-        if components.count > 3 {
-            let first = components.first ?? ""
-            let last = components.suffix(2).joined(separator: "/")
-            p = "\(first)/.../\(last)"
-        }
-    }
-    return p
 }
 
 private func toolIcon(_ name: String) -> String {
