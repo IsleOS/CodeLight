@@ -50,4 +50,38 @@ export async function pushRoutes(app: FastifyInstance) {
 
         return { tokens };
     });
+
+    // Register a Live Activity push token for a session
+    app.post('/v1/live-activity-tokens', {
+        preHandler: authMiddleware,
+        schema: {
+            body: z.object({
+                sessionId: z.string(),
+                token: z.string(),
+            }),
+        },
+    }, async (request) => {
+        const { sessionId, token } = request.body as { sessionId: string; token: string };
+        const deviceId = request.deviceId!;
+
+        await db.liveActivityToken.upsert({
+            where: { deviceId_sessionId: { deviceId, sessionId } },
+            create: { deviceId, sessionId, token },
+            update: { token },
+        });
+
+        console.log(`[LiveActivity] Registered token for session ${sessionId.substring(0,8)}`);
+        return { success: true };
+    });
+
+    // Remove a Live Activity token
+    app.delete('/v1/live-activity-tokens/:sessionId', {
+        preHandler: authMiddleware,
+    }, async (request) => {
+        const { sessionId } = request.params as { sessionId: string };
+        await db.liveActivityToken.deleteMany({
+            where: { deviceId: request.deviceId!, sessionId },
+        });
+        return { success: true };
+    });
 }

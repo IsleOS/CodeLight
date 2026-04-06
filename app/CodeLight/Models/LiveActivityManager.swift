@@ -1,4 +1,5 @@
 import ActivityKit
+import CodeLightCrypto
 import Foundation
 import os.log
 
@@ -64,13 +65,49 @@ final class LiveActivityManager {
                 let activity = try Activity.request(
                     attributes: attributes,
                     content: ActivityContent(state: state, staleDate: nil),
-                    pushType: nil
+                    pushType: .token  // Use APNs push for updates
                 )
                 activities[sessionId] = activity
                 print("[LiveActivity] STARTED activity for \(sessionId.prefix(8))")
+
+                // Observe push token updates
+                Task { [weak self] in
+                    for await tokenData in activity.pushTokenUpdates {
+                        let tokenString = tokenData.map { String(format: "%02x", $0) }.joined()
+                        print("[LiveActivity] Push token for \(sessionId.prefix(8)): \(tokenString.prefix(16))...")
+                        await self?.registerLiveActivityToken(sessionId: sessionId, token: tokenString)
+                    }
+                }
             } catch {
                 print("[LiveActivity] FAILED to start: \(error)")
             }
+        }
+    }
+
+    /// Register Live Activity push token with server
+    private func registerLiveActivityToken(sessionId: String, token: String) async {
+        guard let serverUrl = AppState.shared.currentServer?.url,
+              let authToken = KeyManager(serviceName: "com.codelight.app").loadToken(forServer: serverUrl) else {
+            return
+        }
+
+        let url = URL(string: "\(serverUrl)/v1/live-activity-tokens")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: [
+            "sessionId": sessionId,
+            "token": token,
+        ])
+
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            if let http = response as? HTTPURLResponse, http.statusCode == 200 {
+                print("[LiveActivity] Token registered with server")
+            }
+        } catch {
+            print("[LiveActivity] Failed to register token: \(error)")
         }
     }
 

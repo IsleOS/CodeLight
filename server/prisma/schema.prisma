@@ -91,3 +91,17 @@ model PushToken {
 
     @@unique([deviceId, token])
 }
+
+/// Live Activity push token (scoped to a session).
+/// iOS generates a token per active Live Activity.
+model LiveActivityToken {
+    id        String   @id @default(cuid())
+    deviceId  String
+    sessionId String
+    token     String   // APNs push token for this specific activity
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([deviceId, sessionId])
+    @@index([sessionId])
+}

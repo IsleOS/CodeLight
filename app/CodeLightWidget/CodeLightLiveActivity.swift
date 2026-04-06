@@ -85,17 +85,24 @@ struct CodeLightLiveActivity: Widget {
                     .padding(.horizontal, 4)
                 }
             } compactLeading: {
-                // Compact leading — pixel cat
-                PixelCharacterView(state: animationState(for: context.state.phase))
-                    .scaleEffect(0.45)
-                    .frame(width: 24, height: 22)
+                // Compact leading — pixel cat + project name
+                HStack(spacing: 4) {
+                    PixelCharacterView(state: animationState(for: context.state.phase))
+                        .scaleEffect(0.4)
+                        .frame(width: 22, height: 20)
+                    Text(context.state.projectName)
+                        .font(.system(size: 12, weight: .semibold))
+                        .lineLimit(1)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: 70)
+                }
             } compactTrailing: {
-                // Compact trailing — show tool name OR phase label, with color
+                // Compact trailing — phase label or tool name
                 Text(compactText(context.state))
                     .font(.system(size: 12, weight: .medium))
                     .foregroundStyle(phaseColor(context.state.phase))
                     .lineLimit(1)
-                    .frame(maxWidth: 80)
+                    .frame(maxWidth: 70)
             } minimal: {
                 // Minimal — just the cat face (very small)
                 PixelCharacterView(state: animationState(for: context.state.phase))

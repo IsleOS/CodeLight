@@ -3,7 +3,7 @@ import { db } from '@/storage/db';
 import { allocateSessionSeq } from '@/storage/seq';
 import type { EventRouter } from './eventRouter';
 import { canAccessSession } from '@/auth/deviceAccess';
-import { sendPushToDevice } from '@/push/apns';
+import { sendPushToDevice, sendLiveActivityUpdate } from '@/push/apns';
 
 export function registerSessionHandler(
     socket: Socket,
@@ -49,9 +49,44 @@ export function registerSessionHandler(
                 message: { id: message.id, seq, content: data.message, localId: data.localId },
             }, { type: 'all-interested-in-session', sessionId: data.sid }, socket);
 
-            // Push notification for tool errors — only to session owner's devices
+            // Handle phase messages: push Live Activity update via APNs
             try {
                 const parsed = JSON.parse(data.message);
+
+                if (parsed.type === 'phase') {
+                    // Find all Live Activity tokens for this session
+                    const laTokens = await db.liveActivityToken.findMany({
+                        where: { sessionId: data.sid },
+                    });
+
+                    if (laTokens.length > 0) {
+                        const session = await db.session.findUnique({
+                            where: { id: data.sid },
+                            select: { metadata: true },
+                        });
+                        let projectName = 'Session';
+                        try {
+                            const meta = JSON.parse(session?.metadata || '{}');
+                            projectName = meta.title || 'Session';
+                        } catch {}
+
+                        const contentState = {
+                            phase: parsed.phase || 'idle',
+                            toolName: parsed.toolName || null,
+                            projectName,
+                            lastUserMessage: parsed.lastUserMessage || null,
+                            lastAssistantSummary: parsed.lastAssistantSummary || null,
+                            startedAt: Date.now() / 1000,
+                        };
+
+                        // Push to all device tokens for this session
+                        for (const t of laTokens) {
+                            sendLiveActivityUpdate(t.token, contentState as any).catch(() => {});
+                        }
+                    }
+                }
+
+                // Tool error → notification
                 if (parsed.type === 'tool' && parsed.toolStatus === 'error') {
                     const session = await db.session.findUnique({ where: { id: data.sid }, select: { deviceId: true } });
                     if (session) {

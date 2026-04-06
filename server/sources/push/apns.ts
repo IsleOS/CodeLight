@@ -144,3 +144,78 @@ export async function sendPushToDevice(
         tokens.map((t: { token: string }) => sendPush(t.token, payload))
     );
 }
+
+/**
+ * Live Activity ContentState matching CodeLightActivityAttributes.ContentState.
+ */
+export interface LiveActivityContentState {
+    phase: string;
+    toolName: string | null;
+    projectName: string;
+    lastUserMessage: string | null;
+    lastAssistantSummary: string | null;
+    startedAt: number; // unix timestamp
+}
+
+/**
+ * Send a Live Activity update via APNs push.
+ * This updates an existing Live Activity on the device.
+ */
+export async function sendLiveActivityUpdate(
+    pushToken: string,
+    contentState: LiveActivityContentState,
+    event: 'update' | 'end' = 'update'
+): Promise<boolean> {
+    const apnsConfig = getApnsConfig();
+    if (!apnsConfig) {
+        console.log('[APNs] Not configured, skipping Live Activity push');
+        return false;
+    }
+
+    const host = apnsConfig.production
+        ? 'https://api.push.apple.com'
+        : 'https://api.sandbox.push.apple.com';
+
+    const url = `${host}/3/device/${pushToken}`;
+
+    try {
+        const authToken = await getAuthToken(apnsConfig);
+
+        // Live Activity push payload format
+        const apnsPayload: any = {
+            aps: {
+                timestamp: Math.floor(Date.now() / 1000),
+                event,
+                'content-state': contentState,
+            },
+        };
+
+        if (event === 'end') {
+            apnsPayload.aps['dismissal-date'] = Math.floor(Date.now() / 1000) + 5;
+        }
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'authorization': `bearer ${authToken}`,
+                // Live Activity uses .push-type suffix on bundle id
+                'apns-topic': `${apnsConfig.bundleId}.push-type.liveactivity`,
+                'apns-push-type': 'liveactivity',
+                'apns-priority': '10',
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify(apnsPayload),
+        });
+
+        if (response.ok) {
+            return true;
+        }
+
+        const errorBody = await response.text();
+        console.error(`[APNs LiveActivity] Push failed: ${response.status} ${errorBody}`);
+        return false;
+    } catch (error) {
+        console.error('[APNs LiveActivity] Push error:', error);
+        return false;
+    }
+}
