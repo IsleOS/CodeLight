@@ -66,6 +66,15 @@ final class AppState: ObservableObject {
             }
             isConnected = true
             print("[AppState] Connected to \(server.url)")
+
+            // Auto-fetch sessions and start Live Activities for active ones
+            do {
+                let fetched = try await client.fetchSessions()
+                self.sessions = fetched
+                startLiveActivitiesForActiveSessions()
+            } catch {
+                print("[AppState] Failed to fetch sessions: \(error)")
+            }
         } catch {
             isConnected = false
             print("[AppState] Connection failed: \(error)")
@@ -99,6 +108,22 @@ final class AppState: ObservableObject {
 
     // MARK: - Dynamic Island
 
+    /// Start Live Activities for all active sessions
+    func startLiveActivitiesForActiveSessions() {
+        let serverName = currentServer?.name ?? "Server"
+        for session in sessions where session.active {
+            LiveActivityManager.shared.update(
+                sessionId: session.id,
+                phase: "idle",
+                toolName: nil,
+                projectName: session.metadata?.title ?? "Session",
+                serverName: serverName
+            )
+        }
+    }
+
+    private var idleTimers: [String: Timer] = [:]
+
     private func updateLiveActivity(sessionId: String, content: String, serverName: String) {
         guard let data = content.data(using: .utf8),
               let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
@@ -106,19 +131,56 @@ final class AppState: ObservableObject {
 
         let projectName = sessions.first(where: { $0.id == sessionId })?.metadata?.title ?? "Session"
 
+        // Cancel any pending idle timer for this session
+        idleTimers[sessionId]?.invalidate()
+        idleTimers[sessionId] = nil
+
         switch type {
         case "thinking":
             LiveActivityManager.shared.update(sessionId: sessionId, phase: "thinking", toolName: nil, projectName: projectName, serverName: serverName)
         case "tool":
             let toolName = dict["toolName"] as? String
-            LiveActivityManager.shared.update(sessionId: sessionId, phase: "tool_running", toolName: toolName, projectName: projectName, serverName: serverName)
+            let toolStatus = dict["toolStatus"] as? String
+            // Show "running" until status changes; use done state briefly for completed
+            if toolStatus == "success" || toolStatus == "completed" {
+                LiveActivityManager.shared.update(sessionId: sessionId, phase: "ended", toolName: toolName, projectName: projectName, serverName: serverName)
+                scheduleIdle(sessionId: sessionId, projectName: projectName, serverName: serverName, after: 5)
+            } else if toolStatus == "error" || toolStatus == "failed" {
+                LiveActivityManager.shared.update(sessionId: sessionId, phase: "error", toolName: toolName, projectName: projectName, serverName: serverName)
+                scheduleIdle(sessionId: sessionId, projectName: projectName, serverName: serverName, after: 8)
+            } else {
+                LiveActivityManager.shared.update(sessionId: sessionId, phase: "tool_running", toolName: toolName, projectName: projectName, serverName: serverName)
+            }
         case "assistant":
-            LiveActivityManager.shared.update(sessionId: sessionId, phase: "idle", toolName: nil, projectName: projectName, serverName: serverName)
+            // Don't immediately go idle — give user a moment to see the activity
+            // If no new event comes in 10s, fade to idle
+            scheduleIdle(sessionId: sessionId, projectName: projectName, serverName: serverName, after: 10)
+        case "user":
+            // User just sent a message, expect Claude to start thinking
+            LiveActivityManager.shared.update(sessionId: sessionId, phase: "thinking", toolName: nil, projectName: projectName, serverName: serverName)
         case "interrupted":
-            LiveActivityManager.shared.end(sessionId: sessionId)
+            LiveActivityManager.shared.update(sessionId: sessionId, phase: "error", toolName: "Interrupted", projectName: projectName, serverName: serverName)
+            scheduleIdle(sessionId: sessionId, projectName: projectName, serverName: serverName, after: 5)
         default:
             break
         }
+    }
+
+    private func scheduleIdle(sessionId: String, projectName: String, serverName: String, after seconds: Double) {
+        idleTimers[sessionId]?.invalidate()
+        let timer = Timer.scheduledTimer(withTimeInterval: seconds, repeats: false) { [weak self] _ in
+            Task { @MainActor in
+                LiveActivityManager.shared.update(
+                    sessionId: sessionId,
+                    phase: "idle",
+                    toolName: nil,
+                    projectName: projectName,
+                    serverName: serverName
+                )
+                self?.idleTimers[sessionId] = nil
+            }
+        }
+        idleTimers[sessionId] = timer
     }
 
     // MARK: - Persistence
