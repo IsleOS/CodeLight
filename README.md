@@ -1,10 +1,12 @@
 <div align="center">
 
-<img src="app/CodeLight/Assets.xcassets/AppIcon.appiconset/icon_1024x1024.png" width="160" alt="Code Light icon"/>
+<img src="app/CodeLight/Assets.xcassets/AppIcon.appiconset/icon_1024x1024.png" width="120" alt="Code Light icon"/>
 
 # Code Light
 
-**Control Claude Code from your iPhone — with native performance, precise terminal targeting, and Dynamic Island.**
+### **Your Claude Code, in your pocket.** 🐱✨
+
+**Native iPhone companion for Claude Code — with Dynamic Island, multi-Mac pairing, and pinpoint terminal routing.**
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
@@ -12,12 +14,44 @@
 [![License](https://img.shields.io/badge/license-CC%20BY--NC%204.0-green?style=flat-square)](LICENSE.md)
 [![iOS](https://img.shields.io/badge/iOS-17%2B-black?style=flat-square&logo=apple)](https://github.com/xmqywx/CodeLight/releases)
 [![Swift](https://img.shields.io/badge/Swift-6-orange?style=flat-square&logo=swift)](https://swift.org)
+[![App Store](https://img.shields.io/badge/App_Store-Coming_Soon-D7FE62?style=flat-square&logo=appstore&logoColor=black)](https://github.com/xmqywx/CodeLight)
 
 </div>
 
 ---
 
+<div align="center">
+
+> ### 🏝️ Claude is thinking. You're at lunch. **You'll know.**
+
+<img src="marketing/screenshots/00-lockscreen-live-activity.jpeg" width="640" alt="Code Light Live Activity on iPhone Lock Screen — pixel cat icon, 'Thinking' phase, last user message and Claude's reply preview, 0:01 elapsed timer"/>
+
+*Lock screen Live Activity — your pixel-cat companion shows the active session, the current phase, the last user message, and Claude's reply preview. Updates in real time via APNs.*
+
+</div>
+
+<table>
+<tr>
+<td width="20%"><img src="marketing/screenshots/01-pair-mac-qr.png" alt="Pair with QR or 6-character code"/></td>
+<td width="20%"><img src="marketing/screenshots/02-linked-macs.png" alt="Multiple Macs paired to one iPhone"/></td>
+<td width="20%"><img src="marketing/screenshots/03-mac-sessions.png" alt="Sessions grouped Active / Recent / Archived"/></td>
+<td width="20%"><img src="marketing/screenshots/04-chat-markdown.png" alt="Real-time chat with rich markdown rendering"/></td>
+<td width="20%"><img src="marketing/screenshots/05-settings.png" alt="Self-hosted, multi-server, fully private"/></td>
+</tr>
+<tr>
+<td align="center"><b>🔐 Pair in seconds</b><br><sub>Permanent 6-char code</sub></td>
+<td align="center"><b>🖥️ One iPhone, N Macs</b><br><sub>Switch with one tap</sub></td>
+<td align="center"><b>📋 Active · Recent · Archive</b><br><sub>Three-tab session view</sub></td>
+<td align="center"><b>💬 Live chat + slash commands</b><br><sub>Rich markdown rendering</sub></td>
+<td align="center"><b>⚙️ Self-hosted, private</b><br><sub>Zero-knowledge relay</sub></td>
+</tr>
+</table>
+
+---
+
 Code Light is a **native iPhone companion** for Claude Code. It pairs with [CodeIsland](https://github.com/xmqywx/CodeIsland) on your Mac and lets you read, send, and orchestrate your AI coding sessions from anywhere — without touching the keyboard.
+
+> *Step away from your desk. Lock your phone. Get coffee. The pixel cat in your Dynamic Island will tell you the moment Claude needs you — with the actual question on the lock screen, ready to tap and reply.*
 
 This is a **passion project**, purely for personal interest. It is **free and open-source** with no commercial agenda. Bugs, PRs and ideas are welcome.
 

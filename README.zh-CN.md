@@ -1,10 +1,12 @@
 <div align="center">
 
-<img src="app/CodeLight/Assets.xcassets/AppIcon.appiconset/icon_1024x1024.png" width="160" alt="Code Light icon"/>
+<img src="app/CodeLight/Assets.xcassets/AppIcon.appiconset/icon_1024x1024.png" width="120" alt="Code Light icon"/>
 
 # Code Light
 
-**把 Claude Code 装进口袋 — 原生性能、精准终端定位、支持灵动岛。**
+### **把 Claude Code 装进口袋。** 🐱✨
+
+**Claude Code 的原生 iPhone 伴侣 —— 灵动岛实时显示、多 Mac 配对、精准终端定位。**
 
 [English](README.md) · [简体中文](README.zh-CN.md)
 
@@ -12,12 +14,44 @@
 [![License](https://img.shields.io/badge/license-CC%20BY--NC%204.0-green?style=flat-square)](LICENSE.md)
 [![iOS](https://img.shields.io/badge/iOS-17%2B-black?style=flat-square&logo=apple)](https://github.com/xmqywx/CodeLight/releases)
 [![Swift](https://img.shields.io/badge/Swift-6-orange?style=flat-square&logo=swift)](https://swift.org)
+[![App Store](https://img.shields.io/badge/App_Store-即将上线-D7FE62?style=flat-square&logo=appstore&logoColor=black)](https://github.com/xmqywx/CodeLight)
 
 </div>
 
 ---
 
+<div align="center">
+
+> ### 🏝️ Claude 在思考。你在吃午饭。**你会知道。**
+
+<img src="marketing/screenshots/00-lockscreen-live-activity.jpeg" width="640" alt="Code Light 锁屏 Live Activity —— 像素猫图标、Thinking 阶段、最近用户消息和 Claude 回复预览、0:01 计时器"/>
+
+*锁屏 Live Activity —— 像素猫陪你显示当前活跃会话、所处阶段、最近的用户消息和 Claude 的回复预览。通过 APNs 实时更新。*
+
+</div>
+
+<table>
+<tr>
+<td width="20%"><img src="marketing/screenshots/01-pair-mac-qr.png" alt="扫码或 6 位字符配对"/></td>
+<td width="20%"><img src="marketing/screenshots/02-linked-macs.png" alt="一台 iPhone 配对多台 Mac"/></td>
+<td width="20%"><img src="marketing/screenshots/03-mac-sessions.png" alt="活跃 / 最近 / 归档 三 tab 会话视图"/></td>
+<td width="20%"><img src="marketing/screenshots/04-chat-markdown.png" alt="实时聊天 + 富文本 Markdown 渲染"/></td>
+<td width="20%"><img src="marketing/screenshots/05-settings.png" alt="自托管、多服务器、完全私密"/></td>
+</tr>
+<tr>
+<td align="center"><b>🔐 秒级配对</b><br><sub>永久 6 位字符</sub></td>
+<td align="center"><b>🖥️ 一台 iPhone N 台 Mac</b><br><sub>一键切换</sub></td>
+<td align="center"><b>📋 活跃·最近·归档</b><br><sub>三 tab 会话管理</sub></td>
+<td align="center"><b>💬 实时聊天 + 斜杠命令</b><br><sub>富 Markdown 渲染</sub></td>
+<td align="center"><b>⚙️ 自托管 · 完全私密</b><br><sub>零知识中继</sub></td>
+</tr>
+</table>
+
+---
+
 Code Light 是 Claude Code 的**原生 iPhone 伴侣**。它与 Mac 上的 [CodeIsland](https://github.com/xmqywx/CodeIsland) 配对，让你在任何地方阅读、回复、编排你的 AI 编程会话 —— 完全不用碰键盘。
+
+> *离开座位，锁屏放下手机，去倒杯咖啡。灵动岛里的像素猫会在 Claude 需要你的瞬间告诉你 —— 直接把问题打在锁屏上，点一下就能回复。*
 
 这是一个**出于个人兴趣**的项目，**完全免费开源**，没有任何商业目的。欢迎提 Bug、提 PR、提建议。
 
