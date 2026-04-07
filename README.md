@@ -32,17 +32,17 @@
 
 <table>
 <tr>
-<td width="20%"><img src="marketing/screenshots/01-pair-mac-qr.png" alt="Pair with QR or 6-character code"/></td>
-<td width="20%"><img src="marketing/screenshots/02-linked-macs.png" alt="Multiple Macs paired to one iPhone"/></td>
-<td width="20%"><img src="marketing/screenshots/03-mac-sessions.png" alt="Sessions grouped Active / Recent / Archived"/></td>
-<td width="20%"><img src="marketing/screenshots/04-chat-markdown.png" alt="Real-time chat with rich markdown rendering"/></td>
-<td width="20%"><img src="marketing/screenshots/05-settings.png" alt="Self-hosted, multi-server, fully private"/></td>
+<td width="20%"><img src="marketing/screenshots/01-macs-list-en.png" alt="Multiple Macs paired to one iPhone"/></td>
+<td width="20%"><img src="marketing/screenshots/02-mac-sessions-tabs-en.png" alt="Sessions grouped Active / Recent / Archived"/></td>
+<td width="20%"><img src="marketing/screenshots/03-commands-picker-en.png" alt="Built-in slash commands picker"/></td>
+<td width="20%"><img src="marketing/screenshots/04-chat-markdown-en.png" alt="Real-time chat with rich markdown rendering"/></td>
+<td width="20%"><img src="marketing/screenshots/05-settings-en.png" alt="Self-hosted, multi-server, fully private"/></td>
 </tr>
 <tr>
-<td align="center"><b>🔐 Pair in seconds</b><br><sub>Permanent 6-char code</sub></td>
 <td align="center"><b>🖥️ One iPhone, N Macs</b><br><sub>Switch with one tap</sub></td>
 <td align="center"><b>📋 Active · Recent · Archive</b><br><sub>Three-tab session view</sub></td>
-<td align="center"><b>💬 Live chat + slash commands</b><br><sub>Rich markdown rendering</sub></td>
+<td align="center"><b>⚡ Any /slash command</b><br><sub>/model · /cost · /usage…</sub></td>
+<td align="center"><b>💬 Live chat + markdown</b><br><sub>Code blocks · tables · lists</sub></td>
 <td align="center"><b>⚙️ Self-hosted, private</b><br><sub>Zero-knowledge relay</sub></td>
 </tr>
 </table>
