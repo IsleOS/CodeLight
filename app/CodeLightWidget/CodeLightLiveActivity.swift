@@ -77,17 +77,23 @@ struct CodeLightLiveActivity: Widget {
                     }
                 }
             } compactLeading: {
+                // Cat + rotating status text. Cat is scaled down aggressively to
+                // free up horizontal budget for the rotating text, which is the
+                // more information-dense piece.
                 HStack(spacing: 3) {
                     PixelCharacterView(state: animationState(for: context.state.phase))
-                        .scaleEffect(0.42)
-                        .frame(width: 22, height: 20)
-                    Text(context.state.projectName)
-                        .font(.system(size: 12, weight: .semibold))
-                        .lineLimit(1)
-                        .foregroundStyle(.white)
+                        .scaleEffect(0.36)
+                        .frame(width: 18, height: 18)
+                    RotatingCompactText(state: context.state)
                 }
             } compactTrailing: {
-                RotatingCompactText(state: context.state)
+                // Project name on the trailing side with middle truncation so long
+                // folder names still show both ends.
+                Text(context.state.projectName)
+                    .font(.system(size: 12, weight: .semibold))
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+                    .foregroundStyle(.white)
             } minimal: {
                 PixelCharacterView(state: animationState(for: context.state.phase))
                     .scaleEffect(0.4)
@@ -130,6 +136,8 @@ struct RotatingCompactText: View {
                 .font(.system(size: 12, weight: .medium))
                 .foregroundStyle(phaseColor(state.phase))
                 .lineLimit(1)
+                .truncationMode(.middle)
+                .minimumScaleFactor(0.85)
         }
     }
 }

@@ -15,11 +15,7 @@ struct ConnectionStatusBar: View {
                     .foregroundStyle(Theme.textSecondary)
                 Spacer()
                 Button(String(localized: "retry")) {
-                    Task {
-                        if let server = appState.currentServer {
-                            await appState.connectTo(server)
-                        }
-                    }
+                    Task { await appState.connect() }
                 }
                 .font(.caption)
                 .foregroundStyle(Theme.brand)

@@ -56,6 +56,18 @@ export class EventRouter {
         this.emitUpdate(_deviceId, event, payload, { type: 'all' });
     }
 
+    /** Emit an event to all connections of a specific target device. */
+    emitToDevice(targetDeviceId: string, event: string, payload: unknown): number {
+        const conns = this.connections.get(targetDeviceId);
+        if (!conns) return 0;
+        let count = 0;
+        for (const conn of conns) {
+            conn.socket.emit(event, payload);
+            count++;
+        }
+        return count;
+    }
+
     private shouldSend(conn: ClientConnection, filter: RecipientFilter): boolean {
         switch (filter.type) {
             case 'all':

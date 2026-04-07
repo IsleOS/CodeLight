@@ -1,14 +1,19 @@
 import SwiftUI
 
-/// List of sessions for a given server.
-struct SessionListView: View {
+/// Sessions belonging to a single paired Mac. Shown after the user picks a Mac
+/// from `LinkedMacsListView`. Filters `appState.sessions` by `ownerDeviceId`.
+struct MacSessionListView: View {
     @EnvironmentObject var appState: AppState
-    let server: ServerConfig
+    let mac: LinkedMac
     @State private var isLoading = true
+    @State private var showLaunchSheet = false
+
+    private var macSessions: [SessionInfo] {
+        appState.sessions.filter { $0.ownerDeviceId == mac.deviceId }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
-            // Connection status banner
             ConnectionStatusBar()
 
             Group {
@@ -20,42 +25,49 @@ struct SessionListView: View {
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if appState.sessions.isEmpty {
+                } else if macSessions.isEmpty {
                     emptyState
                 } else {
                     sessionList
                 }
             }
         }
-        .navigationTitle(server.name)
+        .navigationTitle(mac.name)
         .navigationDestination(for: String.self) { sessionId in
             ChatView(sessionId: sessionId)
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 HStack(spacing: 12) {
-                    // Refresh
                     Button {
                         Task { await refreshSessions() }
                     } label: {
                         Image(systemName: "arrow.clockwise")
                     }
 
-                    // Settings
-                    NavigationLink {
-                        SettingsView()
+                    Button {
+                        showLaunchSheet = true
                     } label: {
-                        Image(systemName: "gearshape")
+                        Image(systemName: "plus.circle.fill")
                     }
                 }
             }
         }
+        .sheet(isPresented: $showLaunchSheet) {
+            NavigationStack {
+                LaunchSessionSheet(mac: mac)
+            }
+        }
         .task {
+            // Make sure we're connected to this Mac's server before fetching sessions.
+            if mac.serverUrl != appState.currentServerUrl || !appState.isConnected {
+                await appState.switchServerIfNeeded(to: mac.serverUrl)
+            }
             if let socket = appState.socket {
                 do {
                     appState.sessions = try await socket.fetchSessions()
                 } catch {
-                    print("[SessionList] Fetch error: \(error)")
+                    print("[MacSessionList] Fetch error: \(error)")
                 }
             }
             isLoading = false
@@ -77,44 +89,24 @@ struct SessionListView: View {
                     .font(.title3)
                     .fontWeight(.semibold)
 
-                Text(String(localized: "no_sessions_instruction"))
+                Text(String(localized: "tap_plus_to_launch"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
             }
-
-            VStack(spacing: 12) {
-                HStack(spacing: 8) {
-                    Image(systemName: "1.circle.fill")
-                        .foregroundStyle(.blue)
-                    Text(String(localized: "step_install_codeisland"))
-                        .font(.caption)
-                }
-
-                HStack(spacing: 8) {
-                    Image(systemName: "2.circle.fill")
-                        .foregroundStyle(.blue)
-                    Text(String(localized: "step_start_session"))
-                        .font(.caption)
-                }
-
-                HStack(spacing: 8) {
-                    Image(systemName: "3.circle.fill")
-                        .foregroundStyle(.blue)
-                    Text(String(localized: "step_sessions_appear"))
-                        .font(.caption)
-                }
-            }
-            .padding()
-            .background(Color(.systemGray6), in: RoundedRectangle(cornerRadius: 12))
 
             Button {
-                Task { await refreshSessions() }
+                showLaunchSheet = true
             } label: {
-                Label(String(localized: "refresh"), systemImage: "arrow.clockwise")
-                    .font(.subheadline)
+                Label(String(localized: "launch_session"), systemImage: "plus.circle.fill")
+                    .font(.headline)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    .background(Theme.brand, in: Capsule())
+                    .foregroundStyle(Theme.onBrand)
             }
-            .buttonStyle(.bordered)
+            .padding(.top, 8)
 
             Spacer()
         }
@@ -125,8 +117,7 @@ struct SessionListView: View {
 
     private var sessionList: some View {
         List {
-            // Active sessions
-            let active = appState.sessions.filter(\.active)
+            let active = macSessions.filter(\.active)
             if !active.isEmpty {
                 Section {
                     ForEach(active) { session in
@@ -155,8 +146,7 @@ struct SessionListView: View {
                 }
             }
 
-            // Inactive sessions
-            let inactive = appState.sessions.filter { !$0.active }
+            let inactive = macSessions.filter { !$0.active }
             if !inactive.isEmpty {
                 Section(String(localized: "recent")) {
                     ForEach(inactive) { session in
@@ -175,8 +165,6 @@ struct SessionListView: View {
         }
     }
 
-    // MARK: - Helpers
-
     private func refreshSessions() async {
         if let socket = appState.socket {
             appState.sessions = (try? await socket.fetchSessions()) ?? []
@@ -193,14 +181,12 @@ private func shortenPath(_ path: String) -> String {
     return p
 }
 
-/// A single session row.
 private struct SessionRow: View {
     @EnvironmentObject var appState: AppState
     let session: SessionInfo
 
     var body: some View {
         HStack(spacing: 12) {
-            // Status indicator: brand-lime dot for active, dim for idle.
             ZStack {
                 if session.active {
                     Circle()

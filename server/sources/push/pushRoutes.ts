@@ -51,6 +51,51 @@ export async function pushRoutes(app: FastifyInstance) {
         return { tokens };
     });
 
+    // Get notification preferences for this device. Defaults (all off for
+    // completion/approval, off for error) are enforced at the schema level.
+    app.get('/v1/notification-prefs', {
+        preHandler: authMiddleware,
+    }, async (request) => {
+        const device = await db.device.findUnique({
+            where: { id: request.deviceId! },
+            select: {
+                notifyOnCompletion: true,
+                notifyOnApproval: true,
+                notifyOnError: true,
+            },
+        });
+        return device || { notifyOnCompletion: false, notifyOnApproval: false, notifyOnError: false };
+    });
+
+    // Update notification preferences. All fields optional so the client can
+    // PATCH just one toggle at a time.
+    app.put('/v1/notification-prefs', {
+        preHandler: authMiddleware,
+        schema: {
+            body: z.object({
+                notifyOnCompletion: z.boolean().optional(),
+                notifyOnApproval: z.boolean().optional(),
+                notifyOnError: z.boolean().optional(),
+            }),
+        },
+    }, async (request) => {
+        const body = request.body as {
+            notifyOnCompletion?: boolean;
+            notifyOnApproval?: boolean;
+            notifyOnError?: boolean;
+        };
+        const updated = await db.device.update({
+            where: { id: request.deviceId! },
+            data: body,
+            select: {
+                notifyOnCompletion: true,
+                notifyOnApproval: true,
+                notifyOnError: true,
+            },
+        });
+        return updated;
+    });
+
     // Register a Live Activity push token for a session
     app.post('/v1/live-activity-tokens', {
         preHandler: authMiddleware,

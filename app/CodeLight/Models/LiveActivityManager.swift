@@ -88,7 +88,7 @@ final class LiveActivityManager {
     /// Register the global Live Activity push token with the server.
     /// Uses a special sessionId "__global__" to identify this as the global activity.
     private func registerToken(token: String) async {
-        guard let serverUrl = AppState.shared.currentServer?.url,
+        guard let serverUrl = AppState.shared.currentServerUrl,
               let authToken = KeyManager(serviceName: "com.codelight.app").loadToken(forServer: serverUrl) else {
             return
         }

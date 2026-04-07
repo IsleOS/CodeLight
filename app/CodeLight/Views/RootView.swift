@@ -1,6 +1,9 @@
 import SwiftUI
 
-/// Root navigation — shows pairing if no servers, server list if multiple, session list if one.
+/// Root navigation:
+/// - No backend yet → `PairingView` (first pair sets the backend implicitly)
+/// - Has backend, not connected → loading + auto-connect
+/// - Has backend, connected → `LinkedMacsListView`
 struct RootView: View {
     @EnvironmentObject var appState: AppState
     @State private var showError = false
@@ -8,21 +11,19 @@ struct RootView: View {
 
     var body: some View {
         NavigationStack {
-            if appState.servers.isEmpty {
+            if appState.linkedMacs.isEmpty && appState.lastUsedServerUrl == nil {
+                // Fresh install (no Macs paired, no server history) → pairing flow
                 PairingView()
-            } else if appState.servers.count > 1 {
-                ServerListView()
-            } else if appState.isConnected {
-                SessionListView(server: appState.currentServer ?? appState.servers[0])
+            } else if appState.isConnected || !appState.linkedMacs.isEmpty {
+                // Either connected, OR we have cached Macs to show even while offline
+                LinkedMacsListView()
             } else {
                 connectingView
                     .task {
-                        if let server = appState.currentServer ?? appState.servers.first {
-                            await appState.connectTo(server)
-                            if !appState.isConnected {
-                                errorMessage = String(localized: "could_not_connect")
-                                showError = true
-                            }
+                        await appState.connect()
+                        if !appState.isConnected {
+                            errorMessage = String(localized: "could_not_connect")
+                            showError = true
                         }
                     }
             }
@@ -35,7 +36,6 @@ struct RootView: View {
             Spacer()
 
             if showError {
-                // Error state
                 Image(systemName: "wifi.exclamationmark")
                     .font(.system(size: 48))
                     .foregroundStyle(.orange)
@@ -55,11 +55,9 @@ struct RootView: View {
                     Button {
                         showError = false
                         Task {
-                            if let server = appState.currentServer ?? appState.servers.first {
-                                await appState.connectTo(server)
-                                if !appState.isConnected {
-                                    showError = true
-                                }
+                            await appState.connect()
+                            if !appState.isConnected {
+                                showError = true
                             }
                         }
                     } label: {
@@ -69,16 +67,13 @@ struct RootView: View {
                     .buttonStyle(.borderedProminent)
 
                     Button(role: .destructive) {
-                        appState.servers.removeAll()
-                        UserDefaults.standard.removeObject(forKey: "servers")
-                        appState.disconnect()
+                        appState.reset()
                     } label: {
                         Text(String(localized: "reset_connection"))
                     }
                 }
                 .padding(.horizontal, 40)
             } else {
-                // Loading state
                 ProgressView()
                     .scaleEffect(1.2)
 

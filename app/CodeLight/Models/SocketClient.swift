@@ -144,8 +144,105 @@ final class SocketClient {
 
             let lastActive = (dict["lastActiveAt"] as? String).flatMap { ISO8601DateFormatter().date(from: $0) } ?? Date()
 
-            return SessionInfo(id: id, tag: tag, metadata: metadata, active: active, lastActiveAt: lastActive)
+            // Owner device info — projected by the server from the Session→Device join.
+            let ownerDeviceId = dict["ownerDeviceId"] as? String
+            let ownerDeviceName = dict["ownerDeviceName"] as? String
+
+            return SessionInfo(
+                id: id,
+                tag: tag,
+                metadata: metadata,
+                active: active,
+                lastActiveAt: lastActive,
+                ownerDeviceId: ownerDeviceId,
+                ownerDeviceName: ownerDeviceName
+            )
         }
+    }
+
+    // MARK: - Multi-device pairing API
+
+    /// Register this iPhone with the server (idempotent). Call once after auth.
+    func registerDevice(name: String, kind: String) async throws {
+        _ = try await postJSON(path: "/v1/devices/me", body: ["name": name, "kind": kind])
+    }
+
+    /// Redeem a Mac's permanent shortCode → creates a DeviceLink.
+    func redeemPairingCode(_ code: String) async throws -> LinkedDevice {
+        let result = try await postJSON(path: "/v1/pairing/code/redeem", body: ["code": code])
+        guard let macId = result["macDeviceId"] as? String,
+              let name = result["name"] as? String else {
+            throw NSError(domain: "CodeLight.Pair", code: -1,
+                          userInfo: [NSLocalizedDescriptionKey: result["error"] as? String ?? "Pairing failed"])
+        }
+        let kind = result["kind"] as? String ?? "mac"
+        return LinkedDevice(deviceId: macId, name: name, kind: kind, createdAt: ISO8601DateFormatter().string(from: Date()))
+    }
+
+    /// List all devices linked to this iPhone.
+    func fetchLinks() async throws -> [LinkedDevice] {
+        let url = URL(string: "\(serverUrl)/v1/pairing/links")!
+        var request = URLRequest(url: url)
+        if let token { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return (try? JSONDecoder().decode([LinkedDevice].self, from: data)) ?? []
+    }
+
+    /// Unlink a paired Mac.
+    func unlinkDevice(_ deviceId: String) async throws {
+        let url = URL(string: "\(serverUrl)/v1/pairing/links/\(deviceId)")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        if let token { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
+        let (_, response) = try await URLSession.shared.data(for: request)
+        if let http = response as? HTTPURLResponse, !(200...299).contains(http.statusCode) {
+            throw NSError(domain: "CodeLight.Unlink", code: http.statusCode,
+                          userInfo: [NSLocalizedDescriptionKey: "Unlink failed (\(http.statusCode))"])
+        }
+    }
+
+    /// Fetch a paired Mac's launch presets.
+    func fetchPresets(macDeviceId: String) async throws -> [LaunchPresetDTO] {
+        let url = URL(string: "\(serverUrl)/v1/devices/\(macDeviceId)/presets")!
+        var request = URLRequest(url: url)
+        if let token { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return (try? JSONDecoder().decode([LaunchPresetDTO].self, from: data)) ?? []
+    }
+
+    /// Fetch a paired Mac's known project paths.
+    func fetchProjects(macDeviceId: String, limit: Int = 30) async throws -> [KnownProjectDTO] {
+        let url = URL(string: "\(serverUrl)/v1/devices/\(macDeviceId)/projects?limit=\(limit)")!
+        var request = URLRequest(url: url)
+        if let token { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return (try? JSONDecoder().decode([KnownProjectDTO].self, from: data)) ?? []
+    }
+
+    /// Remote-launch a session on a paired Mac.
+    func launchSession(macDeviceId: String, presetId: String, projectPath: String) async throws {
+        _ = try await postJSON(path: "/v1/sessions/launch", body: [
+            "macDeviceId": macDeviceId,
+            "presetId": presetId,
+            "projectPath": projectPath,
+        ])
+    }
+
+    private func postJSON(path: String, body: [String: Any]) async throws -> [String: Any] {
+        let url = URL(string: "\(serverUrl)\(path)")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        if let token { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        if let http = response as? HTTPURLResponse, !(200...299).contains(http.statusCode) {
+            let body = (try? JSONSerialization.jsonObject(with: data) as? [String: Any]) ?? [:]
+            let msg = body["error"] as? String ?? "HTTP \(http.statusCode)"
+            throw NSError(domain: "CodeLight.HTTP", code: http.statusCode,
+                          userInfo: [NSLocalizedDescriptionKey: msg])
+        }
+        return (try? JSONSerialization.jsonObject(with: data) as? [String: Any]) ?? [:]
     }
 
     struct FetchResult {
@@ -227,6 +324,37 @@ final class SocketClient {
                           userInfo: [NSLocalizedDescriptionKey: "CodeIsland hasn't uploaded capabilities yet. Start CodeIsland on your Mac."])
         }
         return try JSONDecoder().decode(CapabilitySnapshot.self, from: data)
+    }
+
+    // MARK: - Notification Preferences
+
+    struct NotificationPrefs: Codable, Equatable {
+        var notifyOnCompletion: Bool
+        var notifyOnApproval: Bool
+        var notifyOnError: Bool
+    }
+
+    func fetchNotificationPrefs() async throws -> NotificationPrefs {
+        let url = URL(string: "\(serverUrl)/v1/notification-prefs")!
+        var request = URLRequest(url: url)
+        if let token { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return try JSONDecoder().decode(NotificationPrefs.self, from: data)
+    }
+
+    func updateNotificationPrefs(_ prefs: NotificationPrefs) async throws -> NotificationPrefs {
+        let url = URL(string: "\(serverUrl)/v1/notification-prefs")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        if let token { request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization") }
+        request.httpBody = try JSONEncoder().encode(prefs)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+            throw NSError(domain: "CodeLight.Prefs", code: (response as? HTTPURLResponse)?.statusCode ?? -1,
+                          userInfo: [NSLocalizedDescriptionKey: "Failed to update notification prefs"])
+        }
+        return try JSONDecoder().decode(NotificationPrefs.self, from: data)
     }
 
     /// Upload an image blob. Returns the blobId on success.

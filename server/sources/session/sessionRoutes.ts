@@ -4,8 +4,50 @@ import { db } from '@/storage/db';
 import { authMiddleware } from '@/auth/middleware';
 import { allocateSessionSeqBatch } from '@/storage/seq';
 import { getAccessibleDeviceIds, canAccessSession } from '@/auth/deviceAccess';
+import { eventRouter } from '@/socket/socketServer';
 
 export async function sessionRoutes(app: FastifyInstance) {
+
+    // Remote-launch a new session on a paired Mac. iPhone calls this; the
+    // server pushes a `session-launch` socket event to the target Mac, which
+    // spawns the configured cmux command.
+    app.post('/v1/sessions/launch', {
+        preHandler: authMiddleware,
+        schema: {
+            body: z.object({
+                macDeviceId: z.string(),
+                presetId: z.string(),
+                projectPath: z.string().min(1),
+            }),
+        },
+    }, async (request, reply) => {
+        const me = request.deviceId!;
+        const { macDeviceId, presetId, projectPath } = request.body as {
+            macDeviceId: string;
+            presetId: string;
+            projectPath: string;
+        };
+
+        // Must be linked to that Mac
+        const accessible = await getAccessibleDeviceIds(me);
+        if (!accessible.includes(macDeviceId)) {
+            return reply.code(403).send({ error: 'Not linked to that device' });
+        }
+
+        // Validate preset belongs to that Mac
+        const preset = await db.launchPreset.findUnique({ where: { id: presetId } });
+        if (!preset || preset.deviceId !== macDeviceId) {
+            return reply.code(404).send({ error: 'Preset not found on that device' });
+        }
+
+        const dispatched = eventRouter.emitToDevice(macDeviceId, 'session-launch', {
+            presetId,
+            projectPath,
+            requestedByDeviceId: me,
+        });
+
+        return { ok: true, dispatched: dispatched > 0 };
+    });
 
     // Manual cleanup: mark sessions as inactive if no activity in given minutes
     app.post('/v1/sessions/cleanup', {
@@ -51,10 +93,24 @@ export async function sessionRoutes(app: FastifyInstance) {
                     { lastActiveAt: { gte: dayAgo } },
                 ],
             },
+            include: {
+                device: { select: { id: true, name: true, kind: true } },
+            },
             orderBy: { updatedAt: 'desc' },
             take: 50,
         });
-        return { sessions };
+
+        // Project the owner device fields onto each session row so the iPhone
+        // can group sessions by Mac without a second round-trip.
+        const flattened = sessions.map((s) => ({
+            ...s,
+            ownerDeviceId: s.device.id,
+            ownerDeviceName: s.device.name,
+            ownerDeviceKind: s.device.kind,
+            device: undefined,
+        }));
+
+        return { sessions: flattened };
     });
 
     // Create or load session (idempotent by tag) — own device only

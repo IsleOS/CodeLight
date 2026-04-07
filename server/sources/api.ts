@@ -7,6 +7,7 @@ import {
 } from 'fastify-type-provider-zod';
 import { authRoutes } from '@/auth/authRoutes';
 import { pairingRoutes } from '@/pairing/pairingRoutes';
+import { devicesRoutes } from '@/devices/devicesRoutes';
 import { sessionRoutes } from '@/session/sessionRoutes';
 import { pushRoutes } from '@/push/pushRoutes';
 import { blobRoutes } from '@/blob/blobRoutes';
@@ -35,6 +36,7 @@ export async function startApi() {
 
     await app.register(authRoutes);
     await app.register(pairingRoutes);
+    await app.register(devicesRoutes);
     await app.register(sessionRoutes);
     await app.register(pushRoutes);
     await app.register(blobRoutes);

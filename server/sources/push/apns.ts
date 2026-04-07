@@ -73,7 +73,10 @@ export interface PushPayload {
 }
 
 /**
- * Send a push notification to a device token.
+ * Send a push notification to a device token via HTTP/2. Node's built-in
+ * `fetch()` uses HTTP/1.1 which APNs rejects with "fetch failed" — so we
+ * reuse the same `apnsHttp2Request()` helper that the Live Activity path
+ * already relies on.
  */
 export async function sendPush(deviceToken: string, payload: PushPayload): Promise<boolean> {
     const apnsConfig = getApnsConfig();
@@ -82,11 +85,12 @@ export async function sendPush(deviceToken: string, payload: PushPayload): Promi
         return false;
     }
 
+    // http2.connect() interprets the authority string as a URL — without an
+    // explicit https:// scheme it would default to http:// and fail to connect.
+    // Match the format sendLiveActivityUpdate uses below.
     const host = apnsConfig.production
         ? 'https://api.push.apple.com'
         : 'https://api.sandbox.push.apple.com';
-
-    const url = `${host}/3/device/${deviceToken}`;
 
     try {
         const authToken = await getAuthToken(apnsConfig);
@@ -103,25 +107,27 @@ export async function sendPush(deviceToken: string, payload: PushPayload): Promi
             ...(payload.data || {}),
         };
 
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'authorization': `bearer ${authToken}`,
-                'apns-topic': apnsConfig.bundleId,
-                'apns-push-type': 'alert',
-                'apns-priority': '10',
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify(apnsPayload),
-        });
+        const headers: Record<string, string> = {
+            'authorization': `bearer ${authToken}`,
+            'apns-topic': apnsConfig.bundleId,
+            'apns-push-type': 'alert',
+            'apns-priority': '10',
+            'content-type': 'application/json',
+        };
 
-        if (response.ok) {
+        const result = await apnsHttp2Request(
+            host,
+            `/3/device/${deviceToken}`,
+            headers,
+            JSON.stringify(apnsPayload)
+        );
+
+        console.log(`[APNs Alert] host=${host} token=${deviceToken.substring(0, 12)} topic=${apnsConfig.bundleId} status=${result.status} apnsId=${result.apnsId ?? '-'} body=${result.body || '(empty)'}`);
+
+        if (result.status >= 200 && result.status < 300) {
             return true;
         }
-
-        const errorBody = await response.text();
-        console.error(`[APNs] Push failed: ${response.status} ${errorBody}`);
-
+        console.error(`[APNs] Push failed: ${result.status} ${result.body}`);
         return false;
     } catch (error) {
         console.error('[APNs] Push error:', error);
@@ -142,9 +148,23 @@ export async function sendPushToDevice(
         select: { token: true },
     });
 
-    await Promise.allSettled(
+    console.log(`[sendPushToDevice] device=${deviceId.substring(0, 10)} tokenCount=${tokens.length} title=${payload.title}`);
+    if (tokens.length === 0) {
+        console.log(`[sendPushToDevice]   no PushTokens registered — iPhone probably never called POST /v1/push-tokens`);
+        return;
+    }
+
+    const results = await Promise.allSettled(
         tokens.map((t: { token: string }) => sendPush(t.token, payload))
     );
+    results.forEach((r, i) => {
+        const tok = tokens[i].token.substring(0, 10);
+        if (r.status === 'fulfilled') {
+            console.log(`[sendPushToDevice]   token=${tok} → ${r.value}`);
+        } else {
+            console.error(`[sendPushToDevice]   token=${tok} → REJECTED`, r.reason);
+        }
+    });
 }
 
 /**
@@ -166,7 +186,7 @@ export interface LiveActivityContentState {
 /**
  * Send HTTP/2 request to APNs (required — fetch() uses HTTP/1.1).
  */
-function apnsHttp2Request(host: string, path: string, headers: Record<string, string>, body: string): Promise<{ status: number; body: string }> {
+function apnsHttp2Request(host: string, path: string, headers: Record<string, string>, body: string): Promise<{ status: number; body: string; apnsId?: string }> {
     return new Promise((resolve, reject) => {
         const client = http2.connect(host);
 
@@ -183,9 +203,11 @@ function apnsHttp2Request(host: string, path: string, headers: Record<string, st
 
         let responseBody = '';
         let statusCode = 0;
+        let apnsId: string | undefined;
 
         req.on('response', (headers) => {
             statusCode = headers[':status'] as number;
+            apnsId = headers['apns-id'] as string | undefined;
         });
 
         req.on('data', (chunk) => {
@@ -194,7 +216,7 @@ function apnsHttp2Request(host: string, path: string, headers: Record<string, st
 
         req.on('end', () => {
             client.close();
-            resolve({ status: statusCode, body: responseBody });
+            resolve({ status: statusCode, body: responseBody, apnsId });
         });
 
         req.on('error', (err) => {

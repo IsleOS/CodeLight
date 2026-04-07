@@ -21,23 +21,89 @@ public struct AuthResponse: Codable, Sendable {
 }
 
 /// QR code pairing payload (encoded in QR).
+///
+/// **Current format (post-multi-mac-pairing):** `{server, code}` — Mac displays
+/// its permanent shortCode in QR, iPhone redeems via POST /v1/pairing/code/redeem.
+///
+/// **Legacy format:** `{s, k, n}` — kept as optional fields for migration only.
+/// New Mac builds always emit the new format. iPhone shows a friendly error
+/// when it sees a legacy QR (no `code` field).
 public struct PairingQRPayload: Codable, Sendable {
-    public let s: String  // server URL
-    public let k: String  // temp public key (base64)
-    public let n: String  // device name
+    public let server: String?
+    public let code: String?
 
-    public init(serverUrl: String, tempPublicKey: String, deviceName: String) {
-        self.s = serverUrl
-        self.k = tempPublicKey
-        self.n = deviceName
+    // Legacy fields — present in old QR codes from CodeIsland < multi-mac-pairing.
+    public let s: String?
+    public let k: String?
+    public let n: String?
+
+    public init(server: String, code: String) {
+        self.server = server
+        self.code = code
+        self.s = nil
+        self.k = nil
+        self.n = nil
     }
 
-    public var serverUrl: String { s }
-    public var tempPublicKey: String { k }
-    public var deviceName: String { n }
+    /// True if this QR is in the modern `{server, code}` format and has both fields populated.
+    public var isModern: Bool {
+        guard let server, !server.isEmpty, let code, !code.isEmpty else { return false }
+        return true
+    }
 }
 
-/// Session metadata (sent as encrypted blob).
+/// A device linked to the caller via DeviceLink. Returned from GET /v1/pairing/links.
+public struct LinkedDevice: Codable, Sendable, Identifiable, Hashable {
+    public let deviceId: String
+    public let name: String
+    public let kind: String      // "ios" | "mac"
+    public let createdAt: String // ISO8601
+
+    public init(deviceId: String, name: String, kind: String, createdAt: String) {
+        self.deviceId = deviceId
+        self.name = name
+        self.kind = kind
+        self.createdAt = createdAt
+    }
+
+    public var id: String { deviceId }
+}
+
+/// A launch preset for remote-launching a session on a paired Mac.
+public struct LaunchPresetDTO: Codable, Sendable, Identifiable, Hashable {
+    public let id: String
+    public let name: String
+    public let command: String
+    public let icon: String?
+    public let sortOrder: Int
+
+    public init(id: String, name: String, command: String, icon: String?, sortOrder: Int) {
+        self.id = id
+        self.name = name
+        self.command = command
+        self.icon = icon
+        self.sortOrder = sortOrder
+    }
+}
+
+/// A known project path on a paired Mac.
+public struct KnownProjectDTO: Codable, Sendable, Identifiable, Hashable {
+    public let id: String
+    public let path: String
+    public let name: String
+    public let lastSeenAt: String
+
+    public init(id: String, path: String, name: String, lastSeenAt: String) {
+        self.id = id
+        self.path = path
+        self.name = name
+        self.lastSeenAt = lastSeenAt
+    }
+}
+
+/// Session metadata (sent as encrypted blob from the Mac).
+/// NOTE: For owner device info, see the wrapper `SessionInfo`/`ownerDeviceId` —
+/// server-side join, not part of the encrypted blob.
 public struct SessionMetadata: Codable, Sendable {
     public let path: String?         // working directory
     public let title: String?        // session title (conversation summary)

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { db } from '@/storage/db';
 import { authMiddleware } from '@/auth/middleware';
 import { linkDevices } from '@/auth/deviceAccess';
+import { eventRouter } from '@/socket/socketServer';
 
 export async function pairingRoutes(app: FastifyInstance) {
 
@@ -125,5 +126,118 @@ export async function pairingRoutes(app: FastifyInstance) {
         }
 
         return { status: 'pending' };
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Short-code pairing flow
+    //
+    // Each Mac has a permanent shortCode (Device.shortCode), lazy-allocated
+    // by POST /v1/devices/me. iPhone redeems the code here to establish a
+    // DeviceLink. The same code remains valid forever — pairing additional
+    // iPhones is just additional redeem calls.
+    // ─────────────────────────────────────────────────────────────────────
+
+    // iPhone redeems a Mac's permanent shortCode → links the two devices.
+    app.post('/v1/pairing/code/redeem', {
+        preHandler: authMiddleware,
+        schema: {
+            body: z.object({ code: z.string().min(4).max(12) }),
+        },
+    }, async (request, reply) => {
+        const { code } = request.body as { code: string };
+        const normalized = code.toUpperCase().trim();
+        const iosDeviceId = request.deviceId!;
+
+        const macDevice = await db.device.findUnique({
+            where: { shortCode: normalized },
+            select: { id: true, name: true, kind: true },
+        });
+        if (!macDevice) {
+            return reply.code(404).send({ error: 'Invalid code' });
+        }
+        if (macDevice.id === iosDeviceId) {
+            return reply.code(400).send({ error: 'Cannot pair with yourself' });
+        }
+        if (macDevice.kind !== 'mac') {
+            return reply.code(400).send({ error: 'Code does not belong to a Mac device' });
+        }
+
+        await linkDevices(macDevice.id, iosDeviceId);
+
+        console.log(`[pairing] Code-redeemed link: ${macDevice.id} <-> ${iosDeviceId}`);
+
+        return {
+            macDeviceId: macDevice.id,
+            name: macDevice.name,
+            kind: macDevice.kind,
+        };
+    });
+
+    // ─────────────────────────────────────────────────────────────────────
+    // Device link management
+    // ─────────────────────────────────────────────────────────────────────
+
+    // List all devices linked to the caller.
+    app.get('/v1/pairing/links', {
+        preHandler: authMiddleware,
+    }, async (request) => {
+        const myDeviceId = request.deviceId!;
+        const links = await db.deviceLink.findMany({
+            where: {
+                OR: [
+                    { sourceDeviceId: myDeviceId },
+                    { targetDeviceId: myDeviceId },
+                ],
+            },
+            include: {
+                sourceDevice: { select: { id: true, name: true, kind: true } },
+                targetDevice: { select: { id: true, name: true, kind: true } },
+            },
+            orderBy: { createdAt: 'desc' },
+        });
+
+        const links_out = links.map((l) => {
+            const peer = l.sourceDeviceId === myDeviceId ? l.targetDevice : l.sourceDevice;
+            return {
+                deviceId: peer.id,
+                name: peer.name,
+                kind: peer.kind,
+                createdAt: l.createdAt.toISOString(),
+            };
+        });
+
+        return links_out;
+    });
+
+    // Unlink the caller from a target device. Notifies the target via socket.
+    app.delete('/v1/pairing/links/:targetDeviceId', {
+        preHandler: authMiddleware,
+        schema: {
+            params: z.object({ targetDeviceId: z.string() }),
+        },
+    }, async (request, reply) => {
+        const myDeviceId = request.deviceId!;
+        const { targetDeviceId } = request.params as { targetDeviceId: string };
+
+        const deleted = await db.deviceLink.deleteMany({
+            where: {
+                OR: [
+                    { sourceDeviceId: myDeviceId, targetDeviceId },
+                    { sourceDeviceId: targetDeviceId, targetDeviceId: myDeviceId },
+                ],
+            },
+        });
+
+        if (deleted.count === 0) {
+            return reply.code(404).send({ error: 'Link not found' });
+        }
+
+        // Notify the other side so it can clean local state
+        eventRouter.emitToDevice(targetDeviceId, 'link-removed', {
+            sourceDeviceId: myDeviceId,
+        });
+
+        console.log(`[pairing] Unlinked ${myDeviceId} <-> ${targetDeviceId}`);
+        return { ok: true };
     });
 }

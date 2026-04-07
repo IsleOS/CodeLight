@@ -1,107 +1,150 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Device {
-    id        String   @id @default(cuid())
-    publicKey String   @unique
-    name      String
-    seq       Int      @default(0)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
+  publicKey String   @unique
+  name      String
+  kind      String   @default("ios") // 'ios' | 'mac'
+  shortCode String?  @unique // Permanent 6-char pairing code for Macs (lazy-generated)
+  seq       Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    sessions   Session[]
-    pushTokens PushToken[]
+  // Notification preferences (only meaningful for iOS devices).
+  // Controls which phase transitions trigger a system alert push.
+  notifyOnCompletion Boolean @default(false) // non-ended → ended
+  notifyOnApproval   Boolean @default(false) // tool waiting_approval
+  notifyOnError      Boolean @default(false) // tool status=error
 
-    // Device linking (paired devices can see each other's sessions)
-    linksAsSource DeviceLink[] @relation("LinkSource")
-    linksAsTarget DeviceLink[] @relation("LinkTarget")
+  sessions      Session[]
+  pushTokens    PushToken[]
+  launchPresets LaunchPreset[]
+  knownProjects KnownProject[]
+
+  // Device linking (paired devices can see each other's sessions)
+  linksAsSource DeviceLink[] @relation("LinkSource")
+  linksAsTarget DeviceLink[] @relation("LinkTarget")
 }
 
 /// Links two devices together (bidirectional access).
 /// Created during QR pairing. Both devices can see each other's sessions.
 model DeviceLink {
-    id             String   @id @default(cuid())
-    sourceDeviceId String
-    targetDeviceId String
-    sourceDevice   Device   @relation("LinkSource", fields: [sourceDeviceId], references: [id])
-    targetDevice   Device   @relation("LinkTarget", fields: [targetDeviceId], references: [id])
-    createdAt      DateTime @default(now())
+  id             String   @id @default(cuid())
+  sourceDeviceId String
+  targetDeviceId String
+  sourceDevice   Device   @relation("LinkSource", fields: [sourceDeviceId], references: [id])
+  targetDevice   Device   @relation("LinkTarget", fields: [targetDeviceId], references: [id])
+  createdAt      DateTime @default(now())
 
-    @@unique([sourceDeviceId, targetDeviceId])
+  @@unique([sourceDeviceId, targetDeviceId])
 }
 
 model Session {
-    id              String   @id @default(cuid())
-    tag             String
-    deviceId        String
-    device          Device   @relation(fields: [deviceId], references: [id])
-    metadata        String
-    metadataVersion Int      @default(0)
-    seq             Int      @default(0)
-    active          Boolean  @default(true)
-    lastActiveAt    DateTime @default(now())
-    createdAt       DateTime @default(now())
-    updatedAt       DateTime @updatedAt
+  id              String   @id @default(cuid())
+  tag             String
+  deviceId        String
+  device          Device   @relation(fields: [deviceId], references: [id])
+  metadata        String
+  metadataVersion Int      @default(0)
+  seq             Int      @default(0)
+  active          Boolean  @default(true)
+  lastActiveAt    DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-    messages SessionMessage[]
+  messages SessionMessage[]
 
-    @@unique([deviceId, tag])
-    @@index([deviceId, updatedAt(sort: Desc)])
+  @@unique([deviceId, tag])
+  @@index([deviceId, updatedAt(sort: Desc)])
 }
 
 model SessionMessage {
-    id        String   @id @default(cuid())
-    sessionId String
-    session   Session  @relation(fields: [sessionId], references: [id])
-    localId   String?
-    seq       Int
-    content   String
-    createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  sessionId String
+  session   Session  @relation(fields: [sessionId], references: [id])
+  localId   String?
+  seq       Int
+  content   String
+  createdAt DateTime @default(now())
 
-    @@unique([sessionId, localId])
-    @@index([sessionId, seq])
+  @@unique([sessionId, localId])
+  @@index([sessionId, seq])
 }
 
 model PairingRequest {
-    id              String   @id @default(cuid())
-    tempPublicKey   String   @unique
-    serverUrl       String
-    deviceName      String
-    response        String?
-    responseDeviceId String?
-    createdAt       DateTime @default(now())
-    expiresAt       DateTime
+  id               String   @id @default(cuid())
+  tempPublicKey    String   @unique
+  shortCode        String?  @unique // 6-char human-readable pairing code
+  serverUrl        String
+  deviceName       String
+  response         String?
+  responseDeviceId String?
+  createdAt        DateTime @default(now())
+  expiresAt        DateTime
 
-    @@index([tempPublicKey])
+  @@index([tempPublicKey])
+  @@index([shortCode])
+}
+
+/// Launch presets for a Mac CodeIsland device.
+/// iPhone fetches these to show the user what commands can be remote-launched.
+model LaunchPreset {
+  id        String   @id @default(cuid())
+  deviceId  String
+  device    Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  name      String
+  command   String
+  icon      String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([deviceId, sortOrder])
+}
+
+/// Known project paths for a Mac CodeIsland device.
+/// Mac uploads its session cwds + recent project list; iPhone uses these
+/// when picking a project for a remote-launched session.
+model KnownProject {
+  id         String   @id @default(cuid())
+  deviceId   String
+  device     Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  path       String
+  name       String
+  lastSeenAt DateTime @default(now())
+
+  @@unique([deviceId, path])
+  @@index([deviceId, lastSeenAt(sort: Desc)])
 }
 
 model PushToken {
-    id        String   @id @default(cuid())
-    deviceId  String
-    device    Device   @relation(fields: [deviceId], references: [id])
-    token     String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
+  deviceId  String
+  device    Device   @relation(fields: [deviceId], references: [id])
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@unique([deviceId, token])
+  @@unique([deviceId, token])
 }
 
 /// Live Activity push token (scoped to a session).
 /// iOS generates a token per active Live Activity.
 model LiveActivityToken {
-    id        String   @id @default(cuid())
-    deviceId  String
-    sessionId String
-    token     String   // APNs push token for this specific activity
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
+  deviceId  String
+  sessionId String
+  token     String // APNs push token for this specific activity
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-    @@unique([deviceId, sessionId])
-    @@index([sessionId])
+  @@unique([deviceId, sessionId])
+  @@index([sessionId])
 }

@@ -1,6 +1,7 @@
 import SwiftUI
 import CodeLightCrypto
 
+/// Settings — backend info, paired Macs management, security, language, about.
 struct SettingsView: View {
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) private var dismiss
@@ -8,6 +9,13 @@ struct SettingsView: View {
     @State private var selectedLanguage: String = UserDefaults.standard.stringArray(forKey: "AppleLanguages")?.first ?? ""
     @State private var showCleanupAlert = false
     @State private var cleanupResult: String? = nil
+    @State private var showResetConfirm = false
+    @State private var notificationPrefs = SocketClient.NotificationPrefs(
+        notifyOnCompletion: false,
+        notifyOnApproval: false,
+        notifyOnError: false
+    )
+    @State private var prefsLoaded = false
 
     private let expiryOptions = [7, 14, 30, 90, 180, 365]
 
@@ -17,46 +25,100 @@ struct SettingsView: View {
         } else {
             UserDefaults.standard.set([lang], forKey: "AppleLanguages")
         }
-        // Language change takes effect on next app launch
     }
 
     var body: some View {
         List {
-            // Connection
+            // Connection status (current active socket)
             Section {
-                if let server = appState.currentServer {
-                    HStack {
-                        Label(String(localized: "server"), systemImage: "server.rack")
-                        Spacer()
-                        Text(URL(string: server.url)?.host ?? server.url)
-                            .foregroundStyle(.secondary)
-                            .font(.caption)
-                    }
+                HStack {
+                    Label(String(localized: "current_server"), systemImage: "server.rack")
+                    Spacer()
+                    Text(appState.currentServerUrl.flatMap { URL(string: $0)?.host } ?? "—")
+                        .foregroundStyle(.secondary)
+                        .font(.caption)
+                }
 
-                    HStack {
-                        Label(String(localized: "status"), systemImage: "circle.fill")
-                            .foregroundStyle(appState.isConnected ? .green : .red)
-                        Spacer()
-                        Text(appState.isConnected ? String(localized: "connected") : String(localized: "disconnected"))
-                            .foregroundStyle(.secondary)
-                    }
-
-                    HStack {
-                        Label(String(localized: "device_name"), systemImage: "iphone")
-                        Spacer()
-                        Text(server.name)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    HStack {
-                        Label(String(localized: "paired"), systemImage: "calendar")
-                        Spacer()
-                        Text(server.pairedAt, style: .date)
-                            .foregroundStyle(.secondary)
-                    }
+                HStack {
+                    Label(String(localized: "status"), systemImage: "circle.fill")
+                        .foregroundStyle(appState.isConnected ? .green : .red)
+                    Spacer()
+                    Text(appState.isConnected ? String(localized: "connected") : String(localized: "disconnected"))
+                        .foregroundStyle(.secondary)
                 }
             } header: {
                 Text(String(localized: "connection"))
+            }
+
+            // All known servers (one row per unique server URL)
+            Section {
+                if appState.knownServerUrls.isEmpty {
+                    Text(String(localized: "no_servers_yet"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(appState.knownServerUrls, id: \.self) { url in
+                        let macCount = appState.linkedMacs.filter { $0.serverUrl == url }.count
+                        Button {
+                            Task { await appState.switchServerIfNeeded(to: url) }
+                        } label: {
+                            HStack {
+                                Image(systemName: "server.rack")
+                                    .foregroundStyle(url == appState.currentServerUrl ? Theme.brand : .secondary)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(URL(string: url)?.host ?? url)
+                                        .foregroundStyle(.primary)
+                                    Text(String(format: NSLocalizedString("n_macs_format", comment: ""), macCount))
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                if url == appState.currentServerUrl && appState.isConnected {
+                                    Text(String(localized: "active"))
+                                        .font(.caption2)
+                                        .foregroundStyle(.green)
+                                }
+                            }
+                        }
+                    }
+                }
+            } header: {
+                Text(String(localized: "servers"))
+            } footer: {
+                Text(String(localized: "tap_server_to_switch"))
+            }
+
+            // Paired Macs (flat list, shows server host subtitle)
+            Section {
+                if appState.linkedMacs.isEmpty {
+                    Text(String(localized: "no_paired_macs"))
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    ForEach(appState.linkedMacs) { mac in
+                        HStack {
+                            Image(systemName: "desktopcomputer")
+                                .foregroundStyle(Theme.brand)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(mac.name)
+                                Text(mac.serverHost)
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                Task { await appState.unlinkMac(mac) }
+                            } label: {
+                                Label(String(localized: "unpair"), systemImage: "trash")
+                            }
+                        }
+                    }
+                }
+            } header: {
+                Text(String(localized: "paired_macs"))
+            } footer: {
+                Text(String(localized: "swipe_to_unpair"))
             }
 
             // Security
@@ -77,22 +139,9 @@ struct SettingsView: View {
             // Actions
             Section {
                 Button {
-                    Task {
-                        if let server = appState.currentServer {
-                            await appState.connectTo(server)
-                        }
-                    }
+                    Task { await appState.connect() }
                 } label: {
                     Label(String(localized: "reconnect"), systemImage: "arrow.clockwise")
-                }
-
-                Button {
-                    appState.disconnect()
-                    appState.servers.removeAll()
-                    UserDefaults.standard.removeObject(forKey: "servers")
-                    dismiss()
-                } label: {
-                    Label(String(localized: "scan_new_qr_code"), systemImage: "qrcode.viewfinder")
                 }
 
                 Button {
@@ -102,12 +151,9 @@ struct SettingsView: View {
                 }
 
                 Button(role: .destructive) {
-                    if let server = appState.currentServer {
-                        appState.removeServer(server)
-                    }
-                    dismiss()
+                    showResetConfirm = true
                 } label: {
-                    Label(String(localized: "disconnect_remove"), systemImage: "wifi.slash")
+                    Label(String(localized: "reset_backend"), systemImage: "wifi.slash")
                 }
             } header: {
                 Text(String(localized: "actions"))
@@ -150,8 +196,55 @@ struct SettingsView: View {
                         Text(String(localized: "enable_notifications"))
                     }
                 }
+
+                Toggle(isOn: Binding(
+                    get: { notificationPrefs.notifyOnCompletion },
+                    set: { newValue in
+                        notificationPrefs.notifyOnCompletion = newValue
+                        Task { await syncPrefs() }
+                    }
+                )) {
+                    Label {
+                        Text(String(localized: "notify_on_completion"))
+                    } icon: {
+                        Image(systemName: "checkmark.circle")
+                    }
+                }
+                .disabled(!prefsLoaded)
+
+                Toggle(isOn: Binding(
+                    get: { notificationPrefs.notifyOnApproval },
+                    set: { newValue in
+                        notificationPrefs.notifyOnApproval = newValue
+                        Task { await syncPrefs() }
+                    }
+                )) {
+                    Label {
+                        Text(String(localized: "notify_on_approval"))
+                    } icon: {
+                        Image(systemName: "hand.raised")
+                    }
+                }
+                .disabled(!prefsLoaded)
+
+                Toggle(isOn: Binding(
+                    get: { notificationPrefs.notifyOnError },
+                    set: { newValue in
+                        notificationPrefs.notifyOnError = newValue
+                        Task { await syncPrefs() }
+                    }
+                )) {
+                    Label {
+                        Text(String(localized: "notify_on_error"))
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle")
+                    }
+                }
+                .disabled(!prefsLoaded)
             } header: {
                 Text(String(localized: "notifications"))
+            } footer: {
+                Text(String(localized: "notify_footer"))
             }
 
             // About
@@ -184,6 +277,11 @@ struct SettingsView: View {
         }
         .navigationTitle(String(localized: "settings"))
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(String(localized: "done")) { dismiss() }
+            }
+        }
         .alert(String(localized: "cleanup_inactive_sessions"), isPresented: $showCleanupAlert) {
             Button(String(localized: "cancel"), role: .cancel) {}
             Button(String(localized: "clean_now"), role: .destructive) {
@@ -192,10 +290,41 @@ struct SettingsView: View {
         } message: {
             Text(String(localized: "cleanup_confirm_message"))
         }
+        .alert(String(localized: "reset_backend"), isPresented: $showResetConfirm) {
+            Button(String(localized: "cancel"), role: .cancel) {}
+            Button(String(localized: "reset"), role: .destructive) {
+                appState.reset()
+                dismiss()
+            }
+        } message: {
+            Text(String(localized: "reset_backend_confirm"))
+        }
+        .task {
+            await loadPrefs()
+        }
+    }
+
+    // MARK: - Notification Prefs
+
+    private func loadPrefs() async {
+        guard let socket = appState.socket else { return }
+        if let prefs = try? await socket.fetchNotificationPrefs() {
+            await MainActor.run {
+                notificationPrefs = prefs
+                prefsLoaded = true
+            }
+        } else {
+            await MainActor.run { prefsLoaded = true } // enable toggles with defaults
+        }
+    }
+
+    private func syncPrefs() async {
+        guard let socket = appState.socket else { return }
+        _ = try? await socket.updateNotificationPrefs(notificationPrefs)
     }
 
     private func runCleanup() async {
-        guard let serverUrl = appState.currentServer?.url,
+        guard let serverUrl = appState.currentServerUrl,
               let token = KeyManager(serviceName: "com.codelight.app").loadToken(forServer: serverUrl) else {
             return
         }
@@ -205,7 +334,6 @@ struct SettingsView: View {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        // 15 minutes threshold for manual cleanup
         request.httpBody = try? JSONSerialization.data(withJSONObject: ["inactiveMinutes": 15])
 
         do {
@@ -214,7 +342,6 @@ struct SettingsView: View {
                let cleaned = result["cleaned"] as? Int {
                 cleanupResult = String(format: String(localized: "cleanup_result"), cleaned)
 
-                // Refresh session list
                 if let socket = appState.socket {
                     appState.sessions = (try? await socket.fetchSessions()) ?? []
                 }

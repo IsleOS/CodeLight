@@ -1,15 +1,24 @@
 import Combine
 import Foundation
+import UIKit
 import CodeLightCrypto
 import CodeLightProtocol
 
-/// Global app state — manages server connections and sessions.
+/// Global app state — manages backend connections, paired Macs, and sessions.
+///
+/// **Concept model (multi-server, multi-mac):**
+/// - `linkedMacs` is the source of truth — a flat list where each Mac carries its own `serverUrl`.
+/// - At any moment ONE active socket is connected to ONE server. Tapping a Mac on a
+///   different server triggers a disconnect+reconnect (`switchServerIfNeeded`).
+/// - `currentServerUrl` reflects where the socket is pointed right now.
+/// - `lastUsedServerUrl` (persisted) is used to auto-connect on app launch.
+/// - KeyManager stores per-server tokens, so credentials are preserved across switches.
 @MainActor
 final class AppState: ObservableObject {
     static let shared = AppState()
 
-    @Published var servers: [ServerConfig] = []
-    @Published var currentServer: ServerConfig?
+    @Published var linkedMacs: [LinkedMac] = []
+    @Published var currentServerUrl: String?
     @Published var sessions: [SessionInfo] = []
     @Published var isConnected = false
     /// Time of the last real message received per session (not heartbeats/phase updates)
@@ -23,38 +32,70 @@ final class AppState: ObservableObject {
     /// New message events — ChatView subscribes to this
     let newMessageSubject = PassthroughSubject<(sessionId: String, message: ChatMessage), Never>()
 
+    /// UserDefaults-backed: the server URL used in the most recent successful connection.
+    /// Drives auto-connect on launch and prefills the pairing form.
+    var lastUsedServerUrl: String? {
+        get { UserDefaults.standard.string(forKey: "lastUsedServerUrl") }
+        set {
+            if let v = newValue {
+                UserDefaults.standard.set(v, forKey: "lastUsedServerUrl")
+            } else {
+                UserDefaults.standard.removeObject(forKey: "lastUsedServerUrl")
+            }
+        }
+    }
+
+    /// All unique server URLs across linked Macs, sorted alphabetically.
+    var knownServerUrls: [String] {
+        Array(Set(linkedMacs.map { $0.serverUrl })).sorted()
+    }
+
     private let keyManager = KeyManager(serviceName: "com.codelight.app")
     private(set) var socket: SocketClient?
 
     private init() {
-        loadServers()
+        loadLinkedMacs()
+        migrateLegacyIfNeeded()
     }
 
-    // MARK: - Server Management
+    // MARK: - Server / Mac Management
 
-    func addServer(_ config: ServerConfig) {
-        servers.append(config)
-        saveServers()
-    }
-
-    func removeServer(_ config: ServerConfig) {
-        servers.removeAll { $0.id == config.id }
-        if currentServer?.id == config.id {
-            currentServer = nil
-            disconnect()
-        }
-        saveServers()
-    }
-
-    func connectTo(_ server: ServerConfig) async {
+    /// Wipe all paired Macs and disconnect. Used by the "Reset" button in Settings.
+    func reset() {
+        linkedMacs = []
+        saveLinkedMacs()
+        lastUsedServerUrl = nil
         disconnect()
-        currentServer = server
+    }
 
-        let client = SocketClient(serverUrl: server.url, keyManager: keyManager)
+    /// Auto-connect to the most recently used server on app launch. If no recent
+    /// server exists, do nothing (user must pair to set a server URL).
+    func connect() async {
+        if let url = lastUsedServerUrl ?? linkedMacs.first?.serverUrl {
+            await connectToServer(url: url)
+        }
+    }
+
+    /// Connect to a specific server URL if not already connected there. Used when
+    /// the user taps a Mac on a different server.
+    func switchServerIfNeeded(to url: String) async {
+        if currentServerUrl == url && isConnected { return }
+        await connectToServer(url: url)
+    }
+
+    func connectToServer(url: String) async {
+        disconnect()
+
+        let client = SocketClient(serverUrl: url, keyManager: keyManager)
         self.socket = client
 
         do {
             try await client.authenticate()
+
+            // Register this iPhone with the server (sets kind=ios, name=device name)
+            let deviceName = await iOSDeviceName()
+            try? await client.registerDevice(name: deviceName, kind: "ios")
+
             client.connect()
             client.onSessionsUpdate = { [weak self] sessions in
                 self?.sessions = sessions
@@ -63,7 +104,6 @@ final class AppState: ObservableObject {
                 let chatMsg = ChatMessage(id: msg.id, seq: msg.seq, content: msg.content, localId: msg.localId)
                 self?.newMessageSubject.send((sessionId: sessionId, message: chatMsg))
 
-                // Track last real message time (skip phase status updates)
                 if let data = msg.content.data(using: .utf8),
                    let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                    let type = dict["type"] as? String,
@@ -71,25 +111,116 @@ final class AppState: ObservableObject {
                     self?.lastMessageTimeBySession[sessionId] = Date()
                 }
 
-                // Trigger Dynamic Island based on message type
-                self?.updateLiveActivity(sessionId: sessionId, content: msg.content, serverName: server.name)
+                let serverName = URL(string: url)?.host ?? "Server"
+                self?.updateLiveActivity(sessionId: sessionId, content: msg.content, serverName: serverName)
             }
-            client.onEphemeral = { _, _ in
-                // No-op: global activity is managed by phase messages
-            }
+            client.onEphemeral = { _, _ in }
             isConnected = true
-            print("[AppState] Connected to \(server.url)")
+            currentServerUrl = url
+            lastUsedServerUrl = url
+            print("[AppState] Connected to \(url)")
 
-            // Auto-fetch sessions (Live Activities are started when user opens a chat)
+            // Upload the cached APNs device token now that the socket is up.
+            // PushManager often gets the device token from iOS BEFORE we have a
+            // server URL on launch, so it caches the token and waits for this.
+            Task { await PushManager.shared.uploadStoredTokenIfNeeded() }
+
+            // Refresh linked Macs and sessions in parallel
+            async let linksTask: () = refreshLinkedMacs()
             do {
                 let fetched = try await client.fetchSessions()
                 self.sessions = fetched
             } catch {
                 print("[AppState] Failed to fetch sessions: \(error)")
             }
+            _ = await linksTask
         } catch {
             isConnected = false
+            currentServerUrl = nil
             print("[AppState] Connection failed: \(error)")
+        }
+    }
+
+    /// Merge fetched links from the current server into the local list.
+    /// Doesn't clobber entries from other servers — only updates/adds rows
+    /// whose `serverUrl` matches `currentServerUrl`.
+    func refreshLinkedMacs() async {
+        guard let socket, let currentUrl = currentServerUrl else { return }
+        do {
+            let links = try await socket.fetchLinks()
+            let freshFromThisServer: [LinkedMac] = links
+                .filter { $0.kind == "mac" }
+                .map { LinkedMac(
+                    deviceId: $0.deviceId,
+                    name: $0.name,
+                    kind: $0.kind,
+                    createdAt: $0.createdAt,
+                    serverUrl: currentUrl
+                ) }
+
+            // Drop any locally-cached rows from THIS server that no longer exist upstream,
+            // keep rows from other servers untouched.
+            let freshIds = Set(freshFromThisServer.map(\.deviceId))
+            let otherServerRows = linkedMacs.filter { $0.serverUrl != currentUrl }
+            let thisServerRowsStillValid = linkedMacs.filter {
+                $0.serverUrl == currentUrl && freshIds.contains($0.deviceId)
+            }
+            // Add any new ones from the fetch that weren't in the local cache
+            let existingIds = Set(thisServerRowsStillValid.map(\.deviceId))
+            let newOnes = freshFromThisServer.filter { !existingIds.contains($0.deviceId) }
+
+            linkedMacs = otherServerRows + thisServerRowsStillValid + newOnes
+            saveLinkedMacs()
+        } catch {
+            print("[AppState] Failed to fetch links: \(error)")
+        }
+    }
+
+    /// Pair with a Mac on a specific server. Switches backend first if needed.
+    /// Returns the newly linked Mac.
+    @discardableResult
+    func pairWithCode(_ code: String, onServer serverUrl: String) async throws -> LinkedMac {
+        // Switch to the target server first (authenticates + opens socket)
+        if currentServerUrl != serverUrl || !isConnected {
+            await connectToServer(url: serverUrl)
+        }
+        guard let socket, isConnected else {
+            throw NSError(domain: "CodeLight.Pair", code: -1,
+                          userInfo: [NSLocalizedDescriptionKey: "Could not connect to \(serverUrl)"])
+        }
+
+        let device = try await socket.redeemPairingCode(code)
+        let mac = LinkedMac(
+            deviceId: device.deviceId,
+            name: device.name,
+            kind: device.kind,
+            createdAt: device.createdAt,
+            serverUrl: serverUrl
+        )
+        if !linkedMacs.contains(where: { $0.deviceId == mac.deviceId && $0.serverUrl == serverUrl }) {
+            linkedMacs.append(mac)
+            saveLinkedMacs()
+        }
+        // Refresh sessions so the new Mac's sessions appear immediately
+        if let fetched = try? await socket.fetchSessions() {
+            self.sessions = fetched
+        }
+        return mac
+    }
+
+    func unlinkMac(_ mac: LinkedMac) async {
+        // Unlink must happen on the Mac's own server
+        if currentServerUrl != mac.serverUrl {
+            await connectToServer(url: mac.serverUrl)
+        }
+        guard let socket else { return }
+        do {
+            try await socket.unlinkDevice(mac.deviceId)
+            linkedMacs.removeAll { $0.deviceId == mac.deviceId && $0.serverUrl == mac.serverUrl }
+            sessions.removeAll { $0.ownerDeviceId == mac.deviceId }
+            saveLinkedMacs()
+        } catch {
+            print("[AppState] Failed to unlink: \(error)")
         }
     }
 
@@ -98,6 +229,17 @@ final class AppState: ObservableObject {
         socket = nil
         sessions = []
         isConnected = false
+        currentServerUrl = nil
+    }
+
+    private func iOSDeviceName() async -> String {
+        await MainActor.run {
+            #if canImport(UIKit)
+            return UIDevice.current.name
+            #else
+            return "iPhone"
+            #endif
+        }
     }
 
     // MARK: - Messaging
@@ -122,7 +264,7 @@ final class AppState: ObservableObject {
 
     /// Start the GLOBAL Live Activity with the most recently active session's state
     func startLiveActivitiesForActiveSessions() {
-        let serverName = currentServer?.name ?? "Server"
+        let serverName = currentServerUrl.flatMap { URL(string: $0)?.host } ?? "Server"
         guard let socket = self.socket else { return }
 
         let activeSessions = sessions.filter { $0.active }
@@ -248,30 +390,62 @@ final class AppState: ObservableObject {
 
     // MARK: - Persistence
 
-    private func loadServers() {
-        guard let data = UserDefaults.standard.data(forKey: "servers"),
-              let saved = try? JSONDecoder().decode([ServerConfig].self, from: data) else { return }
-        servers = saved
+    private func loadLinkedMacs() {
+        if let data = UserDefaults.standard.data(forKey: "linkedMacs.v2"),
+           let macs = try? JSONDecoder().decode([LinkedMac].self, from: data) {
+            linkedMacs = macs
+        }
     }
 
-    private func saveServers() {
-        guard let data = try? JSONEncoder().encode(servers) else { return }
-        UserDefaults.standard.set(data, forKey: "servers")
+    private func saveLinkedMacs() {
+        guard let data = try? JSONEncoder().encode(linkedMacs) else { return }
+        UserDefaults.standard.set(data, forKey: "linkedMacs.v2")
+    }
+
+    /// One-shot migration: clear any stale pre-multi-server UserDefaults keys.
+    /// Old builds stored a single `backend` singleton or a `servers` array, and
+    /// old `linkedMacs` (v1) lacked the `serverUrl` field — all unusable in the
+    /// new flat-list-with-serverUrl model. We drop them and let the user re-pair.
+    private func migrateLegacyIfNeeded() {
+        let legacyKeys = ["backend", "servers", "linkedMacs"]
+        var didRemove = false
+        for key in legacyKeys where UserDefaults.standard.object(forKey: key) != nil {
+            // Try to salvage a server URL hint for lastUsedServerUrl before dropping
+            if key == "backend", let data = UserDefaults.standard.data(forKey: key),
+               let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let url = dict["url"] as? String, lastUsedServerUrl == nil {
+                lastUsedServerUrl = url
+            }
+            if key == "servers", let data = UserDefaults.standard.data(forKey: key),
+               let arr = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]],
+               let first = arr.first, let url = first["url"] as? String, lastUsedServerUrl == nil {
+                lastUsedServerUrl = url
+            }
+            UserDefaults.standard.removeObject(forKey: key)
+            didRemove = true
+        }
+        if didRemove {
+            print("[AppState] Cleared legacy state keys; lastUsedServerUrl=\(lastUsedServerUrl ?? "nil")")
+        }
     }
 }
 
-/// Server configuration — persisted.
-struct ServerConfig: Codable, Identifiable, Hashable {
-    let id: String
-    let url: String
-    let name: String
-    let pairedAt: Date
+/// A Mac that has been paired with this iPhone via DeviceLink.
+/// Each row carries its own `serverUrl` — multi-server is supported by having
+/// Macs from different servers coexist in the same list.
+struct LinkedMac: Codable, Identifiable, Hashable {
+    let deviceId: String
+    var name: String
+    let kind: String      // always "mac" in the UI
+    let createdAt: String // ISO8601
+    let serverUrl: String // which server this Mac lives on
 
-    init(url: String, name: String) {
-        self.id = UUID().uuidString
-        self.url = url
-        self.name = name
-        self.pairedAt = Date()
+    /// Composite id — (deviceId, serverUrl) — avoids collisions if two different
+    /// servers happen to issue the same cuid (very unlikely but cheap to guard against).
+    var id: String { "\(serverUrl)#\(deviceId)" }
+
+    var serverHost: String {
+        URL(string: serverUrl)?.host ?? serverUrl
     }
 }
 
@@ -282,4 +456,8 @@ struct SessionInfo: Identifiable {
     let metadata: SessionMetadata?
     let active: Bool
     let lastActiveAt: Date
+    /// Owner Mac's server-side deviceId. Used to filter sessions per-Mac in the UI.
+    let ownerDeviceId: String?
+    /// Owner Mac's display name (from the server-side join).
+    let ownerDeviceName: String?
 }
