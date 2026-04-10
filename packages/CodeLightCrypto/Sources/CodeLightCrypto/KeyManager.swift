@@ -7,8 +7,13 @@ public final class KeyManager: Sendable {
 
     private let serviceName: String
 
+    /// Cached identity private key to avoid repeated Keychain lookups.
+    /// Populated on first access, reused for sign() and publicKeyBase64().
+    private let cachedIdentityKey: Mutex<Curve25519.Signing.PrivateKey?>
+
     public init(serviceName: String = "com.codelight.keys") {
         self.serviceName = serviceName
+        self.cachedIdentityKey = Mutex(nil)
     }
 
     // MARK: - Ed25519 Identity Key
@@ -17,13 +22,20 @@ public final class KeyManager: Sendable {
     public func generateIdentityKey() throws -> Curve25519.Signing.PublicKey {
         let privateKey = Curve25519.Signing.PrivateKey()
         try saveToKeychain(key: "identity-private", data: privateKey.rawRepresentation)
+        cachedIdentityKey.withLock { $0 = privateKey }
         return privateKey.publicKey
     }
 
     /// Load the existing identity private key from Keychain.
     public func loadIdentityPrivateKey() throws -> Curve25519.Signing.PrivateKey? {
+        // Return cached key if available
+        if let cached = cachedIdentityKey.withLock({ $0 }) {
+            return cached
+        }
         guard let data = loadFromKeychain(key: "identity-private") else { return nil }
-        return try Curve25519.Signing.PrivateKey(rawRepresentation: data)
+        let key = try Curve25519.Signing.PrivateKey(rawRepresentation: data)
+        cachedIdentityKey.withLock { $0 = key }
+        return key
     }
 
     /// Get or create identity keypair. Returns public key.
@@ -91,6 +103,7 @@ public final class KeyManager: Sendable {
 
         var addQuery = query
         addQuery[kSecValueData as String] = data
+        addQuery[kSecAttrAccessible as String] = kSecAttrAccessibleWhenUnlocked
 
         let status = SecItemAdd(addQuery as CFDictionary, nil)
         guard status == errSecSuccess else {
@@ -110,6 +123,22 @@ public final class KeyManager: Sendable {
         let status = SecItemCopyMatching(query as CFDictionary, &result)
         guard status == errSecSuccess else { return nil }
         return result as? Data
+    }
+}
+
+/// Thread-safe wrapper for mutable state.
+private final class Mutex<Value>: @unchecked Sendable {
+    private var value: Value
+    private let lock = NSLock()
+
+    init(_ value: Value) {
+        self.value = value
+    }
+
+    func withLock<T>(_ body: (inout Value) -> T) -> T {
+        lock.lock()
+        defer { lock.unlock() }
+        return body(&value)
     }
 }
 
