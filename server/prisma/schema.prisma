@@ -102,7 +102,7 @@ model PairingRequest {
   @@index([shortCode])
 }
 
-/// Launch presets for a Mac Pounce device.
+/// Launch presets for a Mac MioIsland device.
 /// iPhone fetches these to show the user what commands can be remote-launched.
 model LaunchPreset {
   id        String   @id @default(cuid())
@@ -118,7 +118,7 @@ model LaunchPreset {
   @@index([deviceId, sortOrder])
 }
 
-/// Known project paths for a Mac Pounce device.
+/// Known project paths for a Mac MioIsland device.
 /// Mac uploads its session cwds + recent project list; iPhone uses these
 /// when picking a project for a remote-launched session.
 model KnownProject {

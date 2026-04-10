@@ -7,7 +7,7 @@ import { eventRouter } from '@/socket/socketServer';
 
 export async function pairingRoutes(app: FastifyInstance) {
 
-    // Step 1: Pounce creates a pairing request (authenticated)
+    // Step 1: MioIsland creates a pairing request (authenticated)
     // Stores the initiator's deviceId for later verification
     app.post('/v1/pairing/request', {
         preHandler: authMiddleware,
@@ -90,7 +90,7 @@ export async function pairingRoutes(app: FastifyInstance) {
         return { success: true, linkedWith: initiatorDeviceId };
     });
 
-    // Step 3: Pounce polls for response
+    // Step 3: MioIsland polls for response
     // Only the initiator can poll (verified by deviceId)
     app.get('/v1/pairing/status', {
         preHandler: authMiddleware,

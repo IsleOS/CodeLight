@@ -24,7 +24,7 @@ const lastPhaseBySession = new Map<string, string>();
 
 /// Pull the latest user message + the latest assistant message for a session
 /// directly from SessionMessage. We can't trust phase payload fields because
-/// Pounce sometimes ships a phase event before its in-memory snapshot
+/// MioIsland sometimes ships a phase event before its in-memory snapshot
 /// catches up to the message that just landed in JSONL — that's how the user
 /// ended up seeing "上上次" content in the notification.
 async function fetchLatestQAndA(sessionId: string): Promise<{ userText: string; assistantText: string }> {
@@ -72,7 +72,7 @@ function shapeNotificationText(raw: string, maxLength = 280): string {
 }
 
 /// Resolve a STABLE project name from session metadata. We deliberately do
-/// NOT use `meta.title` here because Pounce sets that to a "smart title"
+/// NOT use `meta.title` here because MioIsland sets that to a "smart title"
 /// that prefers the latest summary or user message — which means if it leaks
 /// into the Live Activity it'll show user input on the trailing side. Use the
 /// folder name (`projectName`), falling back to the last component of the
@@ -425,8 +425,8 @@ export function registerSessionHandler(
         }, { type: 'all-interested-in-session', sessionId: data.sid });
     });
 
-    // Pounce acknowledges that it successfully consumed a blob, so the server
-    // can drop it from disk immediately. No ack from Pounce = TTL sweeper handles it.
+    // MioIsland acknowledges that it successfully consumed a blob, so the server
+    // can drop it from disk immediately. No ack from MioIsland = TTL sweeper handles it.
     socket.on('blob-consumed', async (data: { blobId: string }) => {
         if (!data?.blobId) return;
         const ok = await deleteBlob(data.blobId);

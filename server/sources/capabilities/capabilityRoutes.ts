@@ -4,7 +4,7 @@ import { getAccessibleDeviceIds } from '@/auth/deviceAccess';
 import { putCapabilities, getCapabilities, type CapabilitySnapshot } from './capabilityStore';
 
 export async function capabilityRoutes(app: FastifyInstance) {
-    // Pounce pushes its latest capability snapshot here. No schema validation:
+    // MioIsland pushes its latest capability snapshot here. No schema validation:
     // the payload is opaque to the server, we just stash it per-device.
     app.post('/v1/capabilities', {
         preHandler: authMiddleware,
@@ -19,7 +19,7 @@ export async function capabilityRoutes(app: FastifyInstance) {
     });
 
     // Phone fetches the snapshot. Returns the first accessible device that has
-    // uploaded one — in practice a single user has their own device + one Pounce.
+    // uploaded one — in practice a single user has their own device + one MioIsland.
     app.get('/v1/capabilities', {
         preHandler: authMiddleware,
     }, async (request, reply) => {

@@ -35,10 +35,10 @@ If enabled, push notifications are delivered via Apple Push Notification Service
 ## Open Source
 
 CodeLight is open source. You can review the complete source code at:
-https://github.com/IsleOS/CodeLight
+https://github.com/MioMioOS/CodeLight
 
 ## Contact
 
 If you have questions about this privacy policy, please contact:
 - Email: xmqywx@gmail.com
-- GitHub Issues: https://github.com/IsleOS/CodeLight/issues
+- GitHub Issues: https://github.com/MioMioOS/CodeLight/issues

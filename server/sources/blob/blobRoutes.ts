@@ -46,7 +46,7 @@ export async function blobRoutes(app: FastifyInstance) {
         return { blobId: rec.id, mime: rec.mime, size: rec.size };
     });
 
-    // Download a blob. Pounce fetches this, then acks via socket to trigger delete.
+    // Download a blob. MioIsland fetches this, then acks via socket to trigger delete.
     app.get('/v1/blobs/:id', {
         preHandler: authMiddleware,
     }, async (request, reply) => {

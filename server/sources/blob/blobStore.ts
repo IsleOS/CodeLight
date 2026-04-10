@@ -1,5 +1,5 @@
 /**
- * Ephemeral blob store for images sent from phone → Pounce.
+ * Ephemeral blob store for images sent from phone → MioIsland.
  *
  * Design:
  *   - Files live in BLOB_DIR (default ./blobs), named <id>.bin

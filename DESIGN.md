@@ -6,13 +6,13 @@
 
 ## Overview
 
-CodeLight is a native Swift iOS app for monitoring and controlling Claude Code sessions remotely. It works with Pounce (macOS notch companion) and CodeLight Server (Fastify/TypeScript backend) to provide real-time session sync, E2E encrypted messaging, and iPhone Dynamic Island status display.
+CodeLight is a native Swift iOS app for monitoring and controlling Claude Code sessions remotely. It works with MioIsland (macOS notch companion) and CodeLight Server (Fastify/TypeScript backend) to provide real-time session sync, E2E encrypted messaging, and iPhone Dynamic Island status display.
 
 ### Naming
 
 | Component | Role |
 |-----------|------|
-| **Pounce** | macOS notch app (existing), gains Socket.io uplink |
+| **MioIsland** | macOS notch app (existing), gains Socket.io uplink |
 | **CodeLight** | iPhone app (new), native Swift + SwiftUI |
 | **CodeLight Server** | Backend (new), Fastify/TypeScript, rewritten from Happy Server |
 
@@ -20,7 +20,7 @@ CodeLight is a native Swift iOS app for monitoring and controlling Claude Code s
 
 - **Public key as identity** — no registration, no passwords, QR pairing exchanges keys
 - **E2E encryption** — server is zero-knowledge, stores only ciphertext
-- **Pounce as sole middleware** — replaces happy-cli, serves both local notch display and remote sync
+- **MioIsland as sole middleware** — replaces happy-cli, serves both local notch display and remote sync
 - **Protocol-compatible with Happy** — reuses SessionEnvelope format and Socket.io event protocol, but all code rewritten clean
 
 ## Architecture
@@ -29,7 +29,7 @@ CodeLight is a native Swift iOS app for monitoring and controlling Claude Code s
 Claude Code
     │ (hooks + JSONL file polling)
     ▼
-Pounce (macOS)
+MioIsland (macOS)
     ├─ Notch UI (existing, unchanged)
     │
     ├─ [NEW] Socket.io → CodeLight Server (E2E encrypted)
@@ -121,12 +121,12 @@ model SessionMessage {
 |-------|-----------|---------|
 | `message` | client → server | New session message (encrypted) |
 | `update` | server → client | Broadcast message to interested clients |
-| `rpc-call` | client → server → client | RPC request forwarding (phone → server → Pounce) |
+| `rpc-call` | client → server → client | RPC request forwarding (phone → server → MioIsland) |
 | `rpc-response` | client → server → client | RPC result return |
 | `session-alive` | client → server | Keep-alive heartbeat |
 | `status` | client → server | Session status update (thinking/tool/idle) |
 
-## Module 2: Pounce Additions
+## Module 2: MioIsland Additions
 
 ### New Modules (additive, no changes to existing code)
 
@@ -137,7 +137,7 @@ model SessionMessage {
 | **RPCExecutor** | Receive RPC requests from phone (bash/readFile/writeFile), execute locally, return results |
 | **PairingManager** | Generate QR code, handle pairing flow (public key + encryption key exchange) |
 
-### Shared Swift Packages (used by both Pounce and CodeLight)
+### Shared Swift Packages (used by both MioIsland and CodeLight)
 
 | Package | Contents |
 |---------|----------|
@@ -193,7 +193,7 @@ model SessionMessage {
 - Voice conversation → not needed
 - Subscription/payment → not needed
 - Full i18n → Chinese + English only
-- Tauri desktop → Pounce covers this
+- Tauri desktop → MioIsland covers this
 - Effort level → defer to later
 
 ## Module 4: Pairing & Encryption Flow
@@ -201,7 +201,7 @@ model SessionMessage {
 ### Flow
 
 ```
-Pounce (Mac)                    CodeLight (iPhone)
+MioIsland (Mac)                    CodeLight (iPhone)
      │                                    │
      ├─ Generate pairing code             │
      │  (server URL + temp pubkey         │
@@ -244,7 +244,7 @@ Pounce (Mac)                    CodeLight (iPhone)
 | **Phase 0** | Merge Happy upstream + run locally | Working Happy setup as reference |
 | **Phase 1** | CodeLight Server — auth, pairing, session, socket | Deployable server on Tencent Cloud |
 | **Phase 2** | Shared Swift Packages — protocol, crypto, socket | Reusable SPM packages |
-| **Phase 3** | Pounce additions — socket uplink, message relay, RPC | Pounce syncs to server |
+| **Phase 3** | MioIsland additions — socket uplink, message relay, RPC | MioIsland syncs to server |
 | **Phase 4** | CodeLight App — pairing, session list, chat (read-only) | iPhone app showing sessions |
 | **Phase 5** | CodeLight App — send messages, model/mode selector, RPC | Full remote control |
 | **Phase 6** | Dynamic Island — Live Activity widget extension | Status on lock screen + Dynamic Island |
@@ -256,4 +256,4 @@ Pounce (Mac)                    CodeLight (iPhone)
 - ServerListView shows all paired servers
 - Each server is independent — different keys, different sessions
 - Server supports multiple devices connecting — each device identified by its public key
-- One Pounce instance connects to one server at a time (configurable)
+- One MioIsland instance connects to one server at a time (configurable)
