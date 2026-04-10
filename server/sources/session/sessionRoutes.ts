@@ -133,7 +133,7 @@ export async function sessionRoutes(app: FastifyInstance) {
         });
 
         // Notify all linked devices (iPhones) that the session list changed.
-        // This lets the phone refresh immediately when CodeCAT registers a
+        // This lets the phone refresh immediately when Pounce registers a
         // new session — no polling needed.
         eventRouter.emitUpdate(deviceId, 'update', {
             type: 'sessions-changed',

@@ -1,6 +1,6 @@
 /**
  * In-memory store for Claude Code capability snapshots (slash commands, skills,
- * MCP servers) uploaded by CodeCAT. Never persisted — each device keeps its
+ * MCP servers) uploaded by Pounce. Never persisted — each device keeps its
  * latest snapshot, overwritten on every upload.
  */
 

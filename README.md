@@ -49,7 +49,7 @@
 
 ---
 
-Code Light is a **native iPhone companion** for Claude Code. It pairs with [CodeCAT](https://github.com/IsleOS/CodeCAT) on your Mac and lets you read, send, and orchestrate your AI coding sessions from anywhere — without touching the keyboard.
+Code Light is a **native iPhone companion** for Claude Code. It pairs with [Pounce](https://github.com/IsleOS/Pounce) on your Mac and lets you read, send, and orchestrate your AI coding sessions from anywhere — without touching the keyboard.
 
 > *Step away from your desk. Lock your phone. Get coffee. The pixel cat in your Dynamic Island will tell you the moment Claude needs you — with the actual question on the lock screen, ready to tap and reply.*
 
@@ -127,7 +127,7 @@ Both apps let you talk to Claude Code from your phone. Here's where they actuall
 ### Deep dive — why each of these matters
 
 **1. Terminal routing: no guessing game.**
-Happy has no concept of which cmux pane a message should go to. It can't, because it wraps your CLI (`happy claude` instead of `claude`) and only sees its own stdin/stdout. Code Light does the opposite: CodeCAT on the Mac watches the whole system — it knows every Claude process, every cmux surface, and the mapping between them via `CMUX_WORKSPACE_ID`/`CMUX_SURFACE_ID` env vars. A message targeted at session UUID `abc12345…` lands in exactly that pane. If the process is gone, the message is cleanly dropped instead of hijacking a nearby window.
+Happy has no concept of which cmux pane a message should go to. It can't, because it wraps your CLI (`happy claude` instead of `claude`) and only sees its own stdin/stdout. Code Light does the opposite: Pounce on the Mac watches the whole system — it knows every Claude process, every cmux surface, and the mapping between them via `CMUX_WORKSPACE_ID`/`CMUX_SURFACE_ID` env vars. A message targeted at session UUID `abc12345…` lands in exactly that pane. If the process is gone, the message is cleanly dropped instead of hijacking a nearby window.
 
 **2. Binary transport, not base64.**
 Happy's wire format wraps payloads in base64 (`Buffer.from(...).toString('base64')` shows up all over their session routes). Base64 inflates every byte by 33% and requires an extra encode/decode round-trip on both sides. Code Light sends message content as plain UTF-8 strings over Socket.io frames — smaller, faster, less code. Images are uploaded as raw binary via `POST /v1/blobs` and referenced by opaque IDs, never base64-blobbed into messages.
@@ -136,13 +136,13 @@ Happy's wire format wraps payloads in base64 (`Buffer.from(...).toString('base64
 Code Light runs an ActivityKit Live Activity that reflects Claude's current phase in your iPhone's Dynamic Island — not a push notification that disappears after 3 seconds. The activity updates in place as Claude moves between states, shows the active tool name, and collapses gracefully when all sessions finish. This is only possible because Code Light is a native Swift app. React Native can't do ActivityKit cleanly.
 
 **4. Slash commands round-trip.**
-`/model`, `/cost`, `/usage`, `/clear` etc. don't fire Claude's hook events — they're handled inside the CLI and their output never reaches the JSONL. Most remote clients therefore can't see the response. Code Light's CodeCAT bridge solves this by: snapshot the pane before injection, send the command, poll until output settles, diff the snapshots, ship the new lines back as a synthetic `terminal_output` message. From the phone it looks like any other response.
+`/model`, `/cost`, `/usage`, `/clear` etc. don't fire Claude's hook events — they're handled inside the CLI and their output never reaches the JSONL. Most remote clients therefore can't see the response. Code Light's Pounce bridge solves this by: snapshot the pane before injection, send the command, poll until output settles, diff the snapshots, ship the new lines back as a synthetic `terminal_output` message. From the phone it looks like any other response.
 
 **5. Multi-Mac really means multi-Mac.**
 Pair your phone with `MacBook Pro` and `Mac mini`, on two different servers if you want. Code Light shows both Macs in one list, grouped by server host, current connection marked green. Tap a Mac on a different server and Code Light reconnects in the background. Every Mac gets its own permanent 6-char `shortCode` (never expires) so pairing additional iPhones is just "type the code". Session access is strictly scoped per `DeviceLink` in the server DB — Mac A's sessions are invisible to an iPhone paired only with Mac B.
 
 **6. Remote launch closes the loop.**
-From the phone, tap `+`, pick a preset like `Claude (skip perms) + Chrome`, pick a project from recent paths, tap Launch — Code Light sends `POST /v1/sessions/launch`, the server emits a `session-launch` socket event scoped to your Mac's `deviceId`, CodeCAT's `LaunchService` spawns `cmux new-workspace --cwd <path> --command "<command>"`, and a fresh cmux workspace pops up running Claude. You never touched your keyboard. Presets are defined on the Mac (so you control the command whitelist), project paths sync from live session cwds.
+From the phone, tap `+`, pick a preset like `Claude (skip perms) + Chrome`, pick a project from recent paths, tap Launch — Code Light sends `POST /v1/sessions/launch`, the server emits a `session-launch` socket event scoped to your Mac's `deviceId`, Pounce's `LaunchService` spawns `cmux new-workspace --cwd <path> --command "<command>"`, and a fresh cmux workspace pops up running Claude. You never touched your keyboard. Presets are defined on the Mac (so you control the command whitelist), project paths sync from live session cwds.
 
 ---
 
@@ -164,7 +164,7 @@ Text input, send with one tap. Dedicated buttons for Escape and Ctrl+C. All mess
 Attach photos via `PhotosPicker` or capture a new one with the camera. Up to 6 per message, JPEG-compressed locally, uploaded as blobs, pasted into the cmux pane on the Mac via `NSPasteboard` + AppleScript `Cmd+V`.
 
 ### 🔐 Short-code pairing (and QR)
-Each Mac's CodeCAT menu shows a permanent 6-character code and a QR. On the iPhone, scan the QR or type the code — either way triggers the same `/v1/pairing/code/redeem` endpoint. Multi-Mac: pair more by typing more codes. No accounts, no passwords, no re-pair after reboot.
+Each Mac's Pounce menu shows a permanent 6-character code and a QR. On the iPhone, scan the QR or type the code — either way triggers the same `/v1/pairing/code/redeem` endpoint. Multi-Mac: pair more by typing more codes. No accounts, no passwords, no re-pair after reboot.
 
 ### 🖥️ Multi-Mac, multi-server
 Maintain a flat list of paired Macs across any number of backend servers. Tap to switch active connection. Each Mac carries its own `serverUrl` in local state.
@@ -186,12 +186,12 @@ Carefully chosen feedback for every class of interaction: selection for tab/pick
 ## Architecture
 
 ```
-  Mac (CodeCAT)              Backend (self-hosted)         iPhone (Code Light)
+  Mac (Pounce)              Backend (self-hosted)         iPhone (Code Light)
 ┌──────────────────┐         ┌──────────────────────┐      ┌────────────────────────┐
 │ Claude Code      │         │ Fastify + Socket.io  │      │ 📱 Linked Macs list    │
 │ hooks + JSONL    │         │ PostgreSQL + Prisma  │      │ 💬 Chat + markdown     │
 │                  │         │                      │      │ 🏝️ Dynamic Island     │
-│ CodeCAT       │◀───────▶│ DeviceLink graph     │◀────▶│ ⌨️ Send + control keys │
+│ Pounce       │◀───────▶│ DeviceLink graph     │◀────▶│ ⌨️ Send + control keys │
 │  · SessionStore  │ WebSocket│ Zero-knowledge relay │ WSS  │ 📷 Camera + photos     │
 │  · LaunchService │  + HTTPS │ APNs bridge (HTTP/2) │      │ 🚀 Remote launch       │
 │  · PresetStore   │         │                      │      │ 🔔 Push notifications  │
@@ -206,7 +206,7 @@ Strict per-device isolation via `DeviceLink` in the server DB. An iPhone paired 
 
 ## Requirements
 
-- **Mac**: macOS 14+, [CodeCAT](https://github.com/IsleOS/CodeCAT) installed, [cmux](https://cmux.io) for terminal integration
+- **Mac**: macOS 14+, [Pounce](https://github.com/IsleOS/Pounce) installed, [cmux](https://cmux.io) for terminal integration
 - **iPhone**: iOS 17+
 - **Server**: any host with Node.js 20+ and PostgreSQL 14+ (or use a public CodeLight Server)
 
@@ -228,9 +228,9 @@ npm start
 
 Put Nginx in front with TLS. `pm2 start npm --name codelight-server -- start` for production.
 
-### 2. Install CodeCAT on your Mac
+### 2. Install Pounce on your Mac
 
-Follow the [CodeCAT README](https://github.com/IsleOS/CodeCAT). Its Sync module will auto-register this Mac with your server and lazy-allocate a permanent 6-character pairing code.
+Follow the [Pounce README](https://github.com/IsleOS/Pounce). Its Sync module will auto-register this Mac with your server and lazy-allocate a permanent 6-character pairing code.
 
 ### 3. Build the iPhone app
 
@@ -243,7 +243,7 @@ Select your development team → connect your iPhone → press **⌘R**.
 
 ### 4. Pair
 
-1. On your Mac, open CodeCAT's notch menu → **Pair iPhone**. You'll see a QR and a 6-char code.
+1. On your Mac, open Pounce's notch menu → **Pair iPhone**. You'll see a QR and a 6-char code.
 2. On your iPhone, enter your server URL and the code (or scan the QR).
 3. Done. The Mac appears in the "Macs" list. Tap in to see its sessions.
 
@@ -303,16 +303,16 @@ Only `type: "phase"` messages re-render the Live Activity. Regular chat messages
 Node's built-in `fetch()` uses HTTP/1.1 and fails against `api.push.apple.com` with an opaque `TypeError: fetch failed`. The server hand-rolls `node:http2` for Live Activity updates. Regular alert pushes use `fetch()` because Apple accepts both there; only Live Activity demands HTTP/2.
 
 ### 60-second echo dedup ring
-Phone sends → server broadcasts → CodeCAT pastes → Claude writes to JSONL → file watcher sees it → CodeCAT re-uploads → phone gets its own message back. Fixed with a 60 s TTL `(claudeUuid, text)` ring on the Mac: MessageRelay consumes a matching entry before uploading and skips. No server changes, no localId negotiation.
+Phone sends → server broadcasts → Pounce pastes → Claude writes to JSONL → file watcher sees it → Pounce re-uploads → phone gets its own message back. Fixed with a 60 s TTL `(claudeUuid, text)` ring on the Mac: MessageRelay consumes a matching entry before uploading and skips. No server changes, no localId negotiation.
 
 ### Ephemeral blob store
 Images are transit cargo (the real history lives in Claude's JSONL once pasted), so the blob store is deliberately **memory + disk, never DB**. Three-tier cleanup: `blob-consumed` socket ack deletes on pickup, 10-minute TTL sweeper catches the rest, server startup purges `blobs/` on every boot. No Prisma model, no orphan rows.
 
 ### Image paste via NSPasteboard + AppleScript
-cmux has no "paste image" command. But Cmd+V with an image on the clipboard works. So: download blob → `cmux focus-panel` → AppleScript activate cmux and poll `NSWorkspace.frontmostApplication` until true → write image to `NSPasteboard` in NSImage + `public.jpeg` + `.tiff` for max terminal compatibility → `System Events keystroke "v" using {command down}` (with CGEvent fallback) → `cmux send` for trailing text. Needs Accessibility permission, and the permission is tracked by signed path so CodeCAT auto-installs itself to `/Applications/Code Island.app` to survive rebuilds.
+cmux has no "paste image" command. But Cmd+V with an image on the clipboard works. So: download blob → `cmux focus-panel` → AppleScript activate cmux and poll `NSWorkspace.frontmostApplication` until true → write image to `NSPasteboard` in NSImage + `public.jpeg` + `.tiff` for max terminal compatibility → `System Events keystroke "v" using {command down}` (with CGEvent fallback) → `cmux send` for trailing text. Needs Accessibility permission, and the permission is tracked by signed path so Pounce auto-installs itself to `/Applications/Code Island.app` to survive rebuilds.
 
 ### Permanent shortCode on Device.id
-shortCode is a column on `Device`, not `PairingRequest`. Lazy-allocated on first `POST /v1/devices/me {kind:"mac"}`, never rotated. Restarting CodeCAT does not change your pairing code. Multiple iPhones can pair with the same Mac by redeeming the same code.
+shortCode is a column on `Device`, not `PairingRequest`. Lazy-allocated on first `POST /v1/devices/me {kind:"mac"}`, never rotated. Restarting Pounce does not change your pairing code. Multiple iPhones can pair with the same Mac by redeeming the same code.
 
 ### Per-device ID round-trip for presets
 Launch presets use **Mac-generated UUIDs** as primary keys on the server, not server cuids. The Mac sends its local UUIDs on upload; the server stores them as-is. When the phone later sends a `session-launch` event with `presetId`, the Mac's local `PresetStore` can look it up immediately. Avoided a subtle "unknown presetId" bug during early phase 4 testing.
@@ -333,7 +333,7 @@ Launch presets use **Mac-generated UUIDs** as primary keys on the server, not se
 
 | Project | Role |
 |---|---|
-| [CodeCAT](https://github.com/IsleOS/CodeCAT) | **Required** — the Mac-side bridge |
+| [Pounce](https://github.com/IsleOS/Pounce) | **Required** — the Mac-side bridge |
 | [cmux](https://cmux.io) | **Recommended** — the terminal multiplexer that makes precise routing possible |
 
 ---

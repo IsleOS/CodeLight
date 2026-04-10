@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED: Use superpowers:subagent-driven-development (if subagents available) or superpowers:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a clean Fastify/TypeScript server that relays E2E encrypted Claude Code session data between CodeCAT (macOS) and CodeLight (iPhone) via Socket.io.
+**Goal:** Build a clean Fastify/TypeScript server that relays E2E encrypted Claude Code session data between Pounce (macOS) and CodeLight (iPhone) via Socket.io.
 
 **Architecture:** Fastify 5 HTTP server + Socket.io for real-time sync. Public key (Ed25519) auth — no passwords, no OAuth. Server is zero-knowledge: stores only ciphertext. Three connection types (device-scoped, session-scoped, user-scoped) with selective event routing.
 
@@ -763,7 +763,7 @@ import { authMiddleware } from '@/auth/middleware';
 
 export async function pairingRoutes(app: FastifyInstance) {
 
-    // Step 1: CodeCAT creates a pairing request (authenticated)
+    // Step 1: Pounce creates a pairing request (authenticated)
     app.post('/v1/pairing/request', {
         preHandler: authMiddleware,
         schema: {
@@ -818,7 +818,7 @@ export async function pairingRoutes(app: FastifyInstance) {
         return { success: true };
     });
 
-    // Step 3: CodeCAT polls for response
+    // Step 3: Pounce polls for response
     app.get('/v1/pairing/status', {
         preHandler: authMiddleware,
         schema: {

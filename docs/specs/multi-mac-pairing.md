@@ -1,18 +1,18 @@
 # Multi-Mac Pairing + Remote Session Launch
 
 **Status:** approved 2026-04-06, in progress
-**Scope:** allow one iPhone to pair with multiple Mac CodeCATs via short-code, manage them as a list, and remotely trigger new Claude sessions on a chosen Mac via cmux.
+**Scope:** allow one iPhone to pair with multiple Mac Pounces via short-code, manage them as a list, and remotely trigger new Claude sessions on a chosen Mac via cmux.
 
 ## Background
 
 Current state (verified 2026-04-06):
 - Server (`server/prisma/schema.prisma`) has `Device`, `DeviceLink`, `Session`, `PairingRequest` tables. The schema already supports many-to-many device linking.
-- `pairingRoutes.ts` has `/v1/pairing/request` + `/respond` + `/status` endpoints that DO call `linkDevices()` — but the Mac side never invokes them. `PairPhoneView.swift` (CodeCAT) generates a QR with payload `{s: serverUrl, k: "", n: deviceName}` — no `tempPublicKey`, no actual pairing request. So `DeviceLink` table is currently empty in production.
+- `pairingRoutes.ts` has `/v1/pairing/request` + `/respond` + `/status` endpoints that DO call `linkDevices()` — but the Mac side never invokes them. `PairPhoneView.swift` (Pounce) generates a QR with payload `{s: serverUrl, k: "", n: deviceName}` — no `tempPublicKey`, no actual pairing request. So `DeviceLink` table is currently empty in production.
 - iOS `AppState.ServerConfig` conflates "a Mac" with "a server". Each QR scan creates a new ServerConfig with the same `url` but different `name`, leading to duplicate "server" entries that are really the same backend.
 - Server-side `canAccessSession()` (auth/deviceAccess.ts:34) already enforces deviceId-scoped isolation: a device can only see sessions from itself + linked devices.
 - cmux supports `cmux new-session -c <cwd> [tokens...]` (CLI/cmux.swift:10194) which calls `workspace.create` + `surface.send_text`.
 
-**Known issue, NOT in scope of this plan:** cmux uses `--settings` flag overriding `~/.claude/settings.json`, bypassing CodeCAT's hooks. Sessions launched via `cmux new-session` won't automatically appear in CodeCAT's session list. This is a separate task; for this plan we accept that "iPhone presses launch → Mac opens cmux window with Claude running" is the success criterion, and the resulting session may take longer to surface in the iPhone session list.
+**Known issue, NOT in scope of this plan:** cmux uses `--settings` flag overriding `~/.claude/settings.json`, bypassing Pounce's hooks. Sessions launched via `cmux new-session` won't automatically appear in Pounce's session list. This is a separate task; for this plan we accept that "iPhone presses launch → Mac opens cmux window with Claude running" is the success criterion, and the resulting session may take longer to surface in the iPhone session list.
 
 ## Goals
 
@@ -20,7 +20,7 @@ Current state (verified 2026-04-06):
 2. Support N Macs ↔ 1 iPhone via DeviceLink, each Mac uniquely identified, sessions data-isolated
 3. iOS: rebuild concept model — `Backend` (singleton) + `LinkedMac[]`, navigation Macs → Sessions → Chat
 4. iOS: remote-launch new session by picking a preset + project path on a chosen Mac
-5. Mac CodeCAT: manage launch presets, sync project paths, receive launch events, spawn cmux subprocess
+5. Mac Pounce: manage launch presets, sync project paths, receive launch events, spawn cmux subprocess
 
 ## Non-goals
 
@@ -55,7 +55,7 @@ knownProjects KnownProject[]
 
 `PairingRequest.shortCode` was added during phase 1.2 but became unused after phase 1.5 redesign — left in place to avoid prod migration churn. Safe to drop in a future cleanup.
 
-**ShortCode lifecycle (post-1.5):** Each Mac has ONE permanent shortCode tied 1:1 to its `Device.id`. Lazy-generated on first `POST /v1/devices/me {kind: "mac"}`, never rotated, never expires. iPhone redeems by code → server looks up Device by `shortCode` → creates DeviceLink. Pairing additional iPhones is just additional redeem calls with the same code. Restarting Mac CodeCAT does NOT change the code.
+**ShortCode lifecycle (post-1.5):** Each Mac has ONE permanent shortCode tied 1:1 to its `Device.id`. Lazy-generated on first `POST /v1/devices/me {kind: "mac"}`, never rotated, never expires. iPhone redeems by code → server looks up Device by `shortCode` → creates DeviceLink. Pairing additional iPhones is just additional redeem calls with the same code. Restarting Mac Pounce does NOT change the code.
 
 Security tradeoff: anyone who learns the 6-char code can pair with that Mac forever. 30B combinations × no public listing = sufficient for personal use. Future hardening option: Mac-side approval popup for new pair attempts (out of scope).
 
@@ -130,7 +130,7 @@ npx prisma migrate deploy
 pm2 restart codelight-server
 ```
 
-## Phase 2 — Mac CodeCAT
+## Phase 2 — Mac Pounce
 
 Branch: `feature/codelight-sync` (continue, not merged to main yet).
 
@@ -262,7 +262,7 @@ Top tab/segment switch: **[Scan QR] | [Enter Code]**
 
 Both paths converge on success → toast "Paired with {Mac name}" → refresh linkedMacs.
 
-Backwards-compat note: old QR payloads `{s, k, n}` should be detected and rejected with a friendly "This QR is from an outdated CodeCAT — please update your Mac app".
+Backwards-compat note: old QR payloads `{s, k, n}` should be detected and rejected with a friendly "This QR is from an outdated Pounce — please update your Mac app".
 
 ### 3.4 Navigation
 
