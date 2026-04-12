@@ -32,9 +32,18 @@ final class AppState: ObservableObject {
     @Published var lastMessagePreviewBySession: [String: String] = [:]
 
     // MARK: - Subscription State
-    @Published var showSubscriptionPaywall: Bool = false
+    @Published var activeSheet: SheetType? = nil
     @Published var subscriptionReason: SubscriptionReason = .voluntary
-    @Published var showDeviceLimit: Bool = false
+
+    // Convenience setters (keep call sites unchanged)
+    var showSubscriptionPaywall: Bool {
+        get { activeSheet == .subscription }
+        set { activeSheet = newValue ? .subscription : nil }
+    }
+    var showDeviceLimit: Bool {
+        get { activeSheet == .deviceLimit }
+        set { activeSheet = newValue ? .deviceLimit : nil }
+    }
     @Published var subscriptionStatus: String = "unknown"
     @Published var trialDaysLeft: Int?
     /// When true, the server has rejected the socket connection. Core relay
@@ -44,6 +53,16 @@ final class AppState: ObservableObject {
     /// Set by StoreManager when a server verify call returns 401.
     /// The next connectToServer call will re-authenticate automatically.
     var needsReauthentication: Bool = false
+    /// Set by SettingsView before dismissing itself. LinkedMacsListView's
+    /// sheet onDismiss checks this flag to present the paywall from the
+    /// correct SwiftUI presentation hierarchy (not from within a sheet).
+    var pendingSubscriptionPaywall: Bool = false
+
+    enum SheetType: Identifiable {
+        case subscription
+        case deviceLimit
+        var id: String { String(describing: self) }
+    }
 
     enum SubscriptionReason {
         case trialExpired

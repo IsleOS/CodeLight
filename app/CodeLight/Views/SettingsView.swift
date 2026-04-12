@@ -116,7 +116,11 @@ struct SettingsView: View {
                 if appState.subscriptionStatus != "active" && !StoreManager.shared.isPurchased {
                     Button {
                         appState.subscriptionReason = .voluntary
-                        appState.showSubscriptionPaywall = true
+                        // Dismiss Settings first, then LinkedMacsListView's
+                        // sheet onDismiss will present the paywall from the
+                        // correct presentation hierarchy.
+                        appState.pendingSubscriptionPaywall = true
+                        dismiss()
                     } label: {
                         Label(String(localized: "upgrade_to_lifetime"), systemImage: "star.fill")
                             .foregroundStyle(Theme.brand)
