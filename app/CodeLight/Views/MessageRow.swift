@@ -589,10 +589,19 @@ struct MessageRow: View {
         guard !input.isEmpty else { return "" }
 
         switch name {
-        // Interactive question tools — show the question text
+        // Interactive question tools — show the question text.
+        // AskUserQuestion's "questions" param is a JSON array of objects,
+        // serialized as a string by MioIsland. Extract the question text.
         case "AskUserQuestion":
-            if let q = input["question"] ?? input["questions"] {
+            if let q = input["question"] {
                 return q
+            }
+            if let questionsJson = input["questions"],
+               let data = questionsJson.data(using: .utf8),
+               let arr = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+                // Extract question text from each question object
+                let questions = arr.compactMap { $0["question"] as? String }
+                return questions.joined(separator: "\n")
             }
             return input.values.first.map { String($0.prefix(200)) } ?? ""
 
