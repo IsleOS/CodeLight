@@ -14,6 +14,48 @@ public final class KeyManager: Sendable {
     public init(serviceName: String = "com.codelight.keys") {
         self.serviceName = serviceName
         self.cachedIdentityKey = Mutex(nil)
+        migrateKeychainAccessibility()
+    }
+
+    /// One-time migration: update all existing Keychain items under this service
+    /// to use kSecAttrAccessibleWhenUnlocked. Prevents macOS authorization prompts
+    /// when the app binary is re-signed (new build / new certificate).
+    private func migrateKeychainAccessibility() {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: serviceName,
+            kSecMatchLimit as String: kSecMatchLimitAll,
+            kSecReturnAttributes as String: true,
+            kSecReturnData as String: true,
+        ]
+
+        var result: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        guard status == errSecSuccess, let items = result as? [[String: Any]] else { return }
+
+        for item in items {
+            guard let account = item[kSecAttrAccount as String] as? String,
+                  let data = item[kSecValueData as String] as? Data else { continue }
+
+            // Check if already migrated
+            if let accessible = item[kSecAttrAccessible as String] as? String,
+               accessible == (kSecAttrAccessibleWhenUnlocked as String) {
+                continue
+            }
+
+            // Delete old item and re-add with correct accessibility
+            let deleteQuery: [String: Any] = [
+                kSecClass as String: kSecClassGenericPassword,
+                kSecAttrService as String: serviceName,
+                kSecAttrAccount as String: account,
+            ]
+            SecItemDelete(deleteQuery as CFDictionary)
+
+            var addQuery = deleteQuery
+            addQuery[kSecValueData as String] = data
+            addQuery[kSecAttrAccessible as String] = kSecAttrAccessibleWhenUnlocked
+            SecItemAdd(addQuery as CFDictionary, nil)
+        }
     }
 
     // MARK: - Ed25519 Identity Key
