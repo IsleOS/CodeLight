@@ -47,7 +47,14 @@ struct LinkedMacsListView: View {
                     }
             }
         }
-        .sheet(isPresented: $showSettings) {
+        .sheet(isPresented: $showSettings, onDismiss: {
+            // If SettingsView set pendingSubscriptionPaywall before dismissing,
+            // present the paywall now from this (correct) presentation level.
+            if appState.pendingSubscriptionPaywall {
+                appState.pendingSubscriptionPaywall = false
+                appState.showSubscriptionPaywall = true
+            }
+        }) {
             NavigationStack {
                 SettingsView()
             }

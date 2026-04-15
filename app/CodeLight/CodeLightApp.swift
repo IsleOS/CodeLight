@@ -1,17 +1,21 @@
 import SwiftUI
+import StoreKit
 
 @main
 struct CodeLightApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var appState = AppState.shared
+    @ObservedObject private var storeManager = StoreManager.shared
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environmentObject(appState)
+                .environmentObject(storeManager)
                 .task {
                     Haptics.prepareAll()
+                    storeManager.start()
                     await PushManager.shared.requestPermission()
                 }
         }

@@ -532,12 +532,10 @@ struct MessageRow: View {
         let status = parsed.toolStatus?.lowercased() ?? ""
         let isRunning = status == "running" || status == "pending"
         let color = statusColor(status)
+        let preview = toolInputPreview(name: parsed.toolName ?? "", input: parsed.toolInput)
 
-        // Single-line chip, no card, no accent bar, no shimmer. The timeline
-        // rail + left icon already carry the "tool event" signal; this view
-        // only needs to name the tool and show status. Keeps multi-tool bursts
-        // dense instead of eating half the screen.
-        return VStack(alignment: .leading, spacing: 3) {
+        return VStack(alignment: .leading, spacing: 4) {
+            // Tool name + status indicator
             HStack(spacing: 6) {
                 if isRunning {
                     PulseDot(color: color, size: 6)
@@ -555,14 +553,101 @@ struct MessageRow: View {
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(.primary)
             }
-            if !parsed.text.isEmpty {
+
+            // Tool input preview (question text, command, file path, etc.)
+            if !preview.isEmpty {
+                Text(preview)
+                    .font(.system(size: 11))
+                    .foregroundStyle(.secondary)
+                    .lineLimit(4)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            // Fallback: raw text field if present
+            if preview.isEmpty && !parsed.text.isEmpty {
                 Text(parsed.text)
                     .font(.system(size: 10, design: .monospaced))
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
+
+            // Tool result (if completed and has result text)
+            if let result = parsed.toolResult, !result.isEmpty {
+                Text(result)
+                    .font(.system(size: 10, design: .monospaced))
+                    .foregroundStyle(.secondary.opacity(0.7))
+                    .lineLimit(3)
+                    .padding(.top, 2)
+            }
         }
         .padding(.vertical, 3)
+    }
+
+    /// Extract a human-readable preview from tool input parameters.
+    /// Each tool type has different important fields.
+    private func toolInputPreview(name: String, input: [String: String]) -> String {
+        guard !input.isEmpty else { return "" }
+
+        switch name {
+        // Interactive question tools — show the question text.
+        // AskUserQuestion's "questions" param is a JSON array of objects,
+        // serialized as a string by MioIsland. Extract the question text.
+        case "AskUserQuestion":
+            if let q = input["question"] {
+                return q
+            }
+            if let questionsJson = input["questions"],
+               let data = questionsJson.data(using: .utf8),
+               let arr = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
+                // Extract question text from each question object
+                let questions = arr.compactMap { $0["question"] as? String }
+                return questions.joined(separator: "\n")
+            }
+            return input.values.first.map { String($0.prefix(200)) } ?? ""
+
+        // Code editing tools — show file path
+        case "Edit", "Write", "Read":
+            return input["file_path"] ?? input["path"] ?? ""
+
+        // Search tools
+        case "Grep":
+            let pattern = input["pattern"] ?? ""
+            let path = input["path"] ?? ""
+            if !pattern.isEmpty && !path.isEmpty {
+                return "\(pattern) in \(path)"
+            }
+            return pattern.isEmpty ? path : pattern
+        case "Glob":
+            return input["pattern"] ?? ""
+
+        // Shell commands
+        case "Bash":
+            if let cmd = input["command"] {
+                return String(cmd.prefix(200))
+            }
+            return input["description"] ?? ""
+
+        // Web tools
+        case "WebSearch":
+            return input["query"] ?? ""
+        case "WebFetch":
+            return input["url"] ?? ""
+
+        // Agent/subagent
+        case "Agent":
+            return input["description"] ?? input["prompt"].map { String($0.prefix(150)) } ?? ""
+
+        // ToolSearch
+        case "ToolSearch":
+            return input["query"] ?? ""
+
+        // Default: show the most useful-looking value
+        default:
+            if let fp = input["file_path"] ?? input["path"] { return fp }
+            if let cmd = input["command"] { return String(cmd.prefix(200)) }
+            if let q = input["question"] ?? input["query"] { return q }
+            return input.values.first.map { String($0.prefix(150)) } ?? ""
+        }
     }
 
     private func thinkingView(_ parsed: ParsedMessage) -> some View {
@@ -629,7 +714,9 @@ struct MessageRow: View {
         let toolName: String?
         let toolStatus: String?
         let imageBlobIds: [String]
-        let command: String?     // For terminal_output messages
+        let command: String?       // For terminal_output messages
+        let toolInput: [String: String]  // Tool input parameters (from MioIsland)
+        let toolResult: String?    // Tool result text (truncated by MioIsland to 2000 chars)
     }
 
     private func parseContent(_ content: String) -> ParsedMessage {
@@ -640,16 +727,28 @@ struct MessageRow: View {
             if let images = dict["images"] as? [[String: Any]] {
                 blobIds = images.compactMap { $0["blobId"] as? String }
             }
+            // Extract toolInput — MioIsland sends it as [String: String]
+            var toolInput: [String: String] = [:]
+            if let input = dict["toolInput"] as? [String: String] {
+                toolInput = input
+            } else if let input = dict["toolInput"] as? [String: Any] {
+                // Fallback: coerce values to strings
+                for (k, v) in input {
+                    toolInput[k] = "\(v)"
+                }
+            }
             return ParsedMessage(
                 type: type,
                 text: dict["text"] as? String ?? "",
                 toolName: dict["toolName"] as? String,
                 toolStatus: dict["toolStatus"] as? String,
                 imageBlobIds: blobIds,
-                command: dict["command"] as? String
+                command: dict["command"] as? String,
+                toolInput: toolInput,
+                toolResult: dict["toolResult"] as? String
             )
         }
-        return ParsedMessage(type: "user", text: content, toolName: nil, toolStatus: nil, imageBlobIds: [], command: nil)
+        return ParsedMessage(type: "user", text: content, toolName: nil, toolStatus: nil, imageBlobIds: [], command: nil, toolInput: [:], toolResult: nil)
     }
 
     // MARK: - Terminal Output View

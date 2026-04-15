@@ -105,6 +105,33 @@ struct SettingsView: View {
                 Text(String(localized: "swipe_to_unpair"))
             }
 
+            // Subscription
+            Section {
+                HStack {
+                    Label(String(localized: "subscription"), systemImage: "crown")
+                    Spacer()
+                    subscriptionBadge
+                }
+
+                if appState.subscriptionStatus != "active" && !StoreManager.shared.isPurchased {
+                    Button {
+                        appState.subscriptionReason = .voluntary
+                        // Dismiss Settings first, then LinkedMacsListView's
+                        // sheet onDismiss will present the paywall from the
+                        // correct presentation hierarchy.
+                        appState.pendingSubscriptionPaywall = true
+                        dismiss()
+                    } label: {
+                        Label(String(localized: "upgrade_to_lifetime"), systemImage: "star.fill")
+                            .foregroundStyle(Theme.brand)
+                    }
+                }
+            } header: {
+                Text(String(localized: "subscription"))
+            } footer: {
+                Text(String(localized: "subscription_footer"))
+            }
+
             // Security
             Section {
                 Picker(selection: $tokenExpiryDays) {
@@ -353,6 +380,34 @@ struct SettingsView: View {
         }
         .task {
             await loadPrefs()
+        }
+    }
+
+    // MARK: - Subscription Badge
+
+    @ViewBuilder
+    private var subscriptionBadge: some View {
+        let status = appState.subscriptionStatus
+        if StoreManager.shared.isPurchased || status == "active" {
+            Text(String(localized: "status_active"))
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(Theme.success)
+        } else if status == "trial" {
+            let daysText = appState.trialDaysLeft.map { String(format: NSLocalizedString("trial_days_left_format", comment: ""), $0) } ?? String(localized: "status_trial")
+            Text(daysText)
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(Theme.warning)
+        } else if status == "expired" {
+            Text(String(localized: "status_expired"))
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(Theme.danger)
+        } else {
+            Text(String(localized: "status_unknown"))
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 

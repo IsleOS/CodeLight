@@ -19,6 +19,9 @@ final class SocketClient {
     var onEphemeral: ((String, Bool) -> Void)?             // (sessionId, active)
     var onConnectionChange: ((Bool) -> Void)?              // connected state
     var onSessionsChanged: (() -> Void)?                   // session list changed on server
+    var onSubscriptionRequired: (([String: Any]) -> Void)? // server demands subscription
+    var onDeviceLimitReached: (([String: Any]) -> Void)?   // too many devices for this license
+    var onSubscriptionUpdated: (([String: Any]) -> Void)?  // subscription status changed
 
     init(serverUrl: String, keyManager: KeyManager) {
         self.serverUrl = serverUrl
@@ -103,6 +106,27 @@ final class SocketClient {
                   let active = dict["active"] as? Bool else { return }
             Task { @MainActor in
                 self?.onEphemeral?(sessionId, active)
+            }
+        }
+
+        socket?.on("subscription-required") { [weak self] data, _ in
+            guard let dict = data.first as? [String: Any] else { return }
+            Task { @MainActor in
+                self?.onSubscriptionRequired?(dict)
+            }
+        }
+
+        socket?.on("device-limit-reached") { [weak self] data, _ in
+            guard let dict = data.first as? [String: Any] else { return }
+            Task { @MainActor in
+                self?.onDeviceLimitReached?(dict)
+            }
+        }
+
+        socket?.on("subscription-updated") { [weak self] data, _ in
+            guard let dict = data.first as? [String: Any] else { return }
+            Task { @MainActor in
+                self?.onSubscriptionUpdated?(dict)
             }
         }
 
@@ -267,6 +291,20 @@ final class SocketClient {
             "presetId": presetId,
             "projectPath": projectPath,
         ])
+    }
+
+    // MARK: - Subscription API
+
+    /// Verify a StoreKit 2 purchase with the server.
+    func verifySubscription(originalTransactionId: String) async throws -> [String: Any] {
+        return try await postJSON(path: "/v1/subscription/verify", body: [
+            "originalTransactionId": originalTransactionId
+        ])
+    }
+
+    /// Fetch the current subscription status from the server.
+    func fetchSubscriptionStatus() async throws -> [String: Any] {
+        return try await getJSON(path: "/v1/subscription/status")
     }
 
     private func postJSON(path: String, body: [String: Any]) async throws -> [String: Any] {

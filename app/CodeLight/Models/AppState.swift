@@ -31,6 +31,45 @@ final class AppState: ObservableObject {
     /// latest reply or question) instead of a stale auto-generated project title.
     @Published var lastMessagePreviewBySession: [String: String] = [:]
 
+    // MARK: - Subscription State
+    @Published var activeSheet: SheetType? = nil
+    @Published var subscriptionReason: SubscriptionReason = .voluntary
+
+    // Convenience setters (keep call sites unchanged)
+    var showSubscriptionPaywall: Bool {
+        get { activeSheet == .subscription }
+        set { activeSheet = newValue ? .subscription : nil }
+    }
+    var showDeviceLimit: Bool {
+        get { activeSheet == .deviceLimit }
+        set { activeSheet = newValue ? .deviceLimit : nil }
+    }
+    @Published var subscriptionStatus: String = "unknown"
+    @Published var trialDaysLeft: Int?
+    /// When true, the server has rejected the socket connection. Core relay
+    /// features (session sync, messaging, remote control) are unavailable.
+    /// The user can dismiss the paywall but sees a degraded-state banner.
+    @Published var isSubscriptionBlocked: Bool = false
+    /// Set by StoreManager when a server verify call returns 401.
+    /// The next connectToServer call will re-authenticate automatically.
+    var needsReauthentication: Bool = false
+    /// Set by SettingsView before dismissing itself. LinkedMacsListView's
+    /// sheet onDismiss checks this flag to present the paywall from the
+    /// correct SwiftUI presentation hierarchy (not from within a sheet).
+    var pendingSubscriptionPaywall: Bool = false
+
+    enum SheetType: Identifiable {
+        case subscription
+        case deviceLimit
+        var id: String { String(describing: self) }
+    }
+
+    enum SubscriptionReason {
+        case trialExpired
+        case sessionBlocked
+        case voluntary
+    }
+
     /// Images the user sent locally, keyed by the blobId. Used by MessageRow to render
     /// attached images the user just sent — server blobs are ephemeral and can't be
     /// re-downloaded after delivery, so we keep a copy here until the app is killed.
@@ -158,6 +197,24 @@ final class AppState: ObservableObject {
                 let serverName = URL(string: url)?.host ?? "Server"
                 self?.updateLiveActivity(sessionId: sessionId, content: msg.content, serverName: serverName)
             }
+            client.onSubscriptionRequired = { [weak self] info in
+                let trialExpired = (info["trialExpired"] as? Bool) ?? false
+                self?.subscriptionReason = trialExpired ? .trialExpired : .sessionBlocked
+                self?.isSubscriptionBlocked = true
+                self?.showSubscriptionPaywall = true
+            }
+            client.onDeviceLimitReached = { [weak self] _ in
+                self?.showDeviceLimit = true
+            }
+            client.onSubscriptionUpdated = { [weak self] info in
+                if let status = info["status"] as? String {
+                    self?.subscriptionStatus = status
+                    if status == "active" {
+                        self?.isSubscriptionBlocked = false
+                        self?.showSubscriptionPaywall = false
+                    }
+                }
+            }
             client.onEphemeral = { _, _ in }
             client.onSessionsChanged = { [weak self] in
                 Task { await self?.refreshSessions() }
@@ -176,6 +233,9 @@ final class AppState: ObservableObject {
             currentServerUrl = url
             lastUsedServerUrl = url
             print("[AppState] Connected to \(url)")
+
+            // Retry any pending StoreKit verify that failed while offline.
+            Task { await StoreManager.shared.retryPendingVerify() }
 
             // Upload the cached APNs device token now that the socket is up.
             // PushManager often gets the device token from iOS BEFORE we have a
