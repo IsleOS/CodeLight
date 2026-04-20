@@ -19,7 +19,7 @@ struct PairingView: View {
     @State private var showScanner = false
 
     // Manual entry state
-    @State private var manualUrl: String = AppState.shared.lastUsedServerUrl ?? "https://island.wdao.chat"
+    @State private var manualUrl: String = AppState.shared.lastUsedServerUrl ?? "https://code.7ove.online"
     @State private var manualCode: String = ""
 
     private var isScannerAvailable: Bool {
@@ -170,7 +170,7 @@ struct PairingView: View {
                         }
                     }
 
-                    TextField("https://island.wdao.chat", text: $manualUrl)
+                    TextField("https://code.7ove.online", text: $manualUrl)
                         .textFieldStyle(.roundedBorder)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()

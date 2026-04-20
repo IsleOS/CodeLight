@@ -24,7 +24,7 @@ Current state (verified 2026-04-06):
 
 ## Non-goals
 
-- P2P / LAN-direct connection (still goes through `island.wdao.chat`)
+- P2P / LAN-direct connection (still goes through `code.7ove.online`)
 - Fixing cmux session visibility (separate task)
 - iPhone-to-iPhone linking (DeviceLink supports it but we don't expose the UI)
 - Renaming a paired Mac from iPhone (Mac controls its own name)
@@ -143,7 +143,7 @@ Branch: `feature/codelight-sync` (continue, not merged to main yet).
   - Big monospace 6-char short code beneath the QR (no countdown — it's permanent)
   - Server URL as small text under the code
   - Hint text: "this code is permanent — anyone with it can pair"
-- QR payload: `{"server": "https://island.wdao.chat", "code": "X7K2M9"}` (replaces old `{s, k, n}`)
+- QR payload: `{"server": "https://code.7ove.online", "code": "X7K2M9"}` (replaces old `{s, k, n}`)
 - Both QR scanning and manual code entry on iPhone hit the same `/v1/pairing/code/redeem` endpoint — single backend path
 - "Paired iPhones" section: lists `GET /v1/pairing/links`, swipe to unpair
 
@@ -253,7 +253,7 @@ Top tab/segment switch: **[Scan QR] | [Enter Code]**
 - Same success path as manual entry
 
 **Enter Code mode**:
-1. **Server URL field** (prefilled `https://island.wdao.chat`, persisted)
+1. **Server URL field** (prefilled `https://code.7ove.online`, persisted)
    - Quick-input pill row above field: `[https://] [http://] [.com] [.chat] [:3006]`
    - Tapping pill appends/prepends to text intelligently
    - Hidden after first successful pair (only shown again from Settings)
