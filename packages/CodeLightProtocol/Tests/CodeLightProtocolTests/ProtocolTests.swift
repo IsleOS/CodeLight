@@ -12,10 +12,10 @@ import Foundation
 }
 
 @Test func testPairingQRPayload() throws {
-    let qr = PairingQRPayload(serverUrl: "https://island.wdao.chat", tempPublicKey: "abc123", deviceName: "Mac")
+    let qr = PairingQRPayload(serverUrl: "https://code.7ove.online", tempPublicKey: "abc123", deviceName: "Mac")
     let data = try JSONEncoder().encode(qr)
     let decoded = try JSONDecoder().decode(PairingQRPayload.self, from: data)
-    #expect(decoded.serverUrl == "https://island.wdao.chat")
+    #expect(decoded.serverUrl == "https://code.7ove.online")
     #expect(decoded.tempPublicKey == "abc123")
     #expect(decoded.deviceName == "Mac")
 }
