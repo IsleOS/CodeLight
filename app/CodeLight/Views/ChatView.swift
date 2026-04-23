@@ -237,6 +237,9 @@ struct ChatView: View {
         }
         .task {
             await loadMessages()
+            // Catch any messages that arrived during the HTTP roundtrip before
+            // the socket finished connecting.
+            scheduleDeltaFetch()
             startLiveActivity()
         }
         .refreshable {
@@ -284,6 +287,13 @@ struct ChatView: View {
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             // App returned from background — socket was likely suspended by iOS,
             // so delta-fetch any messages we missed while backgrounded.
+            scheduleDeltaFetch()
+        }
+        .onChange(of: appState.isConnected) { _, connected in
+            // Socket just reconnected — fetch any messages missed while offline.
+            // foreground notification fires before the socket is up, so this
+            // second trigger is the one that actually succeeds.
+            guard connected else { return }
             scheduleDeltaFetch()
         }
         .onDisappear {
