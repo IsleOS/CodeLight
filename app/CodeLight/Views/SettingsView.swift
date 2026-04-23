@@ -388,8 +388,13 @@ struct SettingsView: View {
     @ViewBuilder
     private var subscriptionBadge: some View {
         let status = appState.subscriptionStatus
-        if StoreManager.shared.isPurchased || status == "active" {
+        if StoreManager.shared.isPurchased || (status == "active" && appState.trialDaysLeft == nil) {
             Text(String(localized: "status_active"))
+                .font(.caption)
+                .fontWeight(.medium)
+                .foregroundStyle(Theme.success)
+        } else if status == "active", let days = appState.trialDaysLeft {
+            Text(String(format: NSLocalizedString("redeemed_days_left_format", comment: ""), days))
                 .font(.caption)
                 .fontWeight(.medium)
                 .foregroundStyle(Theme.success)
@@ -404,10 +409,9 @@ struct SettingsView: View {
                 .font(.caption)
                 .fontWeight(.medium)
                 .foregroundStyle(Theme.danger)
-        } else {
-            Text(String(localized: "status_unknown"))
-                .font(.caption)
-                .foregroundStyle(.secondary)
+        } else if status == "unknown" || status == "none" {
+            ProgressView()
+                .controlSize(.mini)
         }
     }
 

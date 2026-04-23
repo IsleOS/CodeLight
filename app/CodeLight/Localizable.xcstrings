@@ -3828,6 +3828,22 @@
         }
       }
     },
+    "redeemed_days_left_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active (%lld days left)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已激活（剩余 %lld 天）"
+          }
+        }
+      }
+    },
     "trial_days_left_format" : {
       "localizations" : {
         "en" : {

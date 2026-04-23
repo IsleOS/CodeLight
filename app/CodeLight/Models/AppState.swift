@@ -96,6 +96,46 @@ final class AppState: ObservableObject {
         }
     }
 
+    // Cached subscription expiry — used to enforce paywall offline.
+    // Nil means either permanent paid access or unknown.
+    private var cachedSubscriptionExpiresAt: Date? {
+        get {
+            guard let ts = UserDefaults.standard.object(forKey: "subscriptionExpiresAt") as? Double else { return nil }
+            return Date(timeIntervalSince1970: ts)
+        }
+        set {
+            if let d = newValue {
+                UserDefaults.standard.set(d.timeIntervalSince1970, forKey: "subscriptionExpiresAt")
+            } else {
+                UserDefaults.standard.removeObject(forKey: "subscriptionExpiresAt")
+            }
+        }
+    }
+
+    private var cachedSubscriptionStatus: String? {
+        get { UserDefaults.standard.string(forKey: "cachedSubscriptionStatus") }
+        set {
+            if let v = newValue {
+                UserDefaults.standard.set(v, forKey: "cachedSubscriptionStatus")
+            } else {
+                UserDefaults.standard.removeObject(forKey: "cachedSubscriptionStatus")
+            }
+        }
+    }
+
+    /// Called on app launch before network connects. If local cache shows expiry
+    /// is already past, immediately block access without waiting for the server.
+    func checkOfflineExpiry() {
+        guard let expiry = cachedSubscriptionExpiresAt else { return }
+        guard expiry < Date() else { return }
+        // Cache says expired — enforce immediately
+        let cached = cachedSubscriptionStatus ?? "expired"
+        subscriptionStatus = "expired"
+        isSubscriptionBlocked = true
+        subscriptionReason = (cached == "trial") ? .trialExpired : .sessionBlocked
+        showSubscriptionPaywall = true
+    }
+
     /// All unique server URLs across linked Macs, sorted alphabetically.
     var knownServerUrls: [String] {
         Array(Set(linkedMacs.map { $0.serverUrl })).sorted()
@@ -145,6 +185,11 @@ final class AppState: ObservableObject {
     /// Auto-connect to the most recently used server on app launch. If no recent
     /// server exists, do nothing (user must pair to set a server URL).
     func connect() async {
+        // Enforce paywall immediately from cache before network round-trip.
+        // This closes the offline bypass: even with no connectivity, an expired
+        // trial/redeemed account hits the paywall on launch.
+        checkOfflineExpiry()
+
         if let url = lastUsedServerUrl ?? linkedMacs.first?.serverUrl {
             await connectToServer(url: url)
         }
@@ -214,6 +259,11 @@ final class AppState: ObservableObject {
             client.onSubscriptionUpdated = { [weak self] info in
                 if let status = info["status"] as? String {
                     self?.subscriptionStatus = status
+                    if let days = info["daysLeft"] as? Int {
+                        self?.trialDaysLeft = days
+                    } else {
+                        self?.trialDaysLeft = nil
+                    }
                     if status == "active" {
                         self?.isSubscriptionBlocked = false
                         self?.showSubscriptionPaywall = false
@@ -254,7 +304,8 @@ final class AppState: ObservableObject {
             // server URL on launch, so it caches the token and waits for this.
             Task { await PushManager.shared.uploadStoredTokenIfNeeded() }
 
-            // Refresh linked Macs and sessions in parallel
+            // Refresh subscription status, linked Macs, and sessions in parallel
+            async let subTask: () = refreshSubscriptionStatus()
             async let linksTask: () = refreshLinkedMacs()
             do {
                 let fetched = try await client.fetchSessions()
@@ -262,11 +313,40 @@ final class AppState: ObservableObject {
             } catch {
                 print("[AppState] Failed to fetch sessions: \(error)")
             }
+            _ = await subTask
             _ = await linksTask
         } catch {
             isConnected = false
             currentServerUrl = nil
             print("[AppState] Connection failed: \(error)")
+        }
+    }
+
+    func refreshSubscriptionStatus() async {
+        guard let socket else { return }
+        do {
+            let info = try await socket.fetchSubscriptionStatus()
+            await MainActor.run {
+                if let status = info["status"] as? String {
+                    self.subscriptionStatus = status
+                    self.cachedSubscriptionStatus = status
+                }
+                if let days = info["daysLeft"] as? Int {
+                    self.trialDaysLeft = days
+                } else {
+                    self.trialDaysLeft = nil
+                }
+                // Cache expiry for offline enforcement on next launch
+                if let expiresAtStr = info["expiresAt"] as? String,
+                   let date = ISO8601DateFormatter().date(from: expiresAtStr) {
+                    self.cachedSubscriptionExpiresAt = date
+                } else {
+                    // No expiry = permanent paid access — clear any stale cache
+                    self.cachedSubscriptionExpiresAt = nil
+                }
+            }
+        } catch {
+            print("[AppState] Failed to fetch subscription status: \(error)")
         }
     }
 

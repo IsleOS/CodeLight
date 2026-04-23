@@ -15,6 +15,11 @@ struct LinkedMacsListView: View {
                 macList
             }
         }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if appState.isSubscriptionBlocked {
+                subscriptionBanner
+            }
+        }
         .navigationTitle(String(localized: "macs"))
         .navigationDestination(for: LinkedMac.self) { mac in
             MacSessionListView(mac: mac)
@@ -176,6 +181,34 @@ struct LinkedMacsListView: View {
         // is for a different server and count will show 0.
         guard mac.serverUrl == appState.currentServerUrl else { return 0 }
         return appState.sessions.filter { $0.ownerDeviceId == mac.deviceId }.count
+    }
+
+    private var subscriptionBanner: some View {
+        Button {
+            appState.showSubscriptionPaywall = true
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(Theme.warning)
+                    .font(.system(size: 14))
+                Text(String(localized: "subscription_required_banner"))
+                    .font(.caption)
+                    .foregroundStyle(Theme.textPrimary)
+                Spacer()
+                Text(String(localized: "upgrade"))
+                    .font(.caption.bold())
+                    .foregroundStyle(Theme.brand)
+            }
+            .padding(12)
+            .background(Theme.bgElevated)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Theme.border, lineWidth: 0.5)
+            )
+        }
+        .padding(.horizontal)
+        .padding(.top, 8)
     }
 }
 
