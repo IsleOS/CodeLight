@@ -201,6 +201,14 @@ struct ChatView: View {
                     Image(systemName: "list.bullet.indent")
                 }
             }
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    Task { await forceRefresh() }
+                } label: {
+                    Image(systemName: "arrow.clockwise")
+                        .font(.system(size: 14, weight: .medium))
+                }
+            }
         }
         .sheet(isPresented: $showCapabilitySheet) {
             CapabilitySheet { text in
@@ -666,6 +674,13 @@ struct ChatView: View {
               let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let type = dict["type"] as? String else { return false }
         return type == "phase" || type == "heartbeat" || type == "key"
+    }
+
+    private func forceRefresh() async {
+        messages = []
+        hasMoreOlder = false
+        await loadMessages()
+        scheduleDeltaFetch()
     }
 
     private func loadMessages() async {
