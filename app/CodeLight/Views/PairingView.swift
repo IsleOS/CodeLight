@@ -313,6 +313,16 @@ struct PairingView: View {
             Haptics.error()
             return
         }
+        // Validate the URL parses cleanly + has a host. Without this, a value
+        // like `https:// space.com` slipped past sanitizedManualUrl() and ended
+        // up as a malformed URLSession request that quietly failed with no
+        // user-readable error — exactly the kind of dead-end App Review will
+        // flag (Guideline 2.1 — make sure error states are recoverable).
+        guard let parsed = URL(string: urlToUse), parsed.host?.isEmpty == false else {
+            errorMessage = String(localized: "server_url_required")
+            Haptics.error()
+            return
+        }
         guard !manualCode.isEmpty else {
             errorMessage = String(localized: "pairing_code_required")
             Haptics.error()

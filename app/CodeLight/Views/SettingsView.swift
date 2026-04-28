@@ -320,12 +320,16 @@ struct SettingsView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                Link(destination: URL(string: "https://github.com/xmqywx/CodeLight")!) {
-                    Label(String(localized: "github"), systemImage: "link")
+                if let codelightURL = URL(string: "https://github.com/xmqywx/CodeLight") {
+                    Link(destination: codelightURL) {
+                        Label(String(localized: "github"), systemImage: "link")
+                    }
                 }
 
-                Link(destination: URL(string: "https://github.com/MioMioOS/MioIsland")!) {
-                    Label(String(localized: "codeisland_mac_companion"), systemImage: "desktopcomputer")
+                if let mioIslandURL = URL(string: "https://github.com/MioMioOS/MioIsland") {
+                    Link(destination: mioIslandURL) {
+                        Label(String(localized: "codeisland_mac_companion"), systemImage: "desktopcomputer")
+                    }
                 }
 
                 Button {
@@ -522,6 +526,9 @@ struct SettingsView: View {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.httpBody = try? JSONSerialization.data(withJSONObject: ["inactiveMinutes": 15])
+        // 15s ceiling so a slow/hung server doesn't trap the user in a one-minute
+        // spinner with no escape — URLSession's default timeout is 60s.
+        request.timeoutInterval = 15
 
         do {
             let (data, _) = try await URLSession.shared.data(for: request)

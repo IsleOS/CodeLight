@@ -20,8 +20,22 @@ struct RootView: View {
             } else {
                 connectingView
                     .task {
+                        // 30s watchdog: if connect() hasn't returned and the
+                        // socket is still down, surface the error UI so the
+                        // user has a way out (Try Again / Reset). Without
+                        // this the spinner runs forever on stuck DNS / dead
+                        // server / half-open socket — which is both a UX hole
+                        // and an App Review red flag (Guideline 2.1).
+                        let watchdog = Task {
+                            try? await Task.sleep(nanoseconds: 30_000_000_000)
+                            if !Task.isCancelled, !appState.isConnected, !showError {
+                                errorMessage = String(localized: "could_not_connect")
+                                showError = true
+                            }
+                        }
                         await appState.connect()
-                        if !appState.isConnected {
+                        watchdog.cancel()
+                        if !appState.isConnected, !showError {
                             errorMessage = String(localized: "could_not_connect")
                             showError = true
                         }
