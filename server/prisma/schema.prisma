@@ -32,6 +32,14 @@ model Device {
   notifyOnApproval     Boolean @default(false) // tool waiting_approval
   notifyOnError        Boolean @default(false) // tool status=error
 
+  // Subscription / trial fields. Mac devices ignore these (server skips
+  // enforcement for kind='mac'); iOS devices start at 'none', flip to
+  // 'trial' after first pairing, and 'active' after a verified IAP.
+  subscriptionStatus    String    @default("none")
+  trialStartedAt        DateTime?
+  trialExpiresAt        DateTime?
+  trialExpireNotifiedAt DateTime?
+
   sessions      Session[]
   pushTokens    PushToken[]
   launchPresets LaunchPreset[]
@@ -53,6 +61,12 @@ model DeviceLink {
   createdAt      DateTime @default(now())
 
   @@unique([sourceDeviceId, targetDeviceId])
+  // Single-column indexes for the OR(source=X, target=X) lookups in
+  // getAccessibleDeviceIds + canAccessSession + notifyLinkedIPhones. The
+  // composite unique above can't serve either column alone, so without these
+  // every socket message did a full DeviceLink scan.
+  @@index([sourceDeviceId])
+  @@index([targetDeviceId])
 }
 
 model Session {
@@ -156,4 +170,61 @@ model LiveActivityToken {
 
   @@unique([deviceId, sessionId])
   @@index([sessionId])
+}
+
+/// One row per StoreKit 2 originalTransactionId. Holds the trial/active
+/// state independent of any single device, so a paid Apple ID can move
+/// across devices without losing entitlement.
+model Subscription {
+  id                    String    @id @default(cuid())
+  originalTransactionId String    @unique
+  status                String    @default("active") // 'trial' | 'active' | 'expired' | 'revoked'
+  trialStartedAt        DateTime?
+  trialExpiresAt        DateTime?
+  paidAt                DateTime?
+  revokedAt             DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  devices SubscriptionDevice[]
+}
+
+/// Join table — many devices can share one Subscription (same Apple ID).
+model SubscriptionDevice {
+  id             String       @id @default(cuid())
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+  deviceId       String
+  createdAt      DateTime     @default(now())
+
+  @@unique([subscriptionId, deviceId])
+  @@index([deviceId])
+}
+
+/// Promotional / referral codes that grant a fixed-duration trial.
+model RedeemCode {
+  id           String    @id @default(cuid())
+  code         String    @unique
+  durationDays Int       @default(30)
+  maxUses      Int       @default(1)
+  usedCount    Int       @default(0)
+  createdBy    String?
+  note         String?
+  expiresAt    DateTime?
+  createdAt    DateTime  @default(now())
+
+  usages RedeemCodeUsage[]
+}
+
+/// Tracks which device redeemed which code, with the resulting grant window.
+model RedeemCodeUsage {
+  id           String     @id @default(cuid())
+  redeemCodeId String
+  redeemCode   RedeemCode @relation(fields: [redeemCodeId], references: [id])
+  deviceId     String
+  grantedUntil DateTime
+  createdAt    DateTime   @default(now())
+
+  @@unique([redeemCodeId, deviceId])
+  @@index([deviceId])
 }

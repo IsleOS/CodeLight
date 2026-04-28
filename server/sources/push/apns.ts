@@ -379,3 +379,26 @@ export async function sendLiveActivityUpdate(
         return { ok: false, status: 0, terminal: false };
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────
+// Trial expiry notification
+// ─────────────────────────────────────────────────────────────────────
+
+// Track which devices already received a trial expiry notification
+// (in-memory, resets on restart — worst case they get one extra notification)
+const trialExpiryNotified = new Set<string>();
+
+/** Send a push notification warning that the trial expires within 24h. */
+export async function sendTrialExpiryNotification(deviceId: string): Promise<void> {
+    if (trialExpiryNotified.has(deviceId)) return;
+    trialExpiryNotified.add(deviceId);
+
+    const { db } = await import('@/storage/db');
+    await sendPushToDevice(deviceId, {
+        title: 'Your Code Light trial ends tomorrow',
+        body: 'Upgrade to keep using Code Light with your Mac.',
+        data: { type: 'trial_expiry' },
+    }, db);
+
+    console.log(`[APNs] Sent trial expiry notification to device ${deviceId.substring(0, 10)}`);
+}

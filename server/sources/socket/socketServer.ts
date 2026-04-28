@@ -6,6 +6,8 @@ import { config } from '@/config';
 import { EventRouter, type ClientConnection } from './eventRouter';
 import { registerSessionHandler } from './sessionHandler';
 import { registerRpcHandler } from './rpcHandler';
+import { checkAccess, getDeviceSubscription, startTrial } from '@/subscription/subscriptionService';
+import * as concurrencyGuard from '@/subscription/concurrencyGuard';
 
 export const eventRouter = new EventRouter();
 
@@ -19,7 +21,7 @@ export function startSocket(server: HttpServer) {
         connectTimeout: 20000,
     });
 
-    io.on('connection', (socket) => {
+    io.on('connection', async (socket) => {
         // Support both auth object and query params (Swift Socket.io client uses query)
         const token = (socket.handshake.auth.token || socket.handshake.query.token) as string | undefined;
         const clientType = ((socket.handshake.auth.clientType || socket.handshake.query.clientType) as string) || 'user-scoped';
@@ -36,6 +38,44 @@ export function startSocket(server: HttpServer) {
             socket.disconnect();
             return;
         }
+
+        // ── Subscription check ──────────────────────────────────────────
+        let trackedTransactionId: string | null = null;
+        if (config.enforceSubscription) {
+            let access = await checkAccess(payload.deviceId);
+
+            // Auto-start trial for iOS devices that have no subscription yet
+            // (covers existing users who paired before subscription system was deployed)
+            if (!access.allowed && access.reason === 'no_subscription') {
+                await startTrial(payload.deviceId);
+                access = await checkAccess(payload.deviceId);
+            }
+
+            if (!access.allowed) {
+                socket.emit('subscription-required', {
+                    reason: access.reason,
+                    status: access.status,
+                });
+                socket.disconnect();
+                return;
+            }
+
+            // Concurrent device limit (only for paid users with a subscription)
+            const sub = await getDeviceSubscription(payload.deviceId);
+            if (sub?.originalTransactionId) {
+                if (!concurrencyGuard.canConnect(sub.originalTransactionId, socket.id)) {
+                    socket.emit('device-limit-reached', {
+                        max: config.maxConcurrentDevices,
+                        currentDevices: concurrencyGuard.getActiveCount(sub.originalTransactionId),
+                    });
+                    socket.disconnect();
+                    return;
+                }
+                concurrencyGuard.addConnection(sub.originalTransactionId, socket.id);
+                trackedTransactionId = sub.originalTransactionId;
+            }
+        }
+        // ── End subscription check ───────────────────────────────────────
 
         const connection: ClientConnection = {
             connectionType: clientType === 'session-scoped' ? 'session-scoped' : 'user-scoped',
@@ -57,6 +97,9 @@ export function startSocket(server: HttpServer) {
 
         socket.on('disconnect', () => {
             eventRouter.removeConnection(payload.deviceId, connection);
+            if (trackedTransactionId) {
+                concurrencyGuard.removeConnection(trackedTransactionId, socket.id);
+            }
         });
     });
 
