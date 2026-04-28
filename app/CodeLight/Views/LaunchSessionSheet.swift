@@ -193,9 +193,10 @@ struct LaunchSessionSheet: View {
         successMessage = nil
         do {
             try await socket.launchSession(macDeviceId: mac.deviceId, presetId: preset.id, projectPath: pathToUse)
-            successMessage = String(format: NSLocalizedString("launched_on_mac_format", comment: ""), mac.name)
             Haptics.success()
-            try? await Task.sleep(nanoseconds: 800_000_000)
+            // Dismiss immediately — the parent SessionList shows the new
+            // session as soon as the Mac broadcasts `sessions-changed`.
+            // The artificial 800ms delay made every launch feel sluggish.
             dismiss()
         } catch {
             errorMessage = error.localizedDescription
