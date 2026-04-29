@@ -74,6 +74,15 @@ struct ChatView: View {
     @State private var readScreenSentAt: Date? = nil
     @State private var scrollToBottomToken = UUID()
     @State private var turns: [ConversationTurn] = []
+    /// True when the bottom sentinel is materialized in the LazyVStack
+    /// render window — i.e. the user is at or near the bottom of the chat.
+    /// Driven by onAppear/onDisappear on the chat-bottom sentinel below.
+    /// When false, the user has scrolled up to read history and we hold
+    /// our scroll position instead of yanking them back on every new message.
+    @State private var isNearBottom: Bool = true
+    /// Set when a new message arrives while the user is scrolled up.
+    /// Shows the floating "↓ 新消息" pill so they can jump down on demand.
+    @State private var hasUnreadBelow: Bool = false
 
     private let models = ["opus", "sonnet", "haiku"]
     private let modes = ["auto", "default", "plan"]
@@ -133,11 +142,55 @@ struct ChatView: View {
                         // Sentinel — always sits at the absolute bottom of the
                         // list so scrollTo("chat-bottom") reliably lands there
                         // regardless of how tall the last turn is.
+                        // Doubles as a "near bottom" detector: LazyVStack
+                        // materializes/un-materializes this row as it enters
+                        // and exits the render window, which is roughly the
+                        // viewport plus a screen of buffer in each direction.
+                        // Good enough proxy for "user is following along" vs
+                        // "user scrolled up to read history".
                         Color.clear.frame(height: 1).id("chat-bottom")
+                            .onAppear {
+                                isNearBottom = true
+                                hasUnreadBelow = false
+                            }
+                            .onDisappear {
+                                isNearBottom = false
+                            }
                     }
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
                 }
+                // Floating pill — only appears when the user is scrolled up
+                // AND a new message arrived while they were away from the
+                // bottom. Tap to jump back to the latest content. Without
+                // this the smart-scroll change would silently swallow new
+                // replies whenever the user is reading history.
+                .overlay(alignment: .bottom) {
+                    if hasUnreadBelow {
+                        Button {
+                            Haptics.light()
+                            withAnimation(.easeOut(duration: 0.25)) {
+                                proxy.scrollTo("chat-bottom", anchor: .bottom)
+                            }
+                            hasUnreadBelow = false
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "arrow.down")
+                                    .font(.system(size: 11, weight: .semibold))
+                                Text(String(localized: "new_messages_below", defaultValue: "新消息"))
+                                    .font(.system(size: 12, weight: .semibold))
+                            }
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
+                            .background(Theme.brand, in: Capsule())
+                            .foregroundStyle(Theme.onBrand)
+                            .shadow(color: .black.opacity(0.25), radius: 6, y: 2)
+                        }
+                        .padding(.bottom, 12)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }
+                }
+                .animation(.easeOut(duration: 0.25), value: hasUnreadBelow)
                 // Update turns BEFORE the seq onChange reads turns.last.
                 // SwiftUI fires modifiers in declaration order on the same view,
                 // so placing this first guarantees turns is fresh when scroll logic runs.
@@ -145,27 +198,36 @@ struct ChatView: View {
                     turns = groupMessagesIntoTurns(messages)
                 }
                 .onChange(of: messages.last?.seq ?? 0) { oldSeq, newSeq in
-                    // Only scroll when NEW messages arrive (seq increases),
-                    // not when older messages are prepended.
+                    // Auto-follow new messages so the latest reply is always
+                    // visible — but only when the user is already at the
+                    // bottom. If they've scrolled up to read history, hold
+                    // the scroll position and instead flag hasUnreadBelow
+                    // so the floating pill below can offer a tap-to-jump.
+                    //
+                    // Anchor to the persistent `chat-bottom` sentinel rather
+                    // than the freshly appended message — the sentinel is
+                    // already materialized so the scroll target always
+                    // exists, dodging the "anchor on a row that hasn't laid
+                    // out yet → land in dead space" glitch.
+                    //
+                    // Two-pass scroll because LazyVStack doesn't realize the
+                    // newly appended rows synchronously: the first pass pulls
+                    // the viewport in the right direction immediately so the
+                    // motion feels responsive, the second pass after layout
+                    // settles snaps to the true bottom in case the first
+                    // pass landed slightly short.
                     guard shouldAutoScroll && newSeq > oldSeq else { return }
-                    // After SwiftUI commits the new layout, anchor to the
-                    // top of the most recent user turn so the user can see
-                    // their just-sent question. anchor:.bottom on a freshly
-                    // appended row that hasn't fully laid out yet causes the
-                    // viewport to land in dead space (the previous problem
-                    // where the new content was visually pushed off-screen).
-                    let targetId: String
-                    if pendingSend != nil, let lastTurn = turns.last {
-                        targetId = lastTurn.anchorId
-                    } else if let lastTurn = turns.last {
-                        targetId = lastTurn.anchorId
-                    } else {
+                    guard isNearBottom else {
+                        hasUnreadBelow = true
                         return
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                         withAnimation(.easeOut(duration: 0.2)) {
-                            proxy.scrollTo(targetId, anchor: .top)
+                            proxy.scrollTo("chat-bottom", anchor: .bottom)
                         }
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        proxy.scrollTo("chat-bottom", anchor: .bottom)
                     }
                 }
                 .onChange(of: pendingSend?.stage) { _, newStage in
