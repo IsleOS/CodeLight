@@ -365,39 +365,23 @@ struct ChatView: View {
     }
 
     private func messageType(_ msg: ChatMessage) -> String {
-        if let data = msg.content.data(using: .utf8),
-           let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-           let type = dict["type"] as? String {
-            return type
-        }
-        return "user" // Plain text = user message from phone
+        ChatContentParser.parse(msg.content).type
     }
 
     /// Extract the `phase` field from a phase-type status message envelope.
     /// Returns nil for non-phase messages.
     private func phaseFromMessage(_ msg: ChatMessage) -> String? {
-        guard let data = msg.content.data(using: .utf8),
-              let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              (dict["type"] as? String) == "phase"
-        else { return nil }
-        return dict["phase"] as? String
+        let parsed = ChatContentParser.parse(msg.content)
+        guard parsed.type == "phase" else { return nil }
+        return parsed.phase
     }
 
     private func extractTextFromMessage(_ msg: ChatMessage) -> String {
-        if let data = msg.content.data(using: .utf8),
-           let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-           let text = dict["text"] as? String {
-            return text
-        }
-        return msg.content
+        ChatContentParser.parse(msg.content).text
     }
 
     private func extractImageBlobIds(_ msg: ChatMessage) -> [String] {
-        guard let data = msg.content.data(using: .utf8),
-              let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let images = dict["images"] as? [[String: Any]]
-        else { return [] }
-        return images.compactMap { $0["blobId"] as? String }
+        ChatContentParser.parse(msg.content).imageBlobIds
     }
 
     private func startLiveActivity() {
@@ -642,9 +626,7 @@ struct ChatView: View {
     /// that should not appear in chat history. These are surfaced through the
     /// Live Activity instead.
     private func isStatusOnly(_ msg: ChatMessage) -> Bool {
-        guard let data = msg.content.data(using: .utf8),
-              let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let type = dict["type"] as? String else { return false }
+        let type = ChatContentParser.parse(msg.content).type
         return type == "phase" || type == "heartbeat" || type == "key"
     }
 

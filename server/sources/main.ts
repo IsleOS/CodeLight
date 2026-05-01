@@ -43,6 +43,15 @@ async function main() {
                     console.log(`[Auto-cleanup] Deleted ${tokensDeleted.count} orphan Live Activity tokens`);
                 }
             }
+
+            // Purge messages older than 5 days
+            const fiveDaysAgo = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000);
+            const purged = await db.sessionMessage.deleteMany({
+                where: { createdAt: { lt: fiveDaysAgo } },
+            });
+            if (purged.count > 0) {
+                console.log(`[Auto-cleanup] Purged ${purged.count} messages older than 5 days`);
+            }
         } catch (err) {
             console.error('[Auto-cleanup] Error:', err);
         }

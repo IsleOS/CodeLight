@@ -633,23 +633,15 @@ struct MessageRow: View {
     }
 
     private func parseContent(_ content: String) -> ParsedMessage {
-        if let data = content.data(using: .utf8),
-           let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-           let type = dict["type"] as? String {
-            var blobIds: [String] = []
-            if let images = dict["images"] as? [[String: Any]] {
-                blobIds = images.compactMap { $0["blobId"] as? String }
-            }
-            return ParsedMessage(
-                type: type,
-                text: dict["text"] as? String ?? "",
-                toolName: dict["toolName"] as? String,
-                toolStatus: dict["toolStatus"] as? String,
-                imageBlobIds: blobIds,
-                command: dict["command"] as? String
-            )
-        }
-        return ParsedMessage(type: "user", text: content, toolName: nil, toolStatus: nil, imageBlobIds: [], command: nil)
+        let parsed = ChatContentParser.parse(content)
+        return ParsedMessage(
+            type: parsed.type,
+            text: parsed.text,
+            toolName: parsed.toolName,
+            toolStatus: parsed.toolStatus,
+            imageBlobIds: parsed.imageBlobIds,
+            command: parsed.command
+        )
     }
 
     // MARK: - Terminal Output View

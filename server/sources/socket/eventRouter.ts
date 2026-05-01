@@ -35,6 +35,19 @@ export class EventRouter {
         return Array.from(this.connections.get(deviceId) || []);
     }
 
+    /** Total number of connected sockets across all devices. */
+    getConnectionCount(): number {
+        let count = 0;
+        for (const conns of this.connections.values()) count += conns.size;
+        return count;
+    }
+
+    /** Check if a specific device has at least one active socket. */
+    isDeviceConnected(deviceId: string): boolean {
+        const conns = this.connections.get(deviceId);
+        return !!conns && conns.size > 0;
+    }
+
     /** Broadcast to connected devices that are linked to the sender via DeviceLink. */
     async emitUpdate(
         senderDeviceId: string,

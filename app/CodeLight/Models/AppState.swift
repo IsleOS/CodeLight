@@ -138,21 +138,18 @@ final class AppState: ObservableObject {
                 // content message (user / assistant). Phase / heartbeat /
                 // tool / thinking events don't count — they're noise that
                 // would constantly overwrite the preview text.
-                if let data = msg.content.data(using: .utf8),
-                   let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                   let type = dict["type"] as? String {
-                    if type != "phase" && type != "heartbeat" {
-                        self?.lastMessageTimeBySession[sessionId] = Date()
-                    }
-                    if type == "user" || type == "assistant" {
-                        if let text = dict["text"] as? String, !text.isEmpty {
-                            self?.lastMessagePreviewBySession[sessionId] = Self.previewLine(text)
-                        }
-                    }
-                } else {
+                let parsed = ChatContentParser.parse(msg.content)
+                if parsed.type == "user" && parsed.text == msg.content {
                     // Plain-text body (no JSON envelope) = user message from phone
                     self?.lastMessageTimeBySession[sessionId] = Date()
                     self?.lastMessagePreviewBySession[sessionId] = Self.previewLine(msg.content)
+                } else {
+                    if parsed.type != "phase" && parsed.type != "heartbeat" {
+                        self?.lastMessageTimeBySession[sessionId] = Date()
+                    }
+                    if (parsed.type == "user" || parsed.type == "assistant"), !parsed.text.isEmpty {
+                        self?.lastMessagePreviewBySession[sessionId] = Self.previewLine(parsed.text)
+                    }
                 }
 
                 let serverName = URL(string: url)?.host ?? "Server"
@@ -413,22 +410,21 @@ final class AppState: ObservableObject {
 
             // Iterate most recent first
             for msg in result.messages.reversed() {
-                guard let data = msg.content.data(using: .utf8),
-                      let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                      let type = dict["type"] as? String else { continue }
+                let parsed = ChatContentParser.parse(msg.content)
+                let type = parsed.type
 
                 // Latest phase message wins
                 if type == "phase", phase == "idle", toolName == nil {
-                    phase = dict["phase"] as? String ?? "idle"
-                    toolName = dict["toolName"] as? String
+                    phase = parsed.phase ?? "idle"
+                    toolName = parsed.toolName
                 }
                 // Latest user message
-                if userMsg == nil, type == "user", let text = dict["text"] as? String {
-                    userMsg = String(text.prefix(120))
+                if userMsg == nil, type == "user", !parsed.text.isEmpty {
+                    userMsg = String(parsed.text.prefix(120))
                 }
                 // Latest assistant message
-                if assistantMsg == nil, type == "assistant", let text = dict["text"] as? String, !text.isEmpty {
-                    assistantMsg = String(text.prefix(200))
+                if assistantMsg == nil, type == "assistant", !parsed.text.isEmpty {
+                    assistantMsg = String(parsed.text.prefix(200))
                 }
 
                 if userMsg != nil && assistantMsg != nil && phase != "idle" { break }
@@ -446,26 +442,29 @@ final class AppState: ObservableObject {
     private var lastAssistantMessageBySession: [String: String] = [:]
 
     private func updateLiveActivity(sessionId: String, content: String, serverName: String) {
-        guard let data = content.data(using: .utf8),
-              let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let type = dict["type"] as? String else { return }
+        let parsed = ChatContentParser.parse(content)
+        let type = parsed.type
+        guard type != "user" || parsed.text != content || content.hasPrefix("{") else { return }
 
         let sessionMeta = sessions.first(where: { $0.id == sessionId })?.metadata
         let projectName = sessionMeta?.displayProjectName ?? "Session"
         let projectPath = sessionMeta?.path
 
         // Track user/assistant messages
-        if type == "user", let text = dict["text"] as? String {
-            lastUserMessageBySession[sessionId] = String(text.prefix(120))
-        } else if type == "assistant", let text = dict["text"] as? String, !text.isEmpty {
-            lastAssistantMessageBySession[sessionId] = String(text.prefix(200))
+        if type == "user", !parsed.text.isEmpty {
+            lastUserMessageBySession[sessionId] = String(parsed.text.prefix(120))
+        } else if type == "assistant", !parsed.text.isEmpty {
+            lastAssistantMessageBySession[sessionId] = String(parsed.text.prefix(200))
         }
 
         // Only phase messages update the GLOBAL Live Activity (they're the event signal)
         guard type == "phase" else { return }
 
-        let phase = dict["phase"] as? String ?? "idle"
-        let toolName = dict["toolName"] as? String
+        guard let data = content.data(using: .utf8),
+              let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return }
+
+        let phase = parsed.phase ?? "idle"
+        let toolName = parsed.toolName
         if let userMsg = dict["lastUserMessage"] as? String {
             lastUserMessageBySession[sessionId] = userMsg
         }

@@ -124,12 +124,7 @@ struct TurnView: View {
     }
 
     private func messageType(_ msg: ChatMessage) -> String {
-        if let data = msg.content.data(using: .utf8),
-           let dict = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-           let type = dict["type"] as? String {
-            return type
-        }
-        return "user"
+        ChatContentParser.parse(msg.content).type
     }
 
     /// Horizontal strip of image thumbnails for the user's attached photos.
