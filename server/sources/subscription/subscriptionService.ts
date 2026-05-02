@@ -42,6 +42,32 @@ export async function checkAccess(deviceId: string): Promise<AccessCheck> {
     }
 
     if (device.kind === 'mac') {
+        // Mac is always allowed access (the gate is on iPhones), but we still
+        // expose its own trial state when one exists. This is what
+        // /v1/pairing/redeem-code writes onto the Mac and what the MioIsland
+        // banner reads via /v1/subscription/status. Falls through to the
+        // generic mac_device response when there's no trial to surface.
+        if (device.subscriptionStatus === 'active' && device.trialExpiresAt) {
+            const now = new Date();
+            if (device.trialExpiresAt > now) {
+                const msLeft = device.trialExpiresAt.getTime() - now.getTime();
+                const daysLeft = Math.ceil(msLeft / (24 * 60 * 60 * 1000));
+                return {
+                    allowed: true,
+                    reason: 'mac_redeemed',
+                    status: 'trial',
+                    daysLeft,
+                    expiresAt: device.trialExpiresAt.toISOString(),
+                };
+            }
+            // Trial lapsed — flip the row but keep allowing the Mac (Mac is
+            // never gated by subscription).
+            await db.device.updateMany({
+                where: { id: deviceId, subscriptionStatus: 'active' },
+                data: { subscriptionStatus: 'expired' },
+            });
+            return { allowed: true, reason: 'mac_device', status: 'expired' };
+        }
         return { allowed: true, reason: 'mac_device', status: 'none' };
     }
 
