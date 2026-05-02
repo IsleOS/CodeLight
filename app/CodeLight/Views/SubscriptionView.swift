@@ -19,10 +19,6 @@ struct SubscriptionView: View {
 
     @State private var isRestoring = false
     @State private var restoreError: String?
-    @State private var showRedeemInput = false
-    @State private var redeemCode = ""
-    @State private var isRedeeming = false
-    @State private var redeemError: String?
 
     private var headline: String {
         switch reason {
@@ -89,12 +85,7 @@ struct SubscriptionView: View {
                             // Error messages
                             errorArea
 
-                            // Redeem code input (shown when tapped)
-                            if showRedeemInput {
-                                redeemInputField
-                            }
-
-                            // Footer (restore + redeem + privacy + terms)
+                            // Footer (restore + privacy + terms)
                             footerLinks
                         }
 
@@ -283,8 +274,7 @@ struct SubscriptionView: View {
         .disabled(storeManager.product == nil
                   || storeManager.purchaseState == .purchasing
                   || storeManager.purchaseState == .verifying
-                  || storeManager.purchaseState == .success
-                  || storeManager.purchaseState == .pendingServerVerify)
+                  || storeManager.purchaseState == .success)
         .opacity(storeManager.product == nil ? 0.5 : 1)
     }
 
@@ -350,10 +340,8 @@ struct SubscriptionView: View {
             }
             .disabled(isRestoring)
 
-            // Redeem + small legal links
+            // Legal links
             HStack(spacing: 16) {
-                redeemInlineButton
-
                 if let privacyURL = URL(string: "https://code.7ove.online/privacy") {
                     Link(String(localized: "privacy_policy").uppercased(),
                          destination: privacyURL)
@@ -371,124 +359,7 @@ struct SubscriptionView: View {
         }
     }
 
-    private var redeemInlineButton: some View {
-        Button {
-            withAnimation { showRedeemInput = true }
-        } label: {
-            Text(String(localized: "redeem_code_button").uppercased())
-                .font(.caption2.weight(.medium))
-                .foregroundStyle(Theme.textTertiary)
-        }
-    }
-
-    // MARK: - Redeem Code Input
-
-    private var redeemInputField: some View {
-        VStack(spacing: 8) {
-            HStack(spacing: 8) {
-                TextField(String(localized: "redeem_placeholder"), text: $redeemCode)
-                    .textFieldStyle(.roundedBorder)
-                    .textInputAutocapitalization(.characters)
-                    .autocorrectionDisabled()
-                    .font(.system(.subheadline, design: .monospaced))
-
-                Button {
-                    Task { await handleRedeem() }
-                } label: {
-                    if isRedeeming {
-                        ProgressView().controlSize(.small)
-                    } else {
-                        Text(String(localized: "redeem_submit"))
-                            .font(.subheadline.bold())
-                            .foregroundStyle(Theme.brand)
-                    }
-                }
-                .disabled(redeemCode.trimmingCharacters(in: .whitespaces).isEmpty || isRedeeming)
-            }
-            .padding(.horizontal, 24)
-
-            if let redeemError {
-                Text(redeemError)
-                    .font(.caption)
-                    .foregroundStyle(Theme.danger)
-            }
-        }
-    }
-
     // MARK: - Actions
-
-    private func handleRedeem() async {
-        Haptics.medium()
-        isRedeeming = true
-        redeemError = nil
-
-        guard let serverUrl = appState.currentServerUrl ?? appState.lastUsedServerUrl else {
-            redeemError = String(localized: "redeem_no_server")
-            isRedeeming = false
-            return
-        }
-
-        let keyManager = KeyManager(serviceName: "com.codelight.app")
-        guard let token = keyManager.loadToken(forServer: serverUrl) else {
-            redeemError = String(localized: "redeem_no_auth")
-            isRedeeming = false
-            return
-        }
-
-        let trimmed = redeemCode.trimmingCharacters(in: .whitespaces).uppercased()
-
-        do {
-            guard let redeemURL = URL(string: "\(serverUrl)/v1/subscription/redeem") else {
-                redeemError = String(localized: "redeem_network_error")
-                isRedeeming = false
-                return
-            }
-            var request = URLRequest(url: redeemURL)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            request.httpBody = try JSONSerialization.data(withJSONObject: ["code": trimmed])
-            request.timeoutInterval = 15
-
-            let (data, response) = try await URLSession.shared.data(for: request)
-
-            if let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) {
-                if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                   let success = json["success"] as? Bool, success {
-                    Haptics.success()
-                    appState.isSubscriptionBlocked = false
-                    appState.subscriptionStatus = "active"
-                    try? await Task.sleep(nanoseconds: 800_000_000)
-                    dismiss()
-                    return
-                }
-            }
-
-            // Error response
-            if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-               let error = json["error"] as? String {
-                switch error {
-                case "invalid_code":
-                    redeemError = String(localized: "redeem_invalid")
-                case "code_expired":
-                    redeemError = String(localized: "redeem_expired")
-                case "code_exhausted":
-                    redeemError = String(localized: "redeem_exhausted")
-                case "already_redeemed":
-                    redeemError = String(localized: "redeem_already_used")
-                default:
-                    redeemError = String(localized: "redeem_failed")
-                }
-            } else {
-                redeemError = String(localized: "redeem_failed")
-            }
-        } catch {
-            redeemError = String(localized: "redeem_network_error")
-        }
-
-        Haptics.error()
-        isRedeeming = false
-    }
 
     private func handlePurchase() async {
         Haptics.medium()
@@ -496,17 +367,14 @@ struct SubscriptionView: View {
             let tx = try await storeManager.purchase()
             guard tx != nil else { return }
 
-            if storeManager.purchaseState == .success {
-                // Server confirmed — all good, dismiss.
+            // StoreManager grants local entitlement synchronously on Apple-verified
+            // purchase, then runs server sync in the background. Either of these
+            // signals the user is paid and the paywall should close.
+            if storeManager.purchaseState == .success || storeManager.isPurchased {
                 Haptics.success()
                 try? await Task.sleep(nanoseconds: 1_200_000_000)
                 appState.isSubscriptionBlocked = false
                 dismiss()
-            } else if storeManager.purchaseState == .pendingServerVerify {
-                // StoreKit purchase succeeded but server verify failed/pending.
-                // Keep the paywall open and show a "purchased, connecting..." state.
-                // The paywall will auto-dismiss when subscription-updated arrives.
-                Haptics.medium()
             }
         } catch {
             Haptics.error()

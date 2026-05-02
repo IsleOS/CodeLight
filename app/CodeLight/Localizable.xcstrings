@@ -1,4052 +1,3844 @@
 {
-  "sourceLanguage" : "en",
-  "strings" : {
-    "" : {
-
-    },
-    "/Users/you/code/myproject" : {
-
-    },
-    "%@." : {
-
-    },
-    "%lld" : {
-
-    },
-    "%lld %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld %2$@"
-          }
-        }
-      }
-    },
-    "•" : {
-
-    },
-    "1_year" : {
-
-    },
-    "7_days" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "7 days"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "7 天"
-          }
-        }
-      }
-    },
-    "14_days" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "14 days"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "14 天"
-          }
-        }
-      }
-    },
-    "30_days" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "30 days"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "30 天"
-          }
-        }
-      }
-    },
-    "90_days" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "90 days"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "90 天"
-          }
-        }
-      }
-    },
-    "180_days" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "180 days"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "180 天"
-          }
-        }
-      }
-    },
-    "about" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "About"
+  "sourceLanguage": "en",
+  "strings": {
+    "": {},
+    "/Users/you/code/myproject": {},
+    "%@.": {},
+    "%lld": {},
+    "%lld %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld %2$@"
           }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "关于"
-          }
-        }
-      }
-    },
-    "about_footer" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CodeLight — Monitor and control Claude Code from your iPhone.\nMade with passion by the MioIsland team."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CodeLight — 从 iPhone 监控和操作 Claude Code。\n由 MioIsland 团队倾力打造。"
-          }
-        }
-      }
-    },
-    "actions" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actions"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "操作"
-          }
-        }
-      }
-    },
-    "active" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Active"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "活跃"
-          }
         }
       }
     },
-    "active_status" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Active"
+    "•": {},
+    "1_year": {},
+    "7_days": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 days"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "活跃"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 天"
           }
         }
       }
     },
-    "add_server_instruction" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap + to add a server by scanning\na QR code or entering a URL."
+    "14_days": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14 days"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "点击 + 扫描二维码或输入 URL\n来添加服务器。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14 天"
           }
         }
       }
     },
-    "allow" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Allow"
+    "30_days": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "30 days"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "允许"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "30 天"
           }
         }
       }
     },
-    "archive" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Archive"
+    "90_days": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "90 days"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "归档"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "90 天"
           }
         }
       }
     },
-    "archive_hint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Swipe a session left to archive it. Archived sessions live here so you only see what you care about in the main list."
+    "180_days": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "180 days"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在主列表里左滑会话即可归档。归档后的会话集中在这里，主列表只显示你关注的会话。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "180 天"
           }
         }
       }
     },
-    "archived" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Archived"
+    "about": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已归档"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "关于"
           }
         }
       }
     },
-    "bad_response" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bad response"
+    "about_footer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CodeLight — Monitor and control Claude Code from your iPhone.\nMade with passion by the MioIsland team."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "服务器响应异常"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CodeLight — 从 iPhone 监控和操作 Claude Code。\n由 MioIsland 团队倾力打造。"
           }
         }
       }
     },
-    "camera_not_available" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Camera not available on this device"
+    "actions": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actions"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此设备无法使用相机"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "操作"
           }
         }
       }
     },
-    "cancel" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel"
+    "active": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "取消"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "活跃"
           }
         }
       }
     },
-    "Capabilities Unavailable" : {
-
-    },
-    "choose_from_library" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choose from Library"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "从相册选择"
-          }
-        }
-      }
-    },
-    "clean_now" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Clean Now"
+    "active_status": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "立即清理"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "活跃"
           }
         }
       }
     },
-    "cleaning_ellipsis" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cleaning…"
+    "add_server_instruction": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap + to add a server by scanning\na QR code or entering a URL."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在清理…"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击 + 扫描二维码或输入 URL\n来添加服务器。"
           }
         }
       }
     },
-    "cleanup_confirm_message" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This will mark sessions with no activity in the last 15 minutes as inactive."
+    "allow": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "这将把最近 15 分钟没有活动的会话标记为非活跃。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "允许"
           }
         }
       }
     },
-    "cleanup_footer" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mark sessions with no activity in the last 15 minutes as inactive on the server."
+    "archive": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Archive"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "将服务器上最近 15 分钟没有活动的会话标记为非活跃。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "归档"
           }
         }
       }
     },
-    "cleanup_inactive_sessions" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cleanup Inactive Sessions"
+    "archive_hint": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe a session left to archive it. Archived sessions live here so you only see what you care about in the main list."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "清理非活跃会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在主列表里左滑会话即可归档。归档后的会话集中在这里，主列表只显示你关注的会话。"
           }
         }
       }
     },
-    "cleanup_no_sessions" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No inactive sessions to clean"
+    "archived": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Archived"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "没有需要清理的会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已归档"
           }
         }
       }
     },
-    "cleanup_result" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cleaned %d session(s)"
+    "bad_response": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bad response"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已清理 %d 个会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器响应异常"
           }
         }
       }
     },
-    "Close" : {
-
-    },
-    "Commands & Skills" : {
-
-    },
-    "connect" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connect"
+    "camera_not_available": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera not available on this device"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "连接"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "此设备无法使用相机"
           }
         }
       }
     },
-    "connected" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connected"
+    "cancel": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已连接"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取消"
           }
         }
       }
     },
-    "connecting" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connecting..."
+    "Capabilities Unavailable": {},
+    "choose_from_library": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose from Library"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "连接中..."
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从相册选择"
           }
         }
       }
     },
-    "connecting_to_server" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connecting to server..."
+    "clean_now": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clean Now"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在连接服务器..."
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "立即清理"
           }
         }
       }
     },
-    "connection" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connection"
+    "cleaning_ellipsis": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cleaning…"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "连接"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在清理…"
           }
         }
       }
     },
-    "connection_failed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connection Failed"
+    "cleanup_confirm_message": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This will mark sessions with no activity in the last 15 minutes as inactive."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "连接失败"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这将把最近 15 分钟没有活动的会话标记为非活跃。"
           }
         }
       }
     },
-    "could_not_connect" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Could not connect to server"
+    "cleanup_footer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark sessions with no activity in the last 15 minutes as inactive on the server."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法连接到服务器"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "将服务器上最近 15 分钟没有活动的会话标记为非活跃。"
           }
         }
       }
     },
-    "current_server" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Current Server"
+    "cleanup_inactive_sessions": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cleanup Inactive Sessions"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "当前服务器"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "清理非活跃会话"
           }
         }
       }
     },
-    "custom_path" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Custom Path"
+    "cleanup_no_sessions": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No inactive sessions to clean"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自定义路径"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有需要清理的会话"
           }
         }
       }
     },
-    "delete" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delete"
+    "cleanup_result": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cleaned %d session(s)"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "删除"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已清理 %d 个会话"
           }
         }
       }
     },
-    "deny" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deny"
+    "Close": {},
+    "Commands & Skills": {},
+    "connect": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "拒绝"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "连接"
           }
         }
       }
     },
-    "device_limit_body" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your lifetime license is active on another device. Only one device can be connected at a time."
+    "connected": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你的终身授权正在另一台设备上使用。同一时间只能有一台设备连接。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已连接"
           }
         }
       }
     },
-    "device_limit_title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Device Limit Reached"
+    "connecting": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting..."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "设备数量已达上限"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "连接中..."
           }
         }
       }
     },
-    "device_name" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Device Name"
+    "connecting_to_server": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting to server..."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "设备名称"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在连接服务器..."
           }
         }
       }
     },
-    "device_reregistered_message %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "\"%@\" has re-registered with a new pairing code. Your current pairing is no longer valid. Please re-pair in MioIsland."
+    "connection": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connection"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 已使用新的配对码重新注册，当前配对已失效。请在 MioIsland 上重新配对。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "连接"
           }
         }
       }
     },
-    "device_reregistered_repair" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Re-pair Now"
+    "connection_failed": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connection Failed"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "立即重新配对"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "连接失败"
           }
         }
       }
     },
-    "device_reregistered_title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mac Re-registered"
+    "could_not_connect": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not connect to server"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mac 已重新注册"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法连接到服务器"
           }
         }
       }
     },
-    "disabled" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Disabled"
+    "current_server": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current Server"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已关闭"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "当前服务器"
           }
         }
       }
     },
-    "disconnect_remove" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Disconnect & Remove"
+    "custom_path": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom Path"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "断开并移除"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自定义路径"
           }
         }
       }
     },
-    "disconnected" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Disconnected"
+    "delete": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未连接"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "删除"
           }
         }
       }
     },
-    "dismiss" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dismiss"
+    "deny": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deny"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "关闭"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拒绝"
           }
         }
       }
     },
-    "done" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Done"
+    "device_limit_body": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your lifetime license is active on another device. Only one device can be connected at a time."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "完成"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的终身授权正在另一台设备上使用。同一时间只能有一台设备连接。"
           }
         }
       }
     },
-    "enable_all_notifications" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable All Notifications"
+    "device_limit_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Device Limit Reached"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "启用所有通知"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "设备数量已达上限"
           }
         }
       }
     },
-    "enable_notifications" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enable Notifications"
+    "device_name": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Device Name"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "开启通知"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "设备名称"
           }
         }
       }
     },
-    "enabled" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enabled"
+    "device_reregistered_message %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\"%@\" has re-registered with a new pairing code. Your current pairing is no longer valid. Please re-pair in MioIsland."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已开启"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ 已使用新的配对码重新注册，当前配对已失效。请在 MioIsland 上重新配对。"
           }
         }
       }
     },
-    "enter_code" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter Code"
+    "device_reregistered_repair": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Re-pair Now"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "输入代码"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "立即重新配对"
           }
         }
       }
     },
-    "enter_url_manually" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter URL Manually"
+    "device_reregistered_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac Re-registered"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "手动输入 URL"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac 已重新注册"
           }
         }
       }
-    },
-    "https://code.7ove.online" : {
-
     },
-    "image_send_text_only" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Send Text Only"
+    "disabled": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disabled"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "仅发送文字"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已关闭"
           }
         }
       }
     },
-    "image_upload_all_failed_message" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "All images failed to upload. You can still send your message without them."
+    "disconnect_remove": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disconnect & Remove"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "所有图片上传失败，你可以仅发送文字内容。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "断开并移除"
           }
         }
       }
     },
-    "image_upload_all_failed_title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Images Could Not Be Sent"
+    "disconnected": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disconnected"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "图片发送失败"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未连接"
           }
         }
       }
     },
-    "inactive_status" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Inactive"
+    "dismiss": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dismiss"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "不活跃"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "关闭"
           }
         }
       }
     },
-    "interrupted_by_user" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Interrupted by user"
+    "done": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "被用户中断"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完成"
           }
         }
       }
     },
-    "invalid_qr_code" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invalid QR code"
+    "enable_all_notifications": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable All Notifications"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无效的二维码"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "启用所有通知"
           }
         }
       }
     },
-    "jump_to_question" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jump to Question"
+    "enable_notifications": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable Notifications"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "跳转到问题"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开启通知"
           }
         }
       }
     },
-    "label_sent" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sent"
+    "enabled": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enabled"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已发送"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已开启"
           }
         }
       }
     },
-    "label_you" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "YOU"
+    "enter_code": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter Code"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "输入代码"
           }
         }
       }
     },
-    "language" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Language"
+    "enter_url_manually": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter URL Manually"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "语言"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手动输入 URL"
           }
         }
       }
     },
-    "language_change_message" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your language preference has been saved. CodeLight needs to relaunch to display in the new language."
+    "https://code.7ove.online": {},
+    "image_send_text_only": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send Text Only"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "语言偏好已保存。CodeLight 需要重启才能应用新语言。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仅发送文字"
           }
         }
       }
     },
-    "language_change_title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Restart Required"
+    "image_upload_all_failed_message": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All images failed to upload. You can still send your message without them."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "需要重启"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所有图片上传失败，你可以仅发送文字内容。"
           }
         }
       }
     },
-    "language_settings_footer" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap to open System Settings → CodeLight → Language. iOS will restart the app with your chosen language automatically."
+    "image_upload_all_failed_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Images Could Not Be Sent"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "点击跳转到系统设置 → CodeLight → 语言。iOS 会自动用所选语言重启 app。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "图片发送失败"
           }
         }
       }
     },
-    "last_active" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Last Active"
+    "inactive_status": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inactive"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "上次活跃"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不活跃"
           }
         }
       }
     },
-    "launch" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Launch"
+    "interrupted_by_user": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interrupted by user"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "启动"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "被用户中断"
           }
         }
       }
     },
-    "launch_on_mac" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Launch on Mac"
+    "invalid_qr_code": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalid QR code"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 Mac 上启动"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无效的二维码"
           }
         }
       }
     },
-    "launch_preset" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Launch Preset"
+    "jump_to_question": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jump to Question"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "启动预设"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "跳转到问题"
           }
         }
       }
     },
-    "launch_session" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Launch Session"
+    "label_sent": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sent"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "启动会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已发送"
           }
         }
       }
     },
-    "launched_on_mac_format" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Launched on %@"
+    "label_you": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YOU"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已在 %@ 上启动"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你"
           }
         }
       }
     },
-    "load_earlier_messages" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Load earlier messages"
+    "language": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "加载更早的消息"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "语言"
           }
         }
       }
     },
-    "loading_earlier" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading earlier messages..."
+    "language_change_message": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your language preference has been saved. CodeLight needs to relaunch to display in the new language."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在加载更早的消息..."
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "语言偏好已保存。CodeLight 需要重启才能应用新语言。"
           }
         }
       }
     },
-    "loading_sessions" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading sessions..."
+    "language_change_title": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart Required"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "加载会话中..."
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "需要重启"
           }
         }
       }
     },
-    "macs" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Macs"
+    "language_settings_footer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to open System Settings → CodeLight → Language. iOS will restart the app with your chosen language automatically."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mac 列表"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击跳转到系统设置 → CodeLight → 语言。iOS 会自动用所选语言重启 app。"
           }
         }
       }
     },
-    "manual_entry" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Manual Entry"
+    "last_active": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last Active"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "手动输入"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上次活跃"
           }
         }
       }
     },
-    "message_placeholder" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Message..."
+    "launch": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Launch"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "输入消息..."
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "启动"
           }
         }
       }
     },
-    "mode" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mode"
+    "launch_on_mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Launch on Mac"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "模式"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Mac 上启动"
           }
         }
       }
     },
-    "model" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Model"
+    "launch_preset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Launch Preset"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "模型"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "启动预设"
           }
         }
       }
     },
-    "n_macs_format" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d Macs"
+    "launch_session": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Launch Session"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d 台 Mac"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "启动会话"
           }
         }
       }
     },
-    "n_sessions_format" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d sessions"
+    "launched_on_mac_format": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Launched on %@"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%d 个会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已在 %@ 上启动"
           }
         }
       }
     },
-    "new_messages_below" : {
-      "extractionState" : "extracted_with_value",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "新消息"
+    "load_earlier_messages": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load earlier messages"
           }
-        }
-      }
-    },
-    "No Data" : {
-
-    },
-    "no_archived_sessions" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No archived sessions"
-          }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "没有已归档的会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加载更早的消息"
           }
         }
       }
     },
-    "no_paired_macs" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No paired Macs"
+    "loading_earlier": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading earlier messages..."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "尚未配对任何 Mac"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在加载更早的消息..."
           }
         }
       }
     },
-    "no_presets_on_mac" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This Mac has no presets"
+    "loading_sessions": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading sessions..."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "这台 Mac 尚未配置预设"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加载会话中..."
           }
         }
       }
     },
-    "no_questions_yet" : {
-
-    },
-    "no_recent_projects" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No recent projects"
+    "macs": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Macs"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "暂无最近项目"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mac 列表"
           }
         }
       }
     },
-    "no_server_to_connect" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No server configured"
+    "manual_entry": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manual Entry"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "尚未配置服务器"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手动输入"
           }
         }
       }
     },
-    "no_servers" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No Servers"
+    "message_placeholder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Message..."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "暂无服务器"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "输入消息..."
           }
         }
       }
     },
-    "no_servers_yet" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No servers yet"
+    "mode": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "尚未添加服务器"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "模式"
           }
         }
       }
     },
-    "no_sessions_instruction" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start a Claude Code session on your Mac\nwith MioIsland running to see it here."
+    "model": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Model"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 Mac 上启动 Claude Code 会话\n并运行 MioIsland 即可在此查看。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "模型"
           }
         }
       }
     },
-    "no_sessions_yet" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No Sessions Yet"
+    "n_macs_format": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d Macs"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "暂无会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d 台 Mac"
           }
         }
       }
     },
-    "not_connected" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Not connected"
+    "n_sessions_format": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d sessions"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未连接"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d 个会话"
           }
         }
       }
     },
-    "notifications" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notifications"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通知"
+    "new_messages_below": {
+      "extractionState": "extracted_with_value",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "新消息"
           }
         }
       }
     },
-    "notify_footer" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notifications are sent to any iPhone paired with the Mac that owns the session."
+    "No Data": {},
+    "no_archived_sessions": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No archived sessions"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通知会发送到与拥有该会话的 Mac 配对的所有 iPhone。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有已归档的会话"
           }
         }
       }
     },
-    "notify_on_approval" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notify when approval needed"
+    "no_paired_macs": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No paired Macs"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "需要审批时通知"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尚未配对任何 Mac"
           }
         }
       }
     },
-    "notify_on_completion" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notify when Claude finishes"
+    "no_presets_on_mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This Mac has no presets"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude 完成时通知"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这台 Mac 尚未配置预设"
           }
         }
       }
     },
-    "notify_on_error" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notify on tool errors"
+    "no_questions_yet": {},
+    "no_recent_projects": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No recent projects"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "工具出错时通知"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂无最近项目"
           }
         }
       }
     },
-    "ok" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OK"
+    "no_server_to_connect": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No server configured"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "好"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尚未配置服务器"
           }
         }
       }
     },
-    "one_session" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 session"
+    "no_servers": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Servers"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 个会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂无服务器"
           }
         }
       }
     },
-    "open_chat" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Chat"
+    "no_servers_yet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No servers yet"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开聊天"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "尚未添加服务器"
           }
         }
       }
     },
-    "pair" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pair"
+    "no_sessions_instruction": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a Claude Code session on your Mac\nwith MioIsland running to see it here."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "配对"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Mac 上启动 Claude Code 会话\n并运行 MioIsland 即可在此查看。"
           }
         }
       }
     },
-    "pair_a_mac" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pair a Mac"
+    "no_sessions_yet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Sessions Yet"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "配对 Mac"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂无会话"
           }
         }
       }
     },
-    "paired" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paired"
+    "not_connected": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not connected"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已配对"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未连接"
           }
         }
       }
     },
-    "paired_macs" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paired Macs"
+    "notifications": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已配对的 Mac"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知"
           }
         }
       }
     },
-    "paired_with_format" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paired with %@"
+    "notify_footer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications are sent to any iPhone paired with the Mac that owns the session."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已与 %@ 配对"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通知会发送到与拥有该会话的 Mac 配对的所有 iPhone。"
           }
         }
       }
     },
-    "pairing" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pairing…"
+    "notify_on_approval": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notify when approval needed"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "配对中…"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "需要审批时通知"
           }
         }
       }
     },
-    "pairing_code" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pairing Code"
+    "notify_on_completion": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notify when Claude finishes"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "配对码"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 完成时通知"
           }
         }
       }
     },
-    "pairing_code_required" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pairing code required"
+    "notify_on_error": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notify on tool errors"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请输入配对码"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工具出错时通知"
           }
         }
       }
     },
-    "path" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Path"
+    "ok": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "路径"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "好"
           }
         }
       }
     },
-    "privacy_camera" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Camera Usage"
+    "one_session": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 session"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "相机使用"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 个会话"
           }
         }
       }
     },
-    "privacy_camera_body" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CodeLight uses your device's camera solely for scanning QR codes during the device pairing process. No images or video are stored or transmitted."
+    "open_chat": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Chat"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CodeLight 仅在设备配对流程中使用相机扫描二维码，不保存或传输任何图片或视频。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开聊天"
           }
         }
       }
     },
-    "privacy_contact" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Contact"
+    "pair": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pair"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "联系方式"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配对"
           }
         }
       }
     },
-    "privacy_contact_body" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The full privacy policy is available at https://code.7ove.online/privacy."
+    "pair_a_mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pair a Mac"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "完整隐私政策见：https://code.7ove.online/privacy。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配对 Mac"
           }
         }
       }
     },
-    "privacy_data_collection" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Data Collection"
+    "paired": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paired"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "数据收集"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已配对"
           }
         }
       }
     },
-    "privacy_data_collection_body" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CodeLight does not collect, store, or transmit any personal data to third parties. No analytics, no tracking, no advertising."
+    "paired_macs": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paired Macs"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CodeLight 不会收集、存储或向任何第三方传输个人数据。没有统计分析，没有跟踪，没有广告。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已配对的 Mac"
           }
         }
       }
     },
-    "privacy_data_storage" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Data Storage"
+    "paired_with_format": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paired with %@"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "数据存储"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已与 %@ 配对"
           }
         }
       }
     },
-    "privacy_data_storage_body" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Session data is stored on the CodeLight Server you connect to (self-hosted or public). You control where your data lives. Authentication keys are stored securely in your device's Keychain. Server URLs and connection settings are stored locally on your device."
+    "pairing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pairing…"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "会话数据存储在你连接的 CodeLight 服务器上（自托管或公共）。你掌控数据的去向。认证密钥安全地保存在设备的钥匙串中。服务器地址和连接设置只保存在本机。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配对中…"
           }
         }
       }
     },
-    "privacy_last_updated" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Last updated: April 29, 2026"
+    "pairing_code": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pairing Code"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最后更新：2026 年 4 月 29 日"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "配对码"
           }
         }
       }
     },
-    "privacy_overview" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Overview"
+    "pairing_code_required": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pairing code required"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "概述"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请输入配对码"
           }
         }
       }
     },
-    "privacy_overview_body" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CodeLight syncs Claude Code sessions between your Mac and iPhone. Your privacy is important to us."
+    "path": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Path"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CodeLight 用于在你的 Mac 与 iPhone 之间同步 Claude Code 会话。我们重视你的隐私。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "路径"
           }
         }
       }
     },
-    "privacy_policy" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Privacy Policy"
+    "privacy_camera": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera Usage"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "隐私政策"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "相机使用"
           }
         }
       }
     },
-    "privacy_push" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Push Notifications"
+    "privacy_camera_body": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CodeLight uses your device's camera solely for scanning QR codes during the device pairing process. No images or video are stored or transmitted."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "推送通知"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CodeLight 仅在设备配对流程中使用相机扫描二维码，不保存或传输任何图片或视频。"
           }
         }
       }
     },
-    "privacy_push_body" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "If enabled, push notifications are delivered via Apple Push Notification Service (APNs). Device tokens are stored on the CodeLight Server you are connected to and are not shared with anyone else."
+    "privacy_contact": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contact"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "如果启用，推送通知通过 Apple 推送通知服务（APNs）发送。设备令牌保存在你连接的 CodeLight 服务器上，不会与其他任何人共享。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "联系方式"
           }
         }
       }
     },
-    "privacy_third_party" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Third-Party Services"
+    "privacy_contact_body": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The full privacy policy is available at https://code.7ove.online/privacy."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "第三方服务"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完整隐私政策见：https://code.7ove.online/privacy。"
           }
         }
       }
     },
-    "privacy_third_party_body" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CodeLight does not use any analytics, tracking, or advertising services. No data is shared with third parties."
+    "privacy_data_collection": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data Collection"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "CodeLight 不使用任何统计分析、跟踪或广告服务。不会向任何第三方共享数据。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数据收集"
           }
         }
       }
     },
-    "push_notifications" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Push Notifications"
+    "privacy_data_collection_body": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CodeLight does not collect, store, or transmit any personal data to third parties. No analytics, no tracking, no advertising."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "推送通知"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CodeLight 不会收集、存储或向任何第三方传输个人数据。没有统计分析，没有跟踪，没有广告。"
           }
         }
       }
     },
-    "qr_outdated_codeisland" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This QR is from an outdated MioIsland — please update your Mac app"
+    "privacy_data_storage": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data Storage"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "二维码格式过旧，请升级你的 MioIsland Mac 应用"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数据存储"
           }
         }
       }
     },
-    "quit_now" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quit Now"
+    "privacy_data_storage_body": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session data is stored on the CodeLight Server you connect to (self-hosted or public). You control where your data lives. Authentication keys are stored securely in your device's Keychain. Server URLs and connection settings are stored locally on your device."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "立即退出"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "会话数据存储在你连接的 CodeLight 服务器上（自托管或公共）。你掌控数据的去向。认证密钥安全地保存在设备的钥匙串中。服务器地址和连接设置只保存在本机。"
           }
         }
       }
     },
-    "recent" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recent"
+    "privacy_last_updated": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last updated: April 29, 2026"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最后更新：2026 年 4 月 29 日"
           }
         }
       }
     },
-    "recent_projects" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recent Projects"
+    "privacy_overview": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overview"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近项目"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "概述"
           }
         }
       }
     },
-    "reconnect" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reconnect"
+    "privacy_overview_body": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CodeLight syncs Claude Code sessions between your Mac and iPhone. Your privacy is important to us."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重新连接"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CodeLight 用于在你的 Mac 与 iPhone 之间同步 Claude Code 会话。我们重视你的隐私。"
           }
         }
       }
     },
-    "reconnect_failed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reconnect failed"
+    "privacy_policy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重新连接失败"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "隐私政策"
           }
         }
       }
     },
-    "reconnect_footer" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Disconnect and reconnect to the current server. Use this if sync feels out of date."
+    "privacy_push": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Push Notifications"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "断开并重新连接当前服务器。如果同步感觉不同步时可用此操作。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "推送通知"
           }
         }
       }
     },
-    "reconnected_success" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reconnected"
+    "privacy_push_body": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If enabled, push notifications are delivered via Apple Push Notification Service (APNs). Device tokens are stored on the CodeLight Server you are connected to and are not shared with anyone else."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已重新连接"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "如果启用，推送通知通过 Apple 推送通知服务（APNs）发送。设备令牌保存在你连接的 CodeLight 服务器上，不会与其他任何人共享。"
           }
         }
       }
     },
-    "reconnecting" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reconnecting..."
+    "privacy_third_party": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Third-Party Services"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重新连接中..."
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第三方服务"
           }
         }
       }
     },
-    "reconnecting_ellipsis" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reconnecting…"
+    "privacy_third_party_body": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CodeLight does not use any analytics, tracking, or advertising services. No data is shared with third parties."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在重新连接…"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CodeLight 不使用任何统计分析、跟踪或广告服务。不会向任何第三方共享数据。"
           }
         }
       }
     },
-    "redeem_already_used" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You have already used this code."
+    "push_notifications": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Push Notifications"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你已经使用过此兑换码。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "推送通知"
           }
         }
       }
     },
-    "redeem_code_button" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Have a redeem code?"
+    "qr_outdated_codeisland": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This QR is from an outdated MioIsland — please update your Mac app"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "有兑换码？"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "二维码格式过旧，请升级你的 MioIsland Mac 应用"
           }
         }
       }
     },
-    "redeem_exhausted" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This code has been fully redeemed."
+    "quit_now": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quit Now"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此兑换码已被全部使用。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "立即退出"
           }
         }
       }
     },
-    "redeem_expired" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This code has expired."
+    "recent": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "此兑换码已过期。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近"
           }
         }
       }
     },
-    "redeem_failed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redeem failed. Please try again."
+    "recent_projects": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent Projects"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "兑换失败，请重试。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近项目"
           }
         }
       }
     },
-    "redeem_invalid" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Invalid redeem code."
+    "reconnect": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reconnect"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "兑换码无效。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重新连接"
           }
         }
       }
     },
-    "redeem_network_error" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Network error. Please check connection."
+    "reconnect_failed": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reconnect failed"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "网络错误，请检查连接。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重新连接失败"
           }
         }
       }
     },
-    "redeem_no_auth" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Authentication required. Please reconnect."
+    "reconnect_footer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disconnect and reconnect to the current server. Use this if sync feels out of date."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "需要认证，请重新连接。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "断开并重新连接当前服务器。如果同步感觉不同步时可用此操作。"
           }
         }
       }
     },
-    "redeem_no_server" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Not connected to a server."
+    "reconnected_success": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reconnected"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未连接服务器。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已重新连接"
           }
         }
       }
     },
-    "redeem_placeholder" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter redeem code"
+    "reconnecting": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reconnecting..."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "输入兑换码"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重新连接中..."
           }
         }
       }
     },
-    "redeem_submit" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redeem"
+    "reconnecting_ellipsis": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reconnecting…"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "兑换"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在重新连接…"
           }
         }
       }
     },
-    "redeemed_days_left_format" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Active (%lld days left)"
+    "redeemed_days_left_format": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active (%lld days left)"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已激活（剩余 %lld 天）"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已激活（剩余 %lld 天）"
           }
         }
       }
     },
-    "refresh" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Refresh"
+    "refresh": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "刷新"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刷新"
           }
         }
       }
     },
-    "rename" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rename"
+    "rename": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重命名"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重命名"
           }
         }
       }
     },
-    "rename_footer" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stored locally on this iPhone. Other devices won't see your custom name."
+    "rename_footer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stored locally on this iPhone. Other devices won't see your custom name."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存在本机。其他设备看不到你的自定义名称。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存在本机。其他设备看不到你的自定义名称。"
           }
         }
       }
     },
-    "rename_session" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Session Name"
+    "rename_session": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session Name"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "会话名称"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "会话名称"
           }
         }
       }
     },
-    "replies" : {
-
-    },
-    "reset" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset"
+    "replies": {},
+    "reset": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重置"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重置"
           }
         }
       }
     },
-    "reset_backend" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset"
+    "reset_backend": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重置"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重置"
           }
         }
       }
     },
-    "reset_backend_confirm" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This will unpair all Macs and clear all server data. Continue?"
+    "reset_backend_confirm": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This will unpair all Macs and clear all server data. Continue?"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "这将解除所有 Mac 的配对并清空服务器数据，是否继续？"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这将解除所有 Mac 的配对并清空服务器数据，是否继续？"
           }
         }
       }
     },
-    "reset_connection" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset Connection"
+    "reset_connection": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Connection"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重置连接"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重置连接"
           }
         }
       }
     },
-    "reset_footer" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remove all paired Macs from this device and clear the saved server URL. You will need to pair again."
+    "reset_footer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove all paired Macs from this device and clear the saved server URL. You will need to pair again."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "从此设备删除所有已配对的 Mac 并清除已保存的服务器地址，需要重新配对。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从此设备删除所有已配对的 Mac 并清除已保存的服务器地址，需要重新配对。"
           }
         }
       }
     },
-    "reset_to_default" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset to default name"
+    "reset_to_default": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset to default name"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "恢复默认名称"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢复默认名称"
           }
         }
       }
     },
-    "retry" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Retry"
+    "retry": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retry"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重试"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重试"
           }
         }
       }
     },
-    "role_claude" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude"
+    "role_claude": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude"
           }
         }
       }
     },
-    "role_interrupted" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Interrupted"
+    "role_interrupted": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interrupted"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已中断"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已中断"
           }
         }
       }
     },
-    "role_thinking" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Thinking"
+    "role_thinking": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thinking"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "思考中"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "思考中"
           }
         }
       }
     },
-    "role_tool" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tool"
+    "role_tool": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tool"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "工具"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "工具"
           }
         }
       }
     },
-    "role_you" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You"
+    "role_you": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你"
           }
         }
       }
     },
-    "save" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Save"
+    "save": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存"
           }
         }
       }
     },
-    "scan_new_qr_code" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scan New QR Code"
+    "scan_new_qr_code": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan New QR Code"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "扫描新二维码"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "扫描新二维码"
           }
         }
       }
     },
-    "scan_qr" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scan QR"
+    "scan_qr": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan QR"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "扫描二维码"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "扫描二维码"
           }
         }
       }
     },
-    "scan_qr_code" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scan QR Code"
+    "scan_qr_code": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan QR Code"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "扫描二维码"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "扫描二维码"
           }
         }
       }
     },
-    "scan_qr_instruction" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open MioIsland on your Mac\nand scan the pairing QR code"
+    "scan_qr_instruction": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open MioIsland on your Mac\nand scan the pairing QR code"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 Mac 上打开 MioIsland\n然后扫描配对二维码"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Mac 上打开 MioIsland\n然后扫描配对二维码"
           }
         }
       }
     },
-    "scan_qr_on_mac" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scan the QR shown on your Mac"
+    "scan_qr_on_mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan the QR shown on your Mac"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "扫描 Mac 上显示的二维码"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "扫描 Mac 上显示的二维码"
           }
         }
       }
     },
-    "Search" : {
-
-    },
-    "security" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Security"
+    "Search": {},
+    "security": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Security"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "安全"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "安全"
           }
         }
       }
     },
-    "send_status_delivered" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Delivered to Mac"
+    "send_status_delivered": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delivered to Mac"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已送达 Mac"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已送达 Mac"
           }
         }
       }
     },
-    "send_status_sending" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sending…"
+    "send_status_sending": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sending…"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "发送中…"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "发送中…"
           }
         }
       }
     },
-    "send_status_thinking" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude is thinking…"
+    "send_status_thinking": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude is thinking…"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Claude 正在思考…"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Claude 正在思考…"
           }
         }
       }
     },
-    "server" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Server"
+    "server": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "服务器"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器"
           }
         }
       }
     },
-    "server_url" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Server URL"
+    "server_url": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server URL"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "服务器 URL"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器 URL"
           }
         }
       }
     },
-    "server_url_required" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Server URL required"
+    "server_url_required": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server URL required"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "请输入服务器地址"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请输入服务器地址"
           }
         }
       }
     },
-    "servers" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Servers"
+    "servers": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Servers"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "服务器"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "服务器"
           }
         }
       }
     },
-    "session" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Session"
+    "session": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "会话"
           }
         }
       }
     },
-    "session_info" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Session Info"
+    "session_info": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session Info"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "会话信息"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "会话信息"
           }
         }
       }
     },
-    "session_name_placeholder" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Custom name"
+    "session_name_placeholder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Custom name"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自定义名称"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自定义名称"
           }
         }
       }
     },
-    "session_not_found" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Session Not Found"
+    "session_not_found": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session Not Found"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "会话未找到"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "会话未找到"
           }
         }
       }
-    },
-    "session_start" : {
-
     },
-    "settings" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Settings"
+    "session_start": {},
+    "settings": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "设置"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "设置"
           }
         }
       }
     },
-    "status" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Status"
+    "status": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "状态"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "状态"
           }
         }
       }
     },
-    "status_active" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Active"
+    "status_active": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已激活"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已激活"
           }
         }
       }
     },
-    "status_expired" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Expired"
+    "status_expired": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expired"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已过期"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已过期"
           }
         }
       }
     },
-    "status_trial" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trial"
+    "status_trial": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trial"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "试用中"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "试用中"
           }
         }
       }
     },
-    "status_unknown" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unknown"
+    "status_unknown": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未知"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未知"
           }
         }
       }
     },
-    "step_install_codeisland" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Install MioIsland on your Mac"
+    "step_install_codeisland": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Install MioIsland on your Mac"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 Mac 上安装 MioIsland"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Mac 上安装 MioIsland"
           }
         }
       }
     },
-    "step_sessions_appear" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sessions appear here automatically"
+    "step_sessions_appear": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sessions appear here automatically"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "会话将自动显示在这里"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "会话将自动显示在这里"
           }
         }
       }
     },
-    "step_start_session" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start a Claude Code session"
+    "step_start_session": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a Claude Code session"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "启动一个 Claude Code 会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "启动一个 Claude Code 会话"
           }
         }
       }
     },
-    "store_product_unavailable" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Product is unavailable. Please try again later."
+    "store_product_unavailable": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Product is unavailable. Please try again later."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "产品暂不可用，请稍后再试。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "产品暂不可用，请稍后再试。"
           }
         }
       }
     },
-    "store_verification_failed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Transaction verification failed."
+    "store_verification_failed": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transaction verification failed."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "交易验证失败。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "交易验证失败。"
           }
         }
       }
     },
-    "sub_already_purchased_subtitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You have lifetime access to all Code Light features."
+    "sub_already_purchased_subtitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You have lifetime access to all Code Light features."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你已拥有 Code Light 所有功能的终身使用权。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你已拥有 Code Light 所有功能的终身使用权。"
           }
         }
       }
     },
-    "sub_already_purchased_title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You're All Set!"
+    "sub_already_purchased_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You're All Set!"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已解锁！"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已解锁！"
           }
         }
       }
     },
-    "sub_feat_island_desc" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Live session status on your Lock Screen"
+    "sub_feat_island_desc": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live session status on your Lock Screen"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "锁屏实时显示会话状态"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "锁屏实时显示会话状态"
           }
         }
       }
     },
-    "sub_feat_island_title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dynamic Island"
+    "sub_feat_island_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dynamic Island"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "灵动岛"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "灵动岛"
           }
         }
       }
     },
-    "sub_feat_mac_desc" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connect one iPhone to multiple Macs"
+    "sub_feat_mac_desc": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect one iPhone to multiple Macs"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一台 iPhone 连接多台 Mac"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一台 iPhone 连接多台 Mac"
           }
         }
       }
     },
-    "sub_feat_mac_title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Multi-Mac Pairing"
+    "sub_feat_mac_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Multi-Mac Pairing"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "多 Mac 配对"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "多 Mac 配对"
           }
         }
       }
     },
-    "sub_feat_sessions_desc" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Monitor all Claude Code sessions in real time"
+    "sub_feat_sessions_desc": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monitor all Claude Code sessions in real time"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "实时监控所有 Claude Code 会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "实时监控所有 Claude Code 会话"
           }
         }
       }
     },
-    "sub_feat_sessions_title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unlimited Sessions"
+    "sub_feat_sessions_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlimited Sessions"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无限会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无限会话"
           }
         }
       }
     },
-    "sub_feat_sync_desc" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Messages, approvals, and commands from your phone"
+    "sub_feat_sync_desc": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messages, approvals, and commands from your phone"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "消息、审批、指令，手机全搞定"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "消息、审批、指令，手机全搞定"
           }
         }
       }
     },
-    "sub_feat_sync_title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Real-time Sync"
+    "sub_feat_sync_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Real-time Sync"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "实时同步"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "实时同步"
           }
         }
       }
     },
-    "sub_feature_island" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dynamic Island"
+    "sub_feature_island": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dynamic Island"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "灵动岛"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "灵动岛"
           }
         }
       }
     },
-    "sub_feature_lifetime" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lifetime access"
+    "sub_feature_lifetime": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lifetime access"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "终身使用权"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "终身使用权"
           }
         }
       }
     },
-    "sub_feature_multi_mac" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Multi-Mac pairing"
+    "sub_feature_multi_mac": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Multi-Mac pairing"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "多 Mac 配对"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "多 Mac 配对"
           }
         }
       }
     },
-    "sub_feature_sessions" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unlimited sessions"
+    "sub_feature_sessions": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlimited sessions"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无限会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无限会话"
           }
         }
       }
     },
-    "sub_feature_sync" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Real-time sync"
+    "sub_feature_sync": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Real-time sync"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "实时同步"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "实时同步"
           }
         }
       }
     },
-    "sub_one_time_forever" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "one-time · yours forever"
+    "sub_one_time_forever": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "one-time · yours forever"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一次购买 · 终身使用"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一次购买 · 终身使用"
           }
         }
       }
     },
-    "sub_pending_server" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Purchased, connecting..."
+    "sub_pending_server": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purchased, connecting..."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已购买，连接服务器中..."
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已购买，连接服务器中..."
           }
         }
       }
     },
-    "sub_purchasing" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Purchasing..."
+    "sub_purchasing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purchasing..."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "购买中..."
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "购买中..."
           }
         }
       }
     },
-    "sub_restore_no_purchase" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No previous purchase found."
+    "sub_restore_no_purchase": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No previous purchase found."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未找到之前的购买记录。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未找到之前的购买记录。"
           }
         }
       }
     },
-    "sub_restore_purchase" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Restore Purchase"
+    "sub_restore_purchase": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore Purchase"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "恢复购买"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "恢复购买"
           }
         }
       }
     },
-    "sub_subscription_required_subtitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subscribe to continue using Code Light's server features."
+    "sub_subscription_required_subtitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscribe to continue using Code Light's server features."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "订阅后才能使用 Code Light 的服务器转发功能。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "订阅后才能使用 Code Light 的服务器转发功能。"
           }
         }
       }
     },
-    "sub_subscription_required_title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subscription Required"
+    "sub_subscription_required_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscription Required"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "需要订阅"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "需要订阅"
           }
         }
       }
     },
-    "sub_success" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unlocked!"
+    "sub_success": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlocked!"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已解锁！"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已解锁！"
           }
         }
       }
     },
-    "sub_terms" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Terms of Use"
+    "sub_terms": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terms of Use"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用条款"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用条款"
           }
         }
       }
     },
-    "sub_trial_ended_subtitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upgrade to keep using Code Light with your Mac."
+    "sub_trial_ended_subtitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade to keep using Code Light with your Mac."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "升级以继续使用 Code Light 连接你的 Mac。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "升级以继续使用 Code Light 连接你的 Mac。"
           }
         }
       }
     },
-    "sub_trial_ended_title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your Trial Has Ended"
+    "sub_trial_ended_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your Trial Has Ended"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "试用已到期"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "试用已到期"
           }
         }
       }
     },
-    "sub_unlock_button" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unlock Code Light"
+    "sub_unlock_button": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlock Code Light"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "解锁 Code Light"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解锁 Code Light"
           }
         }
       }
     },
-    "sub_unlock_subtitle" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Get lifetime access to all features."
+    "sub_unlock_subtitle": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get lifetime access to all features."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "终身解锁所有功能。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "终身解锁所有功能。"
           }
         }
       }
     },
-    "sub_unlock_title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unlock Code Light"
+    "sub_unlock_title": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlock Code Light"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "解锁 Code Light"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解锁 Code Light"
           }
         }
       }
     },
-    "sub_verifying" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verifying..."
+    "sub_verifying": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verifying..."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "验证中..."
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "验证中..."
           }
         }
       }
     },
-    "subscription" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subscription"
+    "subscription": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscription"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "订阅"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "订阅"
           }
         }
       }
     },
-    "subscription_footer" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A lifetime purchase unlocks all features on this server."
+    "subscription_footer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A lifetime purchase unlocks all features on this server."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "终身买断解锁此服务器的所有功能。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "终身买断解锁此服务器的所有功能。"
           }
         }
       }
     },
-    "subscription_required_banner" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subscription required to use server features"
+    "subscription_required_banner": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscription required to use server features"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "需要订阅才能使用服务器功能"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "需要订阅才能使用服务器功能"
           }
         }
       }
     },
-    "swipe_to_unpair" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Swipe a Mac to unpair"
+    "swipe_to_unpair": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swipe a Mac to unpair"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "左滑以解除配对"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "左滑以解除配对"
           }
         }
       }
     },
-    "sync_failed" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Settings sync failed"
+    "sync_failed": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings sync failed"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "设置同步失败"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "设置同步失败"
           }
         }
       }
     },
-    "tab_active" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Active"
+    "tab_active": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "活跃"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "活跃"
           }
         }
       }
     },
-    "tab_archived" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Archived"
+    "tab_archived": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Archived"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "归档"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "归档"
           }
         }
       }
     },
-    "tab_recent" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Recent"
+    "tab_recent": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recent"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "最近"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近"
           }
         }
       }
     },
-    "take_photo" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Take Photo"
+    "take_photo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take Photo"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "拍照"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拍照"
           }
         }
       }
     },
-    "tap_plus_to_launch" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap + to launch a new session on this Mac"
+    "tap_plus_to_launch": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap + to launch a new session on this Mac"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "点击右上角加号，在这台 Mac 上启动新会话"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击右上角加号，在这台 Mac 上启动新会话"
           }
         }
       }
     },
-    "tap_plus_to_pair" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap + to pair a Mac"
+    "tap_plus_to_pair": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap + to pair a Mac"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "点击加号配对一台 Mac"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击加号配对一台 Mac"
           }
         }
       }
     },
-    "tap_server_to_switch" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap a server to switch the active connection"
+    "tap_server_to_switch": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap a server to switch the active connection"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "点击服务器可切换当前连接"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击服务器可切换当前连接"
           }
         }
       }
     },
-    "tap_to_switch_server" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap to switch server"
+    "tap_to_switch_server": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to switch server"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "点击切换服务器"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点击切换服务器"
           }
         }
       }
     },
-    "thinking_ellipsis" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Thinking..."
+    "thinking_ellipsis": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thinking..."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "思考中..."
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "思考中..."
           }
         }
       }
     },
-    "token_expiry" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Token Expiry"
+    "token_expiry": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Token Expiry"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "令牌有效期"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "令牌有效期"
           }
         }
       }
     },
-    "token_expiry_footer" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Controls how long your authentication token remains valid before you need to re-authenticate."
+    "token_expiry_footer": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Controls how long your authentication token remains valid before you need to re-authenticate."
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "控制认证令牌多久失效并需要重新验证。"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "控制认证令牌多久失效并需要重新验证。"
           }
         }
       }
     },
-    "trial_days_left_format" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trial (%lld days left)"
+    "trial_days_left_format": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trial (%lld days left)"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "试用中（剩余 %lld 天）"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "试用中（剩余 %lld 天）"
           }
         }
       }
     },
-    "try_again" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Try Again"
+    "try_again": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try Again"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重试"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重试"
           }
         }
       }
     },
-    "unarchive" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unarchive"
+    "unarchive": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unarchive"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "取消归档"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取消归档"
           }
         }
       }
     },
-    "unpair" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unpair"
+    "unpair": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unpair"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "解除配对"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解除配对"
           }
         }
       }
     },
-    "upgrade" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upgrade"
+    "upgrade": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "升级"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "升级"
           }
         }
       }
     },
-    "upgrade_to_lifetime" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Upgrade to Lifetime"
+    "upgrade_to_lifetime": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upgrade to Lifetime"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "升级为终身版"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "升级为终身版"
           }
         }
       }
     },
-    "version" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Version"
+    "version": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version"
           }
         },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "版本"
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "版本"
           }
         }
       }
     },
-    "X7K2M9" : {
-
-    }
+    "X7K2M9": {}
   },
-  "version" : "1.0"
+  "version": "1.0"
 }
